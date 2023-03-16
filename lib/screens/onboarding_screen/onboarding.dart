@@ -1,5 +1,5 @@
 import 'package:equb/helper/images.dart';
-import 'package:equb/onboarding_screen/buildPage.dart';
+import 'package:equb/screens/onboarding_screen/buildPage.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 

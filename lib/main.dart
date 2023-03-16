@@ -1,3 +1,5 @@
+import 'package:equb/screens/home.dart';
+import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -37,7 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('hello there'),
+        // child: OnBoardingScreen(),
+        child: Home(),
       ),
     );
   }
