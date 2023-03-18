@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "719861097806",
+    "firebase_url": "https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "addis-equb",
+    "storage_bucket": "addis-equb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719861097806:android:3bcb35c07d5f7ded42aa1f",
+        "android_client_info": {
+          "package_name": "com.example.equb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719861097806-ndl7srd1rs5am779k61fv2kct05jvsrd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAR9r6icByu_1JSg3lIm3rVhWQVk0jowEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719861097806-ndl7srd1rs5am779k61fv2kct05jvsrd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "719861097806-hj1kknj10i8v0obkohfmn45e0ve9msf7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.equb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

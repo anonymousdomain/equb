@@ -1,8 +1,12 @@
 import 'package:equb/screens/home.dart';
-import 'package:equb/screens/onboarding_screen/onboarding.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 
@@ -45,3 +49,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
