@@ -1,6 +1,8 @@
 import 'package:equb/helper/images.dart';
 import 'package:equb/screens/onboarding_screen/build_page.dart';
 import 'package:equb/widget/custom_button.dart';
+import 'package:equb/widget/login_screen.dart';
+import 'package:equb/widget/login_screen_old.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   navigate() => Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: ((context) => Text('hello'))));
+      context, MaterialPageRoute(builder: ((context) => LoginScreen())));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
