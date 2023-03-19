@@ -1,9 +1,10 @@
-import 'package:equb/screens/home.dart';
+// import 'package:equb/screens/home.dart';
+import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-
 void main() async{
+   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
 );
@@ -43,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        // child: OnBoardingScreen(),
-        child: Home(),
+        child: OnBoardingScreen(),
+        // child: Home(),
       ),
     );
   }
