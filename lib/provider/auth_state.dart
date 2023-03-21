@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class AuthState with ChangeNotifier {
   int get countdown => _countdown;
 
   Future<void> verifyPhoneNumber(String phoneNumber) async {
+    log('from auth state $phoneNumber');
     try {
       Future<void> verificationCompleted(
           PhoneAuthCredential phoneAuthCredential) async {
@@ -71,6 +73,11 @@ class AuthState with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _user = userCredential.user;
+      if (_user == null) {
+        setStatus(AuthStatus.uninitialized);
+      } else {
+        setStatus(AuthStatus.authenticated);
+      }
     } catch (e) {
       print(e.toString());
       setStatus(AuthStatus.verificationFailed);

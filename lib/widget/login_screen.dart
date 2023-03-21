@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/widget/otp_field.dart';
@@ -17,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  String? _selectedCountry = '+251';
+
   @override
   void initState() {
     String message = AuthState().status.toString();
@@ -32,55 +35,98 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Your Phone Number'),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _phoneNumberController,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                      hintText: 'Enter phone number',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: Colors.indigo, width: 2))),
-                  validator: ((value) {
-                    if (value!.isEmpty) {
-                      return 'please entery your phone number';
-                    }
-                    return null;
-                  }),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                // if(Provider.of<AuthState>(context).status==AuthStatus.uninitialized){
-                  
-                // }
-               Provider.of<AuthState>(context).status==AuthStatus.uninitialized ? 
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await Provider.of<AuthState>(context,listen: false).verifyPhoneNumber(_phoneNumberController.text.trim());
-                    }
-                  },
-                  child: Text('submit'),
-                ):SizedBox(
-                  child: Text(Provider.of<AuthState>(context,listen: false).status.toString()),
-                )
-              ],
+        child: Consumer<AuthState>(builder: (context, auth, child) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  auth.status == AuthStatus.uninitialized
+                      ? Column(
+                          children: [
+                            Text(
+                              'Your Phone Number',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'please confirm your country code and enter your phone number',
+                              softWrap: true,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _phoneNumberController,
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                        prefixIcon: CountryCodePicker(
+                                          initialSelection: 'ET',
+                                          favorite: const ['+251', 'ET'],
+                                          showCountryOnly: false,
+                                          showOnlyCountryWhenClosed: false,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedCountry = value.dialCode;
+                                            });
+                                          },
+                                        ),
+                                        hintText: 'Enter phone number',
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: BorderSide(
+                                                color: Colors.indigo,
+                                                width: 2))),
+                                    validator: ((value) {
+                                      if (value!.isEmpty) {
+                                        return 'please enter your phone number';
+                                      }
+                                      return null;
+                                    }),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  log(_selectedCountry! +
+                                      _phoneNumberController.text.trim());
+                                  await Provider.of<AuthState>(context,
+                                          listen: false)
+                                      .verifyPhoneNumber(_selectedCountry!+
+                                          _phoneNumberController.text.trim()).then((value) => {
+                                            auth.setStatus(AuthStatus.authenticating)
+                                          });
+                                }
+                              },
+                              child: Text('submit'),
+                            )
+                          ],
+                        )
+                      : Column(
+                        children: [
+                          auth.status==AuthStatus.authenticating?CircularProgressIndicator():Column(
+                            children: [
+                              Text(auth.status.toString())
+                            ],
+                          )
+                        ]
+                      )
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
