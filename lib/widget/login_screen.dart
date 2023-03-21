@@ -3,11 +3,9 @@
 import 'dart:async';
 import 'dart:developer';
 
-
 import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/widget/otp_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,27 +26,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
-  // AuthState authState = AuthState();
   AuthService authService = AuthService(AuthState());
-  // final TextEditingController _otpController = TextEditingController();
-  // bool _isCountdownTimerActive = false;
-  // int _countdownTimerSecondsRemaining = 60;
-  // void _startCountdownTimer() {
-  //   setState(() {
-  //     _isCountdownTimerActive = true;
-  //   });
-  //   Timer.periodic(Duration(seconds: 1), (timer) {
-  //     setState(() {
-  //       _countdownTimerSecondsRemaining -= 1;
-  //     });
-  //     if (_countdownTimerSecondsRemaining == 0) {
-  //       timer.cancel();
-  //       setState(() {
-  //         _isCountdownTimerActive = false;
-  //       });
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,16 +63,19 @@ class LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 16,
                 ),
+                // if(Provider.of<AuthState>(context).status==AuthStatus.uninitialized){
+                  
+                // }
+               Provider.of<AuthState>(context).status==AuthStatus.uninitialized ? 
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      await authService.verifyPhoneNumber(
-                          _phoneNumberController.text.trim()).then((value) => {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>OtpPrompt(phoneNumber: _phoneNumberController.text.trim()) ))
-                          });
+                      await Provider.of<AuthState>(context,listen: false).verifyPhoneNumber(_phoneNumberController.text.trim());
                     }
                   },
                   child: Text('submit'),
+                ):SizedBox(
+                  child: Text(Provider.of<AuthState>(context,listen: false).status.toString()),
                 )
               ],
             ),
