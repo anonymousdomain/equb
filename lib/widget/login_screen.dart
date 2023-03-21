@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:developer';
+
 
 import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
@@ -25,25 +28,27 @@ class LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
+  // AuthState authState = AuthState();
+  AuthService authService = AuthService(AuthState());
   // final TextEditingController _otpController = TextEditingController();
-  bool _isCountdownTimerActive = false;
-  int _countdownTimerSecondsRemaining = 60;
-  void _startCountdownTimer() {
-    setState(() {
-      _isCountdownTimerActive = true;
-    });
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        _countdownTimerSecondsRemaining -= 1;
-      });
-      if (_countdownTimerSecondsRemaining == 0) {
-        timer.cancel();
-        setState(() {
-          _isCountdownTimerActive = false;
-        });
-      }
-    });
-  }
+  // bool _isCountdownTimerActive = false;
+  // int _countdownTimerSecondsRemaining = 60;
+  // void _startCountdownTimer() {
+  //   setState(() {
+  //     _isCountdownTimerActive = true;
+  //   });
+  //   Timer.periodic(Duration(seconds: 1), (timer) {
+  //     setState(() {
+  //       _countdownTimerSecondsRemaining -= 1;
+  //     });
+  //     if (_countdownTimerSecondsRemaining == 0) {
+  //       timer.cancel();
+  //       setState(() {
+  //         _isCountdownTimerActive = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +87,11 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if(_formKey.currentState!.validate()){
-                      AuthService().verifyPhoneNumber(_phoneNumberController.text)
+                    if (_formKey.currentState!.validate()) {
+                      await authService.verifyPhoneNumber(
+                          _phoneNumberController.text.trim()).then((value) => {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>OtpPrompt(phoneNumber: _phoneNumberController.text.trim()) ))
+                          });
                     }
                   },
                   child: Text('submit'),

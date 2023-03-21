@@ -1,31 +1,41 @@
 import 'package:equb/provider/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthState _authState;
 
-  Future<void> verifyPhoneNumber(String phoneNumber,
-      Function(PhoneAuthCredential) onVerificationComplete) async {
+  AuthService(this._authState);
+  // Future<void> verifyPhoneNumber(String phoneNumber,
+  //     Function(PhoneAuthCredential) onVerificationComplete) async {
+  Future<void> verifyPhoneNumber(String phoneNumber) async {
     try {
-      Future<void> verificationCompleted(PhoneAuthCredential phoneAuthCredential) async {
-        await onVerificationComplete(phoneAuthCredential);
+      Future<void> verificationCompleted(
+          PhoneAuthCredential phoneAuthCredential) async {
+        // await onVerificationComplete(phoneAuthCredential);
+        await _auth.signInWithCredential(phoneAuthCredential);
+        _authState.setStatus(AuthStatus.authenticated);
       }
 
       void phoneVerificationFailed(FirebaseAuthException authException) {
         if (authException.code == 'invalid-phone-number') {
           print('the provided phone number is not valid');
         }
+        _authState.setStatus(AuthStatus.verificationFailed);
         print('error:${authException.message}');
       }
 
-      Future<void> codeSent(String verificationId, int? forceResendingToken) async {
-        AuthState().setStatus(AuthStatus.codeSent);
-        AuthState().setVerificationId(verificationId);
+      Future<void> codeSent(
+          String verificationId, int? forceResendingToken) async {
+        _authState.setStatus(AuthStatus.codeSent);
+        _authState.setVerificationId(verificationId);
+        _authState.startCountdown();
       }
 
       void phoneCodeAutoRetrievalTimeout(String verificationId) {
-        AuthState().setStatus(AuthStatus.codeAutoRetievalTimeout);
-        AuthState().setVerificationId(verificationId);
+        _authState.setStatus(AuthStatus.codeAutoRetievalTimeout);
+        _authState.setVerificationId(verificationId);
       }
 
       await _auth.verifyPhoneNumber(
@@ -50,13 +60,13 @@ class AuthService {
       User? user = result.user;
 
       if (user != null) {
-        AuthState().setStatus(AuthStatus.authenticated);
+        _authState.setStatus(AuthStatus.authenticated);
       } else {
-        AuthState().setStatus(AuthStatus.uninitialized);
+        _authState.setStatus(AuthStatus.uninitialized);
       }
     } catch (e) {
       print(e.toString());
-      AuthState().setStatus(AuthStatus.verificationFailed);
+      _authState.setStatus(AuthStatus.verificationFailed);
     }
   }
 }
