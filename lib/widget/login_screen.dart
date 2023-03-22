@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
-import 'package:equb/widget/otp_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +75,7 @@ class LoginScreenState extends State<LoginScreen> {
                                           },
                                         ),
                                         hintText: 'Enter phone number',
+                                        hintStyle: TextStyle(color: Colors.grey[100]),
                                         border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
