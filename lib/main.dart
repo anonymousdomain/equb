@@ -44,9 +44,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'equb',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      // ),
       theme: CustomTheme.lightTheme(context),
       darkTheme: CustomTheme.darkTheme(context),
       themeMode: currentTheme.currentTheme,
@@ -70,18 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     widget.title,
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () {
-      //           currentTheme.toggleTheme();
-      //         },
-      //         icon: Icon(Icons.brightness_4_rounded))
-      //   ],
-      // ),
       body: Stack(
         children: [
           Center(

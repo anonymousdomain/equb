@@ -14,6 +14,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: EdgeInsets.all(8),
       width: MediaQuery.of(context).size.width,
       height: 80,

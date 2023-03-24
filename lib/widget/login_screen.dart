@@ -54,10 +54,6 @@ class LoginScreenState extends State<LoginScreen> {
                                       .textTheme
                                       .bodyText1
                                       ?.color
-                                  // color: currentTheme.currentTheme ==
-                                  //         ThemeMode.dark
-                                  //     ? Colors.white
-                                  //     : Colors.black,
                                   ),
                             ),
                             Text(
@@ -79,11 +75,14 @@ class LoginScreenState extends State<LoginScreen> {
                                     controller: _phoneNumberController,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
+                                      
                                       prefixIcon: CountryCodePicker(
+                                        
                                         initialSelection: 'ET',
                                         favorite: const ['+251', 'ET'],
                                         showCountryOnly: false,
                                         showOnlyCountryWhenClosed: false,
+
                                         onChanged: (value) {
                                           setState(() {
                                             _selectedCountry = value.dialCode;
