@@ -28,7 +28,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
   }
 
-  navigate() => Navigator.pushReplacement(
+  navigate() => Navigator.push(
       context, MaterialPageRoute(builder: ((context) => LoginScreen())));
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'constant.dart';
@@ -5,48 +7,61 @@ import 'constant.dart';
 CustomTheme currentTheme = CustomTheme();
 
 class CustomTheme with ChangeNotifier {
-  static bool _isDarkTheme = true;
+  static bool _isDarkTheme = false;
   ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData.light().copyWith(
-        brightness: Brightness.light,
-        primaryColor: kPrimaryColor,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: appBarTheme,
-        iconTheme: IconThemeData(color: kContentColorLightTheme),
-        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
-            .apply(bodyColor: kContentColorLightTheme),
-        colorScheme: ColorScheme.light(
-            primary: kPrimaryColor,
-            secondary: kSecondaryColor,
-            error: kErrorColor),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: Colors.white,
-            selectedItemColor: kContentColorLightTheme.withOpacity(0.7),
-            unselectedItemColor: kContentColorLightTheme.withOpacity(0.32),
-            selectedIconTheme: IconThemeData(color: kPrimaryColor),
-            showSelectedLabels: true));
+      brightness: Brightness.light,
+      primaryColor: kPrimaryColor,
+      backgroundColor: Colors.white,
+      scaffoldBackgroundColor: scaffoldBackGroundColorLight,
+      // appBarTheme: appBarTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: kPrimaryColor,
+        titleTextStyle: TextStyle(color: kPrimaryColor),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: kPrimaryColor,
+        unselectedItemColor: Colors.grey,
+      ),
+      textTheme:const TextTheme(
+        headline1: TextStyle(
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+        bodyText1: TextStyle(color:Colors.black, fontSize: 16),
+      ),
+    );
   }
 
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData.dark().copyWith(
       brightness: Brightness.dark,
       primaryColor: kPrimaryColor,
-      scaffoldBackgroundColor: kContentColorLightTheme,
-      appBarTheme: appBarTheme,
-      iconTheme: IconThemeData(color: kContentColorDarkTheme),
-      textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
-          .apply(bodyColor: kContentColorDarkTheme),
-      colorScheme: ColorScheme.dark().copyWith(
-        primary: kPrimaryColor,
-        secondary: kSecondaryColor,
-        error: kErrorColor,
+      scaffoldBackgroundColor: scaffoldBackGroundColorDark,
+      appBarTheme: AppBarTheme(
+        backgroundColor: scaffoldBackGroundColorDark,
+        titleTextStyle: TextStyle(color: kPrimaryColor),
+        iconTheme: IconThemeData(color: kPrimaryColor),
+        elevation: 0,
+      ),
+      textTheme:const TextTheme(
+        headline1: TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        bodyText1: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: kContentColorLightTheme,
-        selectedItemColor: Colors.white70,
-        unselectedItemColor: kContentColorDarkTheme.withOpacity(0.32),
+        backgroundColor: scaffoldBackGroundColorDark,
+        selectedItemColor: kPrimaryColor,
+        unselectedItemColor: Colors.grey,
         selectedIconTheme: IconThemeData(color: kPrimaryColor),
         showUnselectedLabels: true,
       ),

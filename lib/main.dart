@@ -70,31 +70,44 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(
-              color: currentTheme.currentTheme == Brightness.dark
-                  ? Colors.white
-                  : Colors.black),
-        ),
-        actions: [
-          IconButton(
+      // appBar: AppBar(
+      //   title: Text(
+      //     widget.title,
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           currentTheme.toggleTheme();
+      //         },
+      //         icon: Icon(Icons.brightness_4_rounded))
+      //   ],
+      // ),
+      body: Stack(
+        children: [
+          Center(
+            child: Consumer<AuthState>(
+              builder: (context, auth, child) {
+                if (auth.user == null) {
+                  return OnBoardingScreen();
+                } else {
+                  return Home();
+                }
+              },
+            ),
+          ),
+          Positioned(
+            top: 20,
+            right: 0,
+            child: IconButton(
+              padding: EdgeInsets.all(10),
               onPressed: () {
                 currentTheme.toggleTheme();
               },
-              icon: Icon(Icons.brightness_4_rounded))
+              icon: Icon(Icons.brightness_4_rounded),
+            ),
+          )
         ],
       ),
-      body: Center(child: Consumer<AuthState>(builder: (context, auth, child) {
-        if (auth.user == null) {
-          return OnBoardingScreen();
-        } else {
-          return Home();
-        }
-      })
-          // child: Home(),
-          ),
     );
   }
 }
