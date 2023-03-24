@@ -1,6 +1,7 @@
 import 'package:equb/helper/images.dart';
-import 'package:equb/screens/onboarding_screen/buildPage.dart';
+import 'package:equb/screens/onboarding_screen/build_page.dart';
 import 'package:equb/widget/custom_button.dart';
+import 'package:equb/widget/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
 
   List<Widget> screens = [
     BuildPage(
@@ -27,8 +28,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
   }
 
-  navigate() => Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: ((context) => Text('hello'))));
+  navigate() => Navigator.push(
+      context, MaterialPageRoute(builder: ((context) => LoginScreen())));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +80,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       bottomSheet: isLastPage
           ? CustomButton(title: 'Get Started', onTap: navigate)
           : Container(
+             color: Theme.of(context).scaffoldBackgroundColor,
               padding: EdgeInsets.symmetric(horizontal: 16),
               height: 80,
               child: Row(
