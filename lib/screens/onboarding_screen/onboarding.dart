@@ -1,4 +1,5 @@
 import 'package:equb/helper/images.dart';
+import 'package:equb/helper/switch_handler.dart';
 import 'package:equb/screens/onboarding_screen/build_page.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:equb/widget/login_screen.dart';
@@ -28,8 +29,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
   }
 
-  navigate() => Navigator.push(
-      context, MaterialPageRoute(builder: ((context) => LoginScreen())));
+  navigate() => Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: ((context) => SwitchHndler())));
   @override
   Widget build(BuildContext context) {
     return Scaffold(

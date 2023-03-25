@@ -1,62 +1,89 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
+import 'package:equb/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
-class OtpPrompt extends StatefulWidget {
-  OtpPrompt({super.key, required this.phoneNumber});
-  String phoneNumber;
+class OtpField extends StatefulWidget {
+  const OtpField({super.key});
 
   @override
-  State<OtpPrompt> createState() => _OtpPromptState();
+  State<OtpField> createState() => _OtpFieldState();
 }
 
-class _OtpPromptState extends State<OtpPrompt> {
-  final key = GlobalKey<FormState>();
-  final TextEditingController _otpController = TextEditingController();
-  AuthService authService = AuthService(AuthState());
+class _OtpFieldState extends State<OtpField> {
+  final TextEditingController _pinCodeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Center(
-            child: SingleChildScrollView(
-          child: Form(
-            key: key,
-            child: Column(
-              children: [
-                Text('Enter Your Otp'),
-                TextFormField(
-                  controller: _otpController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      hintText: 'Enter otp',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                           borderSide:
-                              BorderSide(color: Colors.indigo, width: 2))),
-                  validator: ((value) {
-                    if (value!.isEmpty) {
-                      return 'please entery your otp number';
-                    }
-                    return null;
-                  }),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      await authService.signInWithPhoneNumber(
-                          Provider.of<AuthState>(context,listen: false).verificationId, _otpController.text.trim());
-                    },
-                    child: Text('otp'))
-              ],
-            ),
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              PinCodeTextField(
+                appContext: context,
+                length: 6,
+                onChanged: (value) {
+                  _pinCodeController.text = value;
+                },
+                textStyle: TextStyle(
+                    color: currentTheme.currentTheme == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black),
+                keyboardType: TextInputType.number,
+                pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(10),
+                    fieldHeight: 50,
+                    fieldWidth: 40),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 20,
+                    child: Text('sms code will expired in ',
+                        style: TextStyle(fontSize: 16, color: Colors.indigo)),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      Provider.of<AuthState>(context, listen: false)
+                          .countdown
+                          .toString(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      ' sec',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  String verificationId =
+                      Provider.of<AuthState>(context, listen: false)
+                          .verificationId;
+                  await Provider.of<AuthState>(context, listen: false)
+                      .signInwithPhoneNumber(
+                          verificationId, _pinCodeController.text);
+                },
+                child: Text('verify'),
+              ),
+            ],
           ),
-        )),
+        ),
       ),
     );
   }
