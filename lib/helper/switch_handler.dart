@@ -21,8 +21,11 @@ class SwitchHndler extends StatelessWidget {
       case AuthStatus.authenticated:
         return Home();
       case AuthStatus.verificationFailed:
-        return Text('error');
-
+        return Scaffold(
+          body: Center(
+            child: Text('errors'),
+          ),
+        );
       case AuthStatus.codeAutoRetievalTimeout:
         return Text('jke');
     }

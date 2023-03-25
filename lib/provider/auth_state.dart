@@ -51,11 +51,12 @@ class AuthState with ChangeNotifier {
       void phoneCodeAutoRetrievalTimeout(String verificationId) {
         setStatus(AuthStatus.codeAutoRetievalTimeout);
         setVerificationId(verificationId);
+        startCountdown();
       }
 
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
-          timeout: const Duration(seconds: 60),
+          timeout: const Duration(seconds: 120),
           verificationCompleted: verificationCompleted,
           verificationFailed: phoneVerificationFaild,
           codeSent: codeSent,
@@ -87,6 +88,7 @@ class AuthState with ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
     _user = null;
+    setStatus(AuthStatus.uninitialized);
     // notifyListeners();
   }
 
