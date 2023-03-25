@@ -7,6 +7,8 @@ import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,11 +30,22 @@ class LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _pinCodeController = TextEditingController();
+
   AuthService authService = AuthService(AuthState());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: (() {
+                currentTheme.toggleTheme();
+              }),
+              icon: Icon(Icons.brightness_1))
+        ],
+      ),
       body: Center(
         child: Consumer<AuthState>(builder: (context, auth, child) {
           return SingleChildScrollView(
@@ -53,8 +66,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1
-                                      ?.color
-                                  ),
+                                      ?.color),
                             ),
                             Text(
                               'please confirm your country code and enter your phone number',
@@ -72,17 +84,19 @@ class LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline1!
+                                            .color),
                                     controller: _phoneNumberController,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
-                                      
                                       prefixIcon: CountryCodePicker(
-                                        
                                         initialSelection: 'ET',
                                         favorite: const ['+251', 'ET'],
                                         showCountryOnly: false,
                                         showOnlyCountryWhenClosed: false,
-
                                         onChanged: (value) {
                                           setState(() {
                                             _selectedCountry = value.dialCode;
@@ -114,6 +128,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 if (_formKey.currentState!.validate()) {
                                   log(_selectedCountry! +
                                       _phoneNumberController.text.trim());
+
                                   await Provider.of<AuthState>(context,
                                           listen: false)
                                       .verifyPhoneNumber(_selectedCountry! +
@@ -128,13 +143,49 @@ class LoginScreenState extends State<LoginScreen> {
                             )
                           ],
                         )
-                      : Column(children: [
-                          auth.status == AuthStatus.authenticating
-                              ? CircularProgressIndicator()
-                              : Column(
-                                  children: [Text(auth.status.toString())],
-                                )
-                        ])
+                      : Column(
+                          children: [
+                            auth.status == AuthStatus.authenticating
+                                ? CircularProgressIndicator()
+                                : Column(
+                                    children: [
+                                      PinCodeTextField(
+                                        appContext: context,
+                                        length: 6,
+                                        onChanged: (value) {
+                                          _pinCodeController.text = value;
+                                        },
+                                        textStyle: TextStyle(
+                                            color: currentTheme.currentTheme ==
+                                                    ThemeMode.dark
+                                                ? Colors.white
+                                                : Colors.black),
+                                        keyboardType: TextInputType.number,
+                                        pinTheme: PinTheme(
+                                            shape: PinCodeFieldShape.box,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            fieldHeight: 50,
+                                            fieldWidth: 40),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          log(auth.verificationId);
+                                          log(_pinCodeController.text);
+                                          await Provider.of<AuthState>(context,
+                                                  listen: false)
+                                              .signInwithPhoneNumber(
+                                                  auth.verificationId,
+                                                  _pinCodeController.text).then((value) => {
+                                                    log(auth.status.toString())
+                                                  });
+                                        },
+                                        child: Text('verify'),
+                                      ),
+                                    ],
+                                  ),
+                          ],
+                        )
                 ],
               ),
             ),
