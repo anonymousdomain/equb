@@ -9,7 +9,7 @@ class CustomSnackBar extends StatefulWidget {
     super.key,
     required this.message,
     required this.isSuccess,
-    this.duration = const Duration(seconds: 4),
+    this.duration = const Duration(seconds: 2),
   });
 
  @override
