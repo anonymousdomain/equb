@@ -44,16 +44,20 @@ class _OtpFieldState extends State<OtpField> {
     AuthState provider = context.watch<AuthState>();
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          actions: [
-            IconButton(
-                onPressed: (() {
-                  currentTheme.toggleTheme();
-                }),
-                icon: Icon(FeatherIcons.moon))
-          ],
-        ),
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(10),
+            onPressed: () {
+              currentTheme.toggleTheme();
+            },
+            icon: currentTheme.currentTheme == ThemeMode.dark
+                ? Icon(FeatherIcons.moon)
+                : Icon(FeatherIcons.sun),
+          ),
+        ],
+      ),
         body: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(30),
@@ -99,7 +103,7 @@ class _OtpFieldState extends State<OtpField> {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                   PinCodeTextField(
                     appContext: context,
@@ -116,7 +120,9 @@ class _OtpFieldState extends State<OtpField> {
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(10),
                         fieldHeight: 50,
-                        fieldWidth: 40),
+                        fieldWidth: 40,
+                        inactiveColor: Theme.of(context).primaryColor
+                        ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '';

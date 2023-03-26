@@ -86,10 +86,14 @@ class LoginScreenState extends State<LoginScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           IconButton(
-              onPressed: (() {
-                currentTheme.toggleTheme();
-              }),
-              icon: Icon(FeatherIcons.moon))
+            padding: EdgeInsets.all(10),
+            onPressed: () {
+              currentTheme.toggleTheme();
+            },
+            icon: currentTheme.currentTheme == ThemeMode.dark
+                ? Icon(FeatherIcons.moon)
+                : Icon(FeatherIcons.sun),
+          ),
         ],
       ),
       body: Center(

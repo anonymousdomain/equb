@@ -68,6 +68,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(10),
+            onPressed: () {
+              currentTheme.toggleTheme();
+            },
+            icon: currentTheme.currentTheme == ThemeMode.dark
+                ? Icon(FeatherIcons.moon)
+                : Icon(FeatherIcons.sun),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Center(
@@ -82,19 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ),
-          Positioned(
-            top: 20,
-            right: 0,
-            child: IconButton(
-              padding: EdgeInsets.all(10),
-              onPressed: () {
-                currentTheme.toggleTheme();
-              },
-              icon: currentTheme.currentTheme == ThemeMode.dark
-                  ? Icon(FeatherIcons.moon)
-                  : Icon(FeatherIcons.sun),
-            ),
-          )
         ],
       ),
     );
