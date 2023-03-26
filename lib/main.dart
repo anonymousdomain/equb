@@ -71,21 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           Center(
-            // child: Builder(builder: (context) {
-            //   return StreamBuilder(
-            //       stream: FirebaseAuth.instance.authStateChanges(),
-            //       builder: (context, snapshot) {
-            //         if (snapshot.hasData) {
-            //           return Home();
-            //         } else {
-            //           return OnBoardingScreen();
-            //         }
-            //       });
-            // }),
             child: Consumer<AuthState>(
               builder: (context, auth, child) {
                 if (auth.user == null ||
-                    auth.status == AuthStatus.authenticated) {
+                    auth.status != AuthStatus.authenticated) {
                   return OnBoardingScreen();
                 } else {
                   return Home();

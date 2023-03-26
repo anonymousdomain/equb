@@ -31,10 +31,11 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
 
   void verify() async {
+    AuthState provider = Provider.of<AuthState>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       String phoneNumber =
           _selectedCountry! + _phoneNumberController.text.trim();
-      final veified = await Provider.of<AuthState>(context, listen: false)
+      final veified = await provider
           .verifyPhoneNumber(phoneNumber)
           .then((value) {
         Provider.of<AuthState>(context, listen: false)
@@ -64,11 +65,11 @@ class LoginScreenState extends State<LoginScreen> {
           isSuccess: false,
         )));
 
-        if (Provider.of<AuthState>(context).status ==
+        if (provider.status ==
             AuthStatus.verificationFailed) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: CustomSnackBar(
-            message: Provider.of<AuthState>(context).errorMessage,
+            message: provider.errorMessage,
             isSuccess: false,
           )));
         }

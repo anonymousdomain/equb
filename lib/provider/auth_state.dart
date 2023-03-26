@@ -20,7 +20,7 @@ class AuthState with ChangeNotifier {
 
   User? get user => _user;
   String _verificationId = '';
-  int _countdown = 10;
+  int _countdown = 30;
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
   AuthStatus get status => _status;
@@ -57,7 +57,7 @@ class AuthState with ChangeNotifier {
 
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
-          timeout: const Duration(seconds: 10),
+          timeout: const Duration(seconds: 30),
           verificationCompleted: verificationCompleted,
           verificationFailed: phoneVerificationFaild,
           codeSent: codeSent,
@@ -101,9 +101,10 @@ class AuthState with ChangeNotifier {
   void setStatus(AuthStatus status) {
     Future.delayed(Duration(seconds: 1), () {
       _status = status;
+         notifyListeners();
     });
 
-    // notifyListeners();
+ 
   }
 
   void setPhoneNumber(String phoneNumber) {
