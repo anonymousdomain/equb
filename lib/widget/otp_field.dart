@@ -18,6 +18,7 @@ class _OtpFieldState extends State<OtpField> {
   final TextEditingController _pinCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+
   void signIn() async {
     if (_formKey.currentState!.validate()) {
       String verificationId =
@@ -44,20 +45,20 @@ class _OtpFieldState extends State<OtpField> {
     AuthState provider = context.watch<AuthState>();
     return Scaffold(
         appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        actions: [
-          IconButton(
-            padding: EdgeInsets.all(10),
-            onPressed: () {
-              currentTheme.toggleTheme();
-            },
-            icon: currentTheme.currentTheme == ThemeMode.dark
-                ? Icon(FeatherIcons.moon)
-                : Icon(FeatherIcons.sun),
-          ),
-        ],
-      ),
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          actions: [
+            IconButton(
+              padding: EdgeInsets.all(10),
+              onPressed: () {
+                currentTheme.toggleTheme();
+              },
+              icon: currentTheme.currentTheme == ThemeMode.dark
+                  ? Icon(FeatherIcons.moon)
+                  : Icon(FeatherIcons.sun),
+            ),
+          ],
+        ),
         body: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(30),
@@ -117,12 +118,12 @@ class _OtpFieldState extends State<OtpField> {
                             : Colors.black),
                     keyboardType: TextInputType.number,
                     pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(10),
-                        fieldHeight: 50,
-                        fieldWidth: 40,
-                        inactiveColor: Theme.of(context).primaryColor
-                        ),
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(10),
+                      fieldHeight: 50,
+                      fieldWidth: 40,
+                      inactiveColor: Theme.of(context).primaryColor,
+                    ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '';
@@ -138,37 +139,56 @@ class _OtpFieldState extends State<OtpField> {
                       }
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        child: Text(
-                          ' code will expired in - ',
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .color
-                                ?.withOpacity(0.4),
-                          ),
+                  provider.countdown == 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                              child: Text(
+                                ' Your code is expired ',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color
+                                      ?.withOpacity(0.4),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                              child: Text(
+                                ' code will expired in - ',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color
+                                      ?.withOpacity(0.4),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                              child: Text(
+                                '${provider.countdown} sec',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color
+                                      ?.withOpacity(0.4),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        child: Text(
-                          '${provider.countdown} sec',
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .color
-                                ?.withOpacity(0.4),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 20,
                   ),
