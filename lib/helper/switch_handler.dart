@@ -23,7 +23,7 @@ class SwitchHndler extends StatelessWidget {
       case AuthStatus.verificationFailed:
         return OtpField();
       case AuthStatus.codeAutoRetievalTimeout:
-        return Text('jke');
+        return OtpField();
     }
   }
 }

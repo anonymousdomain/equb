@@ -48,13 +48,14 @@ class LoginScreenState extends State<LoginScreen> {
         )));
       }
     } else {
-      if (_phoneNumberController.text.trim().isNotEmpty && _phoneNumberController.text.trim().length != 9) {
+      if (_phoneNumberController.text.trim().isNotEmpty &&
+          _phoneNumberController.text.trim().length != 9) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             content: CustomSnackBar(
-          message: 'Invalid Phone Number Format',
-          isSuccess: false,
-        )));
+              message: 'Invalid Phone Number Format',
+              isSuccess: false,
+            )));
       }
       if (_phoneNumberController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -169,13 +170,10 @@ class LoginScreenState extends State<LoginScreen> {
                       if (value!.isEmpty) {
                         return '';
                       }
-                      if (value.length != 9) {
+                      if (value.isNotEmpty && value.length != 9) {
                         return '';
                       }
                       if (provider.status == AuthStatus.verificationFailed) {
-                        // String code =
-                        //     Provider.of<AuthState>(context, listen: false)
-                        //         .errorMessage;
                         return '';
                       }
                       return null;
