@@ -18,13 +18,14 @@ class _OtpFieldState extends State<OtpField> {
   final TextEditingController _pinCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
   void signIn() async {
     if (_formKey.currentState!.validate()) {
       String verificationId =
           Provider.of<AuthState>(context, listen: false).verificationId;
       await Provider.of<AuthState>(context, listen: false)
-          .signInwithPhoneNumber(verificationId, _pinCodeController.text);
+          .signInwithPhoneNumber(verificationId, _pinCodeController.text)
+          .then((value) => Provider.of<AuthState>(context, listen: false)
+              .setStatus(AuthStatus.authenticated));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(

@@ -18,13 +18,12 @@ class SwitchHndler extends StatelessWidget {
         return LoginScreen();
       case AuthStatus.codeSent:
         return OtpField();
-      case AuthStatus.authenticated:
-       
-        return Home();
       case AuthStatus.verificationFailed:
         return OtpField();
       case AuthStatus.codeAutoRetievalTimeout:
         return OtpField();
+        case AuthStatus.authenticated:
+        return Home();
     }
   }
 }

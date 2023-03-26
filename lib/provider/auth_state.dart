@@ -50,7 +50,9 @@ class AuthState with ChangeNotifier {
       }
 
       void phoneCodeAutoRetrievalTimeout(String verificationId) {
-        setStatus(AuthStatus.codeAutoRetievalTimeout);
+        if (status != AuthStatus.authenticated) {
+          setStatus(AuthStatus.codeAutoRetievalTimeout);
+        }
         setVerificationId(verificationId);
         startCountdown();
       }
