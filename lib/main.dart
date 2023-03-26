@@ -3,7 +3,6 @@ import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // }),
             child: Consumer<AuthState>(
               builder: (context, auth, child) {
-                if (auth.user == null || auth.status==AuthStatus.authenticated) {
+                if (auth.user == null ||
+                    auth.status == AuthStatus.authenticated) {
                   return OnBoardingScreen();
                 } else {
                   return Home();

@@ -20,7 +20,9 @@ class AuthState with ChangeNotifier {
 
   User? get user => _user;
   String _verificationId = '';
-  int _countdown = 30;
+  int _countdown = 120;
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
   AuthStatus get status => _status;
   String get verificationId => _verificationId;
   int get countdown => _countdown;
@@ -34,11 +36,9 @@ class AuthState with ChangeNotifier {
       }
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
-        if (authException.code == 'invalid-phone-number') {
-          print('the provided phone number is not valid');
-        }
         setStatus(AuthStatus.verificationFailed);
-        print('error:${authException.message}');
+        setErrorMessage(authException.code);
+        log('error:${authException.message}');
       }
 
       Future<void> codeSent(
@@ -98,9 +98,18 @@ class AuthState with ChangeNotifier {
   }
 
   void setStatus(AuthStatus status) {
+    Future.delayed(Duration(
+      seconds: 2
+    ),(){
     _status = status;
+    });
+
 
     // notifyListeners();
+  }
+
+  void setErrorMessage(String errorMessage) {
+    _errorMessage = errorMessage;
   }
 
   void startCountdown() {
