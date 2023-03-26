@@ -101,14 +101,16 @@ class AuthState with ChangeNotifier {
   void setStatus(AuthStatus status) {
     Future.delayed(Duration(seconds: 1), () {
       _status = status;
-         notifyListeners();
+      notifyListeners();
     });
-
- 
   }
 
   void setPhoneNumber(String phoneNumber) {
     _phoneNumber = phoneNumber;
+  }
+
+  void setCountDown(int countdown) {
+    _countdown = countdown;
   }
 
   void setErrorMessage(String errorMessage) {

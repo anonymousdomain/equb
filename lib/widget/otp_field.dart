@@ -36,6 +36,7 @@ class _OtpFieldState extends State<OtpField> {
   void resend() async {
     AuthState provider = Provider.of<AuthState>(context, listen: false);
     await provider.verifyPhoneNumber(provider.phoneNumber);
+    provider.setCountDown(30);
   }
 
   @override
@@ -145,7 +146,6 @@ class _OtpFieldState extends State<OtpField> {
                   ),
                 ],
               ),
-              Text(provider.status.toString()),
               provider.status == AuthStatus.codeAutoRetievalTimeout
                   ? CustomButton(title: 'resend', onTap: resend)
                   : CustomButton(title: 'signin', onTap: signIn)
