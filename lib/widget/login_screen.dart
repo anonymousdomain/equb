@@ -47,6 +47,31 @@ class LoginScreenState extends State<LoginScreen> {
           isSuccess: true,
         )));
       }
+    } else {
+      if (_phoneNumberController.text.trim().isNotEmpty && _phoneNumberController.text.trim().length != 9) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            content: CustomSnackBar(
+          message: 'Invalid Phone Number Format',
+          isSuccess: false,
+        )));
+      }
+      if (_phoneNumberController.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: CustomSnackBar(
+          message: 'Enter Your Phone Number',
+          isSuccess: false,
+        )));
+
+        if (Provider.of<AuthState>(context).status ==
+            AuthStatus.verificationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: CustomSnackBar(
+            message: Provider.of<AuthState>(context).errorMessage,
+            isSuccess: false,
+          )));
+        }
+      }
     }
   }
 
@@ -142,16 +167,16 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                     validator: ((value) {
                       if (value!.isEmpty) {
-                        return 'Enter Your Phone';
+                        return '';
                       }
                       if (value.length != 9) {
-                        return 'invalid phone number';
+                        return '';
                       }
                       if (provider.status == AuthStatus.verificationFailed) {
-                        String code =
-                            Provider.of<AuthState>(context, listen: false)
-                                .errorMessage;
-                        return code;
+                        // String code =
+                        //     Provider.of<AuthState>(context, listen: false)
+                        //         .errorMessage;
+                        return '';
                       }
                       return null;
                     }),

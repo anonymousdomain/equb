@@ -99,7 +99,7 @@ class AuthState with ChangeNotifier {
 
   void setStatus(AuthStatus status) {
     Future.delayed(Duration(
-      seconds: 2
+      seconds: 1
     ),(){
     _status = status;
     });
