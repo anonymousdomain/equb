@@ -3,14 +3,11 @@
 import 'dart:developer';
 
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:equb/helper/auth_service.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/utils/theme.dart';
-import 'package:equb/widget/custom_button.dart';
+import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -32,12 +29,56 @@ class LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
-  // final TextEditingController _pinCodeController = TextEditingController();
 
-  AuthService authService = AuthService(AuthState());
+  void verify() async {
+    if (_formKey.currentState!.validate()) {
+      String phoneNumber =
+          _selectedCountry! + _phoneNumberController.text.trim();
+      final veified = await Provider.of<AuthState>(context, listen: false)
+          .verifyPhoneNumber(phoneNumber)
+          .then((value) {
+        Provider.of<AuthState>(context, listen: false)
+            .setStatus(AuthStatus.authenticating);
+      });
+      if (veified) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: CustomSnackBar(
+          message: 'Your Phone is verifyed',
+          isSuccess: true,
+        )));
+      }
+    } else {
+      if (_phoneNumberController.text.trim().isNotEmpty &&
+          _phoneNumberController.text.trim().length != 9) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            content: CustomSnackBar(
+              message: 'Invalid Phone Number Format',
+              isSuccess: false,
+            )));
+      }
+      if (_phoneNumberController.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: CustomSnackBar(
+          message: 'Enter Your Phone Number',
+          isSuccess: false,
+        )));
+
+        if (Provider.of<AuthState>(context).status ==
+            AuthStatus.verificationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: CustomSnackBar(
+            message: Provider.of<AuthState>(context).errorMessage,
+            isSuccess: false,
+          )));
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    AuthState provider = Provider.of<AuthState>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -127,7 +168,13 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                     validator: ((value) {
                       if (value!.isEmpty) {
-                        return 'please enter your phone number';
+                        return '';
+                      }
+                      if (value.isNotEmpty && value.length != 9) {
+                        return '';
+                      }
+                      if (provider.status == AuthStatus.verificationFailed) {
+                        return '';
                       }
                       return null;
                     }),
@@ -140,25 +187,24 @@ class LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.topRight,
                   widthFactor: 6,
                   child: GestureDetector(
-                      child: CircleAvatar(
-                        maxRadius: 25,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        child: Icon(
-                          FeatherIcons.arrowRight,
-                          size: 30,
-                          color: Theme.of(context).textTheme.headline1!.color,
-                        ),
-                      ),
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          log(_selectedCountry! + _phoneNumberController.text);
-                          await Provider.of<AuthState>(context, listen: false)
-                              .verifyPhoneNumber(_selectedCountry! +
-                                  _phoneNumberController.text)
-                              .then((value) => Provider.of<AuthState>(context,listen: false)
-                                  .setStatus(AuthStatus.authenticating));
-                        }
-                      }),
+                    onTap: verify,
+                    child: provider.status == AuthStatus.authenticating
+                        ? CircleAvatar(
+                            maxRadius: 20,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: CircularProgressIndicator.adaptive(),
+                          )
+                        : CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Icon(
+                              FeatherIcons.arrowRight,
+                              size: 30,
+                              color:
+                                  Theme.of(context).textTheme.headline1!.color,
+                            ),
+                          ),
+                  ),
                 )
               ],
             ),

@@ -20,13 +20,16 @@ class AuthState with ChangeNotifier {
 
   User? get user => _user;
   String _verificationId = '';
-  int _countdown = 30;
+  int _countdown = 10;
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
   AuthStatus get status => _status;
   String get verificationId => _verificationId;
   int get countdown => _countdown;
-
+  String _phoneNumber = '';
+  String get phoneNumber => _phoneNumber;
   Future<void> verifyPhoneNumber(String phoneNumber) async {
-    log('from auth state $phoneNumber');
+    setPhoneNumber(phoneNumber);
     try {
       Future<void> verificationCompleted(
           PhoneAuthCredential phoneAuthCredential) async {
@@ -34,11 +37,9 @@ class AuthState with ChangeNotifier {
       }
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
-        if (authException.code == 'invalid-phone-number') {
-          print('the provided phone number is not valid');
-        }
         setStatus(AuthStatus.verificationFailed);
-        print('error:${authException.message}');
+        setErrorMessage(authException.code);
+        log('error:${authException.message}');
       }
 
       Future<void> codeSent(
@@ -56,7 +57,7 @@ class AuthState with ChangeNotifier {
 
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
-          timeout: const Duration(seconds: 120),
+          timeout: const Duration(seconds: 10),
           verificationCompleted: verificationCompleted,
           verificationFailed: phoneVerificationFaild,
           codeSent: codeSent,
@@ -98,9 +99,19 @@ class AuthState with ChangeNotifier {
   }
 
   void setStatus(AuthStatus status) {
-    _status = status;
+    Future.delayed(Duration(seconds: 1), () {
+      _status = status;
+    });
 
     // notifyListeners();
+  }
+
+  void setPhoneNumber(String phoneNumber) {
+    _phoneNumber = phoneNumber;
+  }
+
+  void setErrorMessage(String errorMessage) {
+    _errorMessage = errorMessage;
   }
 
   void startCountdown() {
