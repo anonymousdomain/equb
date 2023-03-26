@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/utils/theme.dart';
+import 'package:equb/widget/custom_button.dart';
+import 'package:equb/widget/custom_leading_button.dart';
 import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -31,12 +33,12 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
 
   void verify() async {
+    AuthState provider = Provider.of<AuthState>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       String phoneNumber =
           _selectedCountry! + _phoneNumberController.text.trim();
-      final veified = await Provider.of<AuthState>(context, listen: false)
-          .verifyPhoneNumber(phoneNumber)
-          .then((value) {
+      final veified =
+          await provider.verifyPhoneNumber(phoneNumber).then((value) {
         Provider.of<AuthState>(context, listen: false)
             .setStatus(AuthStatus.authenticating);
       });
@@ -64,11 +66,10 @@ class LoginScreenState extends State<LoginScreen> {
           isSuccess: false,
         )));
 
-        if (Provider.of<AuthState>(context).status ==
-            AuthStatus.verificationFailed) {
+        if (provider.status == AuthStatus.verificationFailed) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: CustomSnackBar(
-            message: Provider.of<AuthState>(context).errorMessage,
+            message: provider.errorMessage,
             isSuccess: false,
           )));
         }
@@ -85,10 +86,14 @@ class LoginScreenState extends State<LoginScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           IconButton(
-              onPressed: (() {
-                currentTheme.toggleTheme();
-              }),
-              icon: Icon(FeatherIcons.moon))
+            padding: EdgeInsets.all(10),
+            onPressed: () {
+              currentTheme.toggleTheme();
+            },
+            icon: currentTheme.currentTheme == ThemeMode.dark
+                ? Icon(FeatherIcons.moon)
+                : Icon(FeatherIcons.sun),
+          ),
         ],
       ),
       body: Center(
@@ -183,34 +188,14 @@ class LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  widthFactor: 6,
-                  child: GestureDetector(
-                    onTap: verify,
-                    child: provider.status == AuthStatus.authenticating
-                        ? CircleAvatar(
-                            maxRadius: 20,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: CircularProgressIndicator.adaptive(),
-                          )
-                        : CircleAvatar(
-                            maxRadius: 25,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: Icon(
-                              FeatherIcons.arrowRight,
-                              size: 30,
-                              color:
-                                  Theme.of(context).textTheme.headline1!.color,
-                            ),
-                          ),
-                  ),
-                )
               ],
             ),
           ),
         ),
       ),
+      bottomSheet: provider.status == AuthStatus.authenticating
+          ? CustomLoadingButton()
+          : CustomButton(title: 'enter', onTap: verify),
     );
   }
 }
