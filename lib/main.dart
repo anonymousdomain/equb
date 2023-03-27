@@ -1,4 +1,5 @@
 import 'package:equb/provider/auth_state.dart';
+import 'package:equb/provider/conectivity.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/screens/onboarding_screen/onboarding.dart';
@@ -18,20 +19,25 @@ void main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     androidProvider: AndroidProvider.debug,
   );
-  runApp(ChangeNotifierProvider(
-    create: (_) => AuthState(),
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthState()),
+        ChangeNotifierProvider(create: (_) => Connection())
+      ],
+      child: Equb(),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Equb extends StatefulWidget {
+  const Equb({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Equb> createState() => EqubState();
 }
 
-class _MyAppState extends State<MyApp> {
+class EqubState extends State<Equb> {
   @override
   void initState() {
     super.initState();
