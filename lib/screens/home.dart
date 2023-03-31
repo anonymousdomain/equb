@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
+              duration: Duration(seconds: 3),
                 message: 'You are logged in successfuly', isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
@@ -69,7 +70,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: CupertinoTabBar(
           onTap: onPageTap,
           currentIndex: pageIndex,
-          activeColor: Colors.indigo,
+          activeColor: Colors.blue,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(
