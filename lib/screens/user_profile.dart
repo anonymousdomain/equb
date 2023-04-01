@@ -11,7 +11,7 @@ class UserProifle extends StatelessWidget {
     final user = provider.user;
     print(user);
     return Container(
-      child: Text('${user}'),
+      child: Text('hello'),
     );
   }
 }
