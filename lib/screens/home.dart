@@ -1,6 +1,8 @@
+import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/widget/nav_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 import '../widget/custom_snackbar.dart';
 
@@ -21,8 +23,9 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
-              duration: Duration(seconds: 3),
-                message: 'You are logged in successfuly', isSuccess: true))));
+                duration: Duration(seconds: 3),
+                message: 'You are logged in successfuly',
+                isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
   }
@@ -50,20 +53,23 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: Text('welcome home'),
+        title: Text(''),
       ),
       drawer: NavDrawer(),
       body: PageView(
         onPageChanged: onPageChanged,
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: const [
+        children:  [
           Center(
-            child: Text('1'),
+            child: Text('',style: TextStyle(
+              color: Theme.of(context).textTheme.headline1!.color
+            ),),
           ),
-          Center(child: Text('2')),
+          Center(child: Text('groups you in')),
+          NewEqubGroup(),
           Center(
-            child: Text('3'),
+            child: Text('new stuf'),
           ),
         ],
       ),
@@ -74,19 +80,25 @@ class _HomeState extends State<Home> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.star,
+                FeatherIcons.home,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.edit_note,
+                FeatherIcons.umbrella,
+                size: 30,
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                FeatherIcons.plusCircle,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
                 icon: Icon(
-              Icons.deblur,
+              FeatherIcons.anchor,
               size: 30,
             ))
           ]),

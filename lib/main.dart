@@ -94,8 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Center(
             child: Consumer<AuthState>(
               builder: (context, auth, child) {
-                if (auth.user == null ||
-                    auth.status != AuthStatus.authenticated) {
+                if (auth.user == null) {
                   return OnBoardingScreen();
                 } else {
                   return Home();

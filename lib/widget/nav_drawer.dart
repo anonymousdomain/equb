@@ -1,4 +1,5 @@
 import 'package:equb/provider/auth_state.dart';
+import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -23,7 +24,11 @@ class NavDrawer extends StatelessWidget {
                 ),
               ),
               title: Text('dawit yitagesu'),
-              subtitle: Text('+251915559055' ,style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),),
+              subtitle: Text(
+                '+251915559055',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.headline1!.color),
+              ),
               trailing: GestureDetector(
                 child: currentTheme.currentTheme == ThemeMode.dark
                     ? Icon(FeatherIcons.moon)
@@ -33,19 +38,25 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('home'),
+            title: Text('Home'),
             onTap: () => Navigator.pop(context),
             leading: Icon(FeatherIcons.home),
           ),
           ListTile(
-            title: Text('equbs You joind in'),
+            title: Text('Equbs'),
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: ((context) => Text('hello')))),
             leading: Icon(FeatherIcons.umbrella),
           ),
           ListTile(
+            title: Text('Join'),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: ((context) => NewEqubGroup()))),
+            leading: Icon(FeatherIcons.plusCircle),
+          ),
+          ListTile(
             leading: Icon(FeatherIcons.logOut),
-            title: Text('logout'),
+            title: Text('Logout'),
             onTap: () =>
                 Provider.of<AuthState>(context, listen: false).signOut(),
           )

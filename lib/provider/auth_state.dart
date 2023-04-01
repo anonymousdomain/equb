@@ -51,6 +51,7 @@ class AuthState with ChangeNotifier {
 
       void phoneCodeAutoRetrievalTimeout(String verificationId) {
         if (status != AuthStatus.authenticated) {
+
           setStatus(AuthStatus.codeAutoRetievalTimeout);
         }
         setVerificationId(verificationId);
@@ -101,10 +102,10 @@ class AuthState with ChangeNotifier {
   }
 
   void setStatus(AuthStatus status) {
-    Future.delayed(Duration(seconds: 1), () {
+    // Future.delayed(Duration(seconds: 1), () {
       _status = status;
       notifyListeners();
-    });
+    // });
   }
 
   void setPhoneNumber(String phoneNumber) {

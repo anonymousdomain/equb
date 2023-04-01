@@ -23,9 +23,7 @@ class _OtpFieldState extends State<OtpField> {
       String verificationId =
           Provider.of<AuthState>(context, listen: false).verificationId;
       await Provider.of<AuthState>(context, listen: false)
-          .signInwithPhoneNumber(verificationId, _pinCodeController.text)
-          .then((value) => Provider.of<AuthState>(context, listen: false)
-              .setStatus(AuthStatus.authenticated));
+          .signInwithPhoneNumber(verificationId, _pinCodeController.text);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(
