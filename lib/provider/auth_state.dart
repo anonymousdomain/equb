@@ -23,7 +23,7 @@ class AuthState with ChangeNotifier {
   bool get isNewUser => _isNewUser;
   User? get user => _user;
   String _verificationId = '';
-  int _countdown = 30;
+  int _countdown = 60;
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
   AuthStatus get status => _status;
@@ -69,20 +69,15 @@ class AuthState with ChangeNotifier {
 
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
-          timeout: const Duration(seconds: 30),
+          timeout: const Duration(seconds: 60),
           verificationCompleted: verificationCompleted,
           verificationFailed: phoneVerificationFaild,
           codeSent: codeSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
     } catch (e) {
-      // if (e is Exception) {
-      //   setStatus(AuthStatus.verificationFailed);
-      //   setErrorMessage(e.toString());
-      // } else {
         print(e.toString());
         setStatus(AuthStatus.verificationFailed);
         setErrorMessage('You provide invalide sms code');
-      // }
     }
   }
 

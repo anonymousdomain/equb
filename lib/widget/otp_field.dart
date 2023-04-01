@@ -37,7 +37,7 @@ class _OtpFieldState extends State<OtpField> {
   void resend() async {
     AuthState provider = Provider.of<AuthState>(context, listen: false);
     await provider.verifyPhoneNumber(provider.phoneNumber);
-    provider.setCountDown(30);
+    provider.setCountDown(60);
   }
 
   @override
