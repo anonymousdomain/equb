@@ -49,7 +49,7 @@ class AuthState with ChangeNotifier {
         } else {
           setErrorMessage('You provide invalide sms code');
         }
-        throw Exception(authException.message);
+        // throw Exception(authException.message);
       }
 
       Future<void> codeSent(
@@ -75,14 +75,14 @@ class AuthState with ChangeNotifier {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
     } catch (e) {
-      if (e is Exception) {
-        setStatus(AuthStatus.verificationFailed);
-        setErrorMessage(e.toString());
-      } else {
+      // if (e is Exception) {
+      //   setStatus(AuthStatus.verificationFailed);
+      //   setErrorMessage(e.toString());
+      // } else {
         print(e.toString());
         setStatus(AuthStatus.verificationFailed);
         setErrorMessage('You provide invalide sms code');
-      }
+      // }
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/home.dart';
+import 'package:equb/screens/user_profile.dart';
 import 'package:equb/widget/login_screen.dart';
 import 'package:equb/widget/otp_field.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class SwitchHndler extends StatelessWidget {
         return OtpField();
       case AuthStatus.authenticated:
         if (context.watch<AuthState>().isNewUser) {
-          return NewEqubGroup();
+          return UserProifle();
         } else {
           return Home();
         }

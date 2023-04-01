@@ -30,6 +30,7 @@ class _OtpFieldState extends State<OtpField> {
         isSuccess: false,
         message: widget.message ?? '',
       )));
+      Provider.of<AuthState>(context,listen: false).setStatus(AuthStatus.codeSent);
     }
   }
 
@@ -123,7 +124,6 @@ class _OtpFieldState extends State<OtpField> {
                       fieldWidth: 40,
                       inactiveColor: Theme.of(context).primaryColor,
                     ),
-                    
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '';
