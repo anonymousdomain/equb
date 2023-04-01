@@ -38,8 +38,18 @@ class AuthState with ChangeNotifier {
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
         setStatus(AuthStatus.verificationFailed);
-        setErrorMessage(authException.code);
-        log('error:${authException.message}');
+        String errorCode = authException.code;
+        if (errorCode == 'invalid-verification-code') {
+          setErrorMessage('Invalid verification code');
+        } else if (errorCode == 'expired-action-code') {
+          setErrorMessage('Expired Session Please Try Again');
+        } else {
+          setErrorMessage(
+              'An error occurred while verifying your phone number. Please try again later');
+        }
+        // setErrorMessage(authException.code);
+        log('error-message:${authException.message}');
+        log('error-code:${authException.code}');
       }
 
       Future<void> codeSent(
@@ -51,7 +61,6 @@ class AuthState with ChangeNotifier {
 
       void phoneCodeAutoRetrievalTimeout(String verificationId) {
         if (status != AuthStatus.authenticated) {
-
           setStatus(AuthStatus.codeAutoRetievalTimeout);
         }
         setVerificationId(verificationId);
@@ -67,6 +76,9 @@ class AuthState with ChangeNotifier {
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
     } catch (e) {
       print(e.toString());
+      setStatus(AuthStatus.verificationFailed);
+      setErrorMessage(
+          'An error occurred while verifying your phone number. Please try again later.');
     }
   }
 
@@ -86,6 +98,8 @@ class AuthState with ChangeNotifier {
     } catch (e) {
       print(e.toString());
       setStatus(AuthStatus.verificationFailed);
+      setErrorMessage(
+          'An error occurred while verifying your phone number. Please try again later.');
     }
   }
 
@@ -93,19 +107,15 @@ class AuthState with ChangeNotifier {
     await _auth.signOut();
     _user = null;
     setStatus(AuthStatus.uninitialized);
-    // notifyListeners();
   }
 
   void setVerificationId(String verificationId) {
     _verificationId = verificationId;
-    // notifyListeners();
   }
 
   void setStatus(AuthStatus status) {
-    // Future.delayed(Duration(seconds: 1), () {
-      _status = status;
-      notifyListeners();
-    // });
+    _status = status;
+    notifyListeners();
   }
 
   void setPhoneNumber(String phoneNumber) {
