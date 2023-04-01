@@ -19,7 +19,7 @@ class SwitchHndler extends StatelessWidget {
       case AuthStatus.codeSent:
         return OtpField();
       case AuthStatus.verificationFailed:
-        return OtpField();
+        return OtpField(message: Provider.of<AuthState>( context,listen: false).errorMessage,);
       case AuthStatus.codeAutoRetievalTimeout:
         return OtpField();
         case AuthStatus.authenticated:

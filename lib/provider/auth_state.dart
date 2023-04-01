@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 enum AuthStatus {
   uninitialized,
@@ -14,6 +15,7 @@ enum AuthStatus {
 }
 
 class AuthState with ChangeNotifier {
+  var logger = Logger();
   AuthStatus _status = AuthStatus.uninitialized;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? _user;
@@ -41,15 +43,12 @@ class AuthState with ChangeNotifier {
         String errorCode = authException.code;
         if (errorCode == 'invalid-verification-code') {
           setErrorMessage('Invalid verification code');
-        } else if (errorCode == 'expired-action-code') {
+        } else if (errorCode == 'session-expired') {
           setErrorMessage('Expired Session Please Try Again');
         } else {
-          setErrorMessage(
-              'An error occurred while verifying your phone number. Please try again later');
+          setErrorMessage('You provide invalide sms code');
         }
-        // setErrorMessage(authException.code);
-        log('error-message:${authException.message}');
-        log('error-code:${authException.code}');
+        throw Exception(authException.message);
       }
 
       Future<void> codeSent(
@@ -75,10 +74,14 @@ class AuthState with ChangeNotifier {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
     } catch (e) {
-      print(e.toString());
-      setStatus(AuthStatus.verificationFailed);
-      setErrorMessage(
-          'An error occurred while verifying your phone number. Please try again later.');
+      if (e is Exception) {
+        setStatus(AuthStatus.verificationFailed);
+        setErrorMessage(e.toString());
+      } else {
+        print(e.toString());
+        setStatus(AuthStatus.verificationFailed);
+        setErrorMessage('You provide invalide sms code');
+      }
     }
   }
 
@@ -98,8 +101,7 @@ class AuthState with ChangeNotifier {
     } catch (e) {
       print(e.toString());
       setStatus(AuthStatus.verificationFailed);
-      setErrorMessage(
-          'An error occurred while verifying your phone number. Please try again later.');
+      setErrorMessage('You provide invalide sms code');
     }
   }
 

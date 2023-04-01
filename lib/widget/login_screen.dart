@@ -37,12 +37,12 @@ class LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       String phoneNumber =
           _selectedCountry! + _phoneNumberController.text.trim();
-      final veified =
+     
           await provider.verifyPhoneNumber(phoneNumber).then((value) {
         Provider.of<AuthState>(context, listen: false)
             .setStatus(AuthStatus.authenticating);
       });
-      if (veified) {
+      if (provider.status==AuthStatus.codeSent) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
           message: 'Your Phone is verifyed',
