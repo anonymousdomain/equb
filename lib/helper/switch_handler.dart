@@ -24,6 +24,8 @@ class SwitchHndler extends StatelessWidget {
         return OtpField();
         case AuthStatus.authenticated:
         return Home();
+        default:
+        return LoginScreen();
     }
   }
 }

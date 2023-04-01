@@ -8,8 +8,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class OtpField extends StatefulWidget {
-  const OtpField({super.key});
-
+   OtpField({super.key,this.message});
+String? message;
   @override
   State<OtpField> createState() => _OtpFieldState();
 }
@@ -23,14 +23,12 @@ class _OtpFieldState extends State<OtpField> {
       String verificationId =
           Provider.of<AuthState>(context, listen: false).verificationId;
       await Provider.of<AuthState>(context, listen: false)
-          .signInwithPhoneNumber(verificationId, _pinCodeController.text)
-          .then((value) => Provider.of<AuthState>(context, listen: false)
-              .setStatus(AuthStatus.authenticated));
+          .signInwithPhoneNumber(verificationId, _pinCodeController.text);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(
         isSuccess: false,
-        message: 'invalid otp',
+        message:Provider.of<AuthState>(context).errorMessage,
       )));
     }
   }
