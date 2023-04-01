@@ -19,7 +19,8 @@ class AuthState with ChangeNotifier {
   AuthStatus _status = AuthStatus.uninitialized;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? _user;
-
+  bool _isNewUser = false;
+  bool get isNewUser => _isNewUser;
   User? get user => _user;
   String _verificationId = '';
   int _countdown = 30;
@@ -93,6 +94,7 @@ class AuthState with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _user = userCredential.user;
+      _isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
       if (_user == null) {
         setStatus(AuthStatus.uninitialized);
       } else {

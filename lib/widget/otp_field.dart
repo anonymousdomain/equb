@@ -60,7 +60,7 @@ class _OtpFieldState extends State<OtpField> {
         ),
         body: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.all(40),
             child: Form(
               key: _formKey,
               child: Column(
@@ -123,6 +123,7 @@ class _OtpFieldState extends State<OtpField> {
                       fieldWidth: 40,
                       inactiveColor: Theme.of(context).primaryColor,
                     ),
+                    
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '';
