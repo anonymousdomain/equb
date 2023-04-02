@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:equb/utils/theme.dart';
+import 'package:equb/widget/custom_text_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -14,22 +17,54 @@ class _UserProifleState extends State<UserProifle> {
 
   final TextEditingController _nameController = TextEditingController();
 
-  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   final TextEditingController _bankController = TextEditingController();
+  String? _selectedItem;
 
+  final _items = [
+    'Dashn Bank',
+    'Ethiopian Comericial Bank',
+    'Abbisinya Bank',
+    'Zemen Bank',
+  ];
   @override
   void dispose() {
     _nameController.dispose();
-    _userController.dispose();
+    _userNameController.dispose();
     _bankController.dispose();
     super.dispose();
+  }
+
+  void register() {
+    print(_nameController.text);
+    print(_userNameController.text);
+    print(_bankController.text);
+    print(_selectedItem);
+    if (_profileFormKey.currentState!.validate()) {
+      log('success');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(10),
+            onPressed: () {
+              currentTheme.toggleTheme();
+            },
+            icon: currentTheme.currentTheme == ThemeMode.dark
+                ? Icon(FeatherIcons.moon)
+                : Icon(FeatherIcons.sun),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(30.0),
@@ -70,9 +105,9 @@ class _UserProifleState extends State<UserProifle> {
                 ),
                 SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _nameController,
                   style: TextStyle(
                       color: Theme.of(context).textTheme.headline1!.color),
-                  initialValue: '',
                   decoration: InputDecoration(
                     focusColor: Theme.of(context).primaryColor,
                     hintText: 'Enter Your First Name',
@@ -86,9 +121,9 @@ class _UserProifleState extends State<UserProifle> {
                   height: 10,
                 ),
                 TextFormField(
+                  controller: _userNameController,
                   style: TextStyle(
                       color: Theme.of(context).textTheme.headline1!.color),
-                  initialValue: '',
                   decoration: InputDecoration(
                     focusColor: Theme.of(context).primaryColor,
                     hintText: 'Enter Your Last Name',
@@ -101,17 +136,39 @@ class _UserProifleState extends State<UserProifle> {
                 SizedBox(
                   height: 10,
                 ),
-                TextFormField(
+                DropdownButtonFormField(
+                  borderRadius: BorderRadius.circular(10),
+                  focusColor: Theme.of(context).primaryColor,
+                  value: _selectedItem,
+                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
                   style: TextStyle(
                       color: Theme.of(context).textTheme.headline1!.color),
-                  initialValue: '',
+                  items: _items.map((item) {
+                    return DropdownMenuItem(value: item, child: Text(item));
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedItem = value!;
+                    });
+                  },
+                  isDense: true,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: _bankController,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1!.color),
                   decoration: InputDecoration(
-                    // prefix: DropdownButtonFormField(
-                    //   items: const [],
-                    //   onChanged: ,
-                    // ),
                     focusColor: Theme.of(context).primaryColor,
-                    hintText: 'Enter Your Account',
+                    hintText: 'Enter Your Bank Number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: Colors.indigo, width: 2),
@@ -126,7 +183,7 @@ class _UserProifleState extends State<UserProifle> {
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColor,
           shape: CircleBorder(),
-          onPressed: () {},
+          onPressed: register,
           label: Icon(FeatherIcons.arrowRightCircle)),
     ));
   }
