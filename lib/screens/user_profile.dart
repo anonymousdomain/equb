@@ -3,6 +3,8 @@ import 'package:equb/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+import 'home.dart';
+
 class UserProifle extends StatefulWidget {
   const UserProifle({Key? key}) : super(key: key);
 
@@ -42,7 +44,8 @@ class _UserProifleState extends State<UserProifle> {
           firstName: _nameController.text.trim(),
           lastName: _userNameController.text.trim());
     }
-    // Navigator
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: ((context) => Home())));
   }
 
   @override
