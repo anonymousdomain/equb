@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/service/services.dart';
 import 'package:equb/utils/theme.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'home.dart';
 
@@ -21,6 +26,38 @@ class _UserProifleState extends State<UserProifle> {
 
   final TextEditingController _bankController = TextEditingController();
   String? _selectedItem;
+  File? _file;
+  String? imageUrl;
+  bool isDisposed = false;
+  final ImagePicker _picker = ImagePicker();
+  void takePhoto(ImageSource source) async {
+    final pickedFile =
+        await _picker.pickImage(source: source, maxHeight: 675, maxWidth: 960);
+    if (!isDisposed) {
+      setState(() {
+        _file = File(pickedFile!.path);
+      });
+    }
+  }
+
+  Future uploadImage(File imageFile) async {
+    UploadTask uploadTask = storage
+        .child('profiles/${DateTime.now().toString()}.jpg')
+        .putFile(imageFile);
+    String url = await (await uploadTask).ref.getDownloadURL();
+    // await uploadTask.whenComplete(() async {
+    //   if (!isDisposed) {
+    //     await storage.getDownloadURL().then(
+    //       (url) {
+    //         setState(() {
+    //           imageUrl = url;
+    //         });
+    //       },
+    //     );
+    //   }
+    // });
+    return url;
+  }
 
   final _items = [
     'Dashn Bank',
@@ -28,13 +65,6 @@ class _UserProifleState extends State<UserProifle> {
     'Abbisinya Bank',
     'Zemen Bank',
   ];
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _userNameController.dispose();
-    _bankController.dispose();
-    super.dispose();
-  }
 
   void register() {
     if (_profileFormKey.currentState!.validate()) {
@@ -42,10 +72,22 @@ class _UserProifleState extends State<UserProifle> {
           bankName: _bankController.text.trim(),
           bankNumber: _selectedItem,
           firstName: _nameController.text.trim(),
-          lastName: _userNameController.text.trim());
+          lastName: _userNameController.text.trim(),
+          imageUrl: uploadImage(_file!));
     }
+
+    // uploadImage(_file!);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: ((context) => Home())));
+  }
+
+  @override
+  void dispose() {
+    isDisposed = true;
+    super.dispose();
+    _nameController.dispose();
+    _userNameController.dispose();
+    _bankController.dispose();
   }
 
   @override
@@ -77,14 +119,19 @@ class _UserProifleState extends State<UserProifle> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    takePhoto(ImageSource.gallery);
+                  },
                   child: CircleAvatar(
+                    backgroundImage: _file != null ? FileImage(_file!) : null,
                     backgroundColor: Theme.of(context).primaryColor,
                     radius: 70.0,
-                    child: Icon(
-                      FeatherIcons.plusCircle,
-                      size: 30,
-                    ),
+                    child: _file == null
+                        ? Icon(
+                            FeatherIcons.plusCircle,
+                            size: 30,
+                          )
+                        : null,
                   ),
                 ),
                 SizedBox(height: 16.0),
