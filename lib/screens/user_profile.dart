@@ -1,12 +1,10 @@
-import 'dart:developer';
-
+import 'package:equb/service/services.dart';
 import 'package:equb/utils/theme.dart';
-import 'package:equb/widget/custom_text_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class UserProifle extends StatefulWidget {
-  UserProifle({Key? key}) : super(key: key);
+  const UserProifle({Key? key}) : super(key: key);
 
   @override
   State<UserProifle> createState() => _UserProifleState();
@@ -37,13 +35,14 @@ class _UserProifleState extends State<UserProifle> {
   }
 
   void register() {
-    print(_nameController.text);
-    print(_userNameController.text);
-    print(_bankController.text);
-    print(_selectedItem);
     if (_profileFormKey.currentState!.validate()) {
-      log('success');
+      createUserDocument(
+          bankName: _bankController.text.trim(),
+          bankNumber: _selectedItem,
+          firstName: _nameController.text.trim(),
+          lastName: _userNameController.text.trim());
     }
+    // Navigator
   }
 
   @override
@@ -98,7 +97,7 @@ class _UserProifleState extends State<UserProifle> {
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  'Enter your Related form carfully',
+                  'Enter Your Information ',
                   style: TextStyle(
                     color: Colors.grey,
                   ),
@@ -184,7 +183,7 @@ class _UserProifleState extends State<UserProifle> {
           backgroundColor: Theme.of(context).primaryColor,
           shape: CircleBorder(),
           onPressed: register,
-          label: Icon(FeatherIcons.arrowRightCircle)),
+          label: Icon(FeatherIcons.arrowRight)),
     ));
   }
 }
