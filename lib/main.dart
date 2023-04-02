@@ -1,5 +1,6 @@
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
+import 'package:equb/screens/user_profile.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/screens/onboarding_screen/onboarding.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-
+ 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -96,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context, auth, child) {
                 if (auth.user == null) {
                   return OnBoardingScreen();
+                } else if (auth.isNewUser) {
+                  return UserProifle();
                 } else {
                   return Home();
                 }

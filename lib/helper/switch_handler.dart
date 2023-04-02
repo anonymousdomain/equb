@@ -1,5 +1,7 @@
 import 'package:equb/provider/auth_state.dart';
+import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/home.dart';
+import 'package:equb/screens/user_profile.dart';
 import 'package:equb/widget/login_screen.dart';
 import 'package:equb/widget/otp_field.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +21,18 @@ class SwitchHndler extends StatelessWidget {
       case AuthStatus.codeSent:
         return OtpField();
       case AuthStatus.verificationFailed:
-        return OtpField();
+        return OtpField(
+          message: Provider.of<AuthState>(context, listen: false).errorMessage,
+        );
       case AuthStatus.codeAutoRetievalTimeout:
         return OtpField();
-        case AuthStatus.authenticated:
-        return Home();
-        default:
+      case AuthStatus.authenticated:
+        if (context.watch<AuthState>().isNewUser) {
+          return UserProifle();
+        } else {
+          return Home();
+        }
+      default:
         return LoginScreen();
     }
   }

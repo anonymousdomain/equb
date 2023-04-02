@@ -8,8 +8,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class OtpField extends StatefulWidget {
-   OtpField({super.key,this.message});
-String? message;
+  OtpField({super.key, this.message});
+  String? message;
   @override
   State<OtpField> createState() => _OtpFieldState();
 }
@@ -28,15 +28,16 @@ class _OtpFieldState extends State<OtpField> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(
         isSuccess: false,
-        message:Provider.of<AuthState>(context).errorMessage,
+        message: widget.message ?? '',
       )));
+      Provider.of<AuthState>(context,listen: false).setStatus(AuthStatus.codeSent);
     }
   }
 
   void resend() async {
     AuthState provider = Provider.of<AuthState>(context, listen: false);
     await provider.verifyPhoneNumber(provider.phoneNumber);
-    provider.setCountDown(30);
+    provider.setCountDown(60);
   }
 
   @override
@@ -60,7 +61,7 @@ class _OtpFieldState extends State<OtpField> {
         ),
         body: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.all(40),
             child: Form(
               key: _formKey,
               child: Column(
@@ -128,6 +129,9 @@ class _OtpFieldState extends State<OtpField> {
                         return '';
                       }
                       if (value.isNotEmpty && value.length != 6) {
+                        return '';
+                      }
+                      if (provider.status == AuthStatus.verificationFailed) {
                         return '';
                       }
                       return null;

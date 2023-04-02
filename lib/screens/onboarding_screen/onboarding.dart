@@ -80,7 +80,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       bottomSheet: isLastPage
           ? CustomButton(title: 'Get Started', onTap: navigate)
           : Container(
-             color: Theme.of(context).scaffoldBackgroundColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               padding: EdgeInsets.symmetric(horizontal: 16),
               height: 80,
               child: Row(
