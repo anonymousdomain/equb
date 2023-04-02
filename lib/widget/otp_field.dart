@@ -30,7 +30,8 @@ class _OtpFieldState extends State<OtpField> {
         isSuccess: false,
         message: widget.message ?? '',
       )));
-      Provider.of<AuthState>(context,listen: false).setStatus(AuthStatus.codeSent);
+      Provider.of<AuthState>(context, listen: false)
+          .setStatus(AuthStatus.codeSent);
     }
   }
 
@@ -137,7 +138,8 @@ class _OtpFieldState extends State<OtpField> {
                       return null;
                     },
                     onCompleted: (value) {
-                      if (value.length == 6) {
+                      if (value.length == 6 &&
+                          _formKey.currentState!.validate()) {
                         signIn();
                       }
                     },
