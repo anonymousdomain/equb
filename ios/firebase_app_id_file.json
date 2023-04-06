@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:719861097806:ios:6147bcd24cd0754842aa1f",
-  "FIREBASE_PROJECT_ID": "addis-equb",
-  "GCM_SENDER_ID": "719861097806"
+  "GOOGLE_APP_ID": "1:370755416533:ios:3d3b6ea7e275f308ce0d5c",
+  "FIREBASE_PROJECT_ID": "equb-addis",
+  "GCM_SENDER_ID": "370755416533"
 }

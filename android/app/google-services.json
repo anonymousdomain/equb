@@ -1,42 +1,35 @@
 {
   "project_info": {
-    "project_number": "719861097806",
-    "firebase_url": "https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "addis-equb",
-    "storage_bucket": "addis-equb.appspot.com"
+    "project_number": "370755416533",
+    "firebase_url": "https://equb-addis-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "equb-addis",
+    "storage_bucket": "equb-addis.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:719861097806:android:3bcb35c07d5f7ded42aa1f",
+        "mobilesdk_app_id": "1:370755416533:android:fbb3710009e3e6e3ce0d5c",
         "android_client_info": {
           "package_name": "com.example.equb"
         }
       },
       "oauth_client": [
         {
-          "client_id": "719861097806-ndl7srd1rs5am779k61fv2kct05jvsrd.apps.googleusercontent.com",
+          "client_id": "370755416533-kdf82di8hfrbb0vm32p3ja9jd3d721e1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAR9r6icByu_1JSg3lIm3rVhWQVk0jowEM"
+          "current_key": "AIzaSyBQ8VstqgfcYC7D7S9MqhSpzfyIQ7rh4WM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "719861097806-ndl7srd1rs5am779k61fv2kct05jvsrd.apps.googleusercontent.com",
+              "client_id": "370755416533-kdf82di8hfrbb0vm32p3ja9jd3d721e1.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "719861097806-hj1kknj10i8v0obkohfmn45e0ve9msf7.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.equb"
-              }
             }
           ]
         }

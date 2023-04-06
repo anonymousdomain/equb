@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,45 +49,23 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDgrr4nnXPF0aHTPXoG19DhB1c0Ws6D3Sg',
-    appId: '1:719861097806:web:f17a712be8a96bd042aa1f',
-    messagingSenderId: '719861097806',
-    projectId: 'addis-equb',
-    authDomain: 'addis-equb.firebaseapp.com',
-    databaseURL: 'https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'addis-equb.appspot.com',
-    measurementId: 'G-C5MSGPYH8Z',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAR9r6icByu_1JSg3lIm3rVhWQVk0jowEM',
-    appId: '1:719861097806:android:3bcb35c07d5f7ded42aa1f',
-    messagingSenderId: '719861097806',
-    projectId: 'addis-equb',
-    databaseURL: 'https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'addis-equb.appspot.com',
+    apiKey: 'AIzaSyBQ8VstqgfcYC7D7S9MqhSpzfyIQ7rh4WM',
+    appId: '1:370755416533:android:fbb3710009e3e6e3ce0d5c',
+    messagingSenderId: '370755416533',
+    projectId: 'equb-addis',
+    databaseURL: 'https://equb-addis-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'equb-addis.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB8nR8YYMJVIn6EPAzOL_TgLswC3fUiGFo',
-    appId: '1:719861097806:ios:6147bcd24cd0754842aa1f',
-    messagingSenderId: '719861097806',
-    projectId: 'addis-equb',
-    databaseURL: 'https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'addis-equb.appspot.com',
-    iosClientId: '719861097806-hj1kknj10i8v0obkohfmn45e0ve9msf7.apps.googleusercontent.com',
-    iosBundleId: 'com.example.equb',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB8nR8YYMJVIn6EPAzOL_TgLswC3fUiGFo',
-    appId: '1:719861097806:ios:6147bcd24cd0754842aa1f',
-    messagingSenderId: '719861097806',
-    projectId: 'addis-equb',
-    databaseURL: 'https://addis-equb-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'addis-equb.appspot.com',
-    iosClientId: '719861097806-hj1kknj10i8v0obkohfmn45e0ve9msf7.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDg2btAIcHZvAo4QCrILfM_YWOvar4NkRU',
+    appId: '1:370755416533:ios:3d3b6ea7e275f308ce0d5c',
+    messagingSenderId: '370755416533',
+    projectId: 'equb-addis',
+    databaseURL: 'https://equb-addis-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'equb-addis.appspot.com',
+    iosClientId: '370755416533-gemdoa2qsdnpcsjqh6avv499j2rdhid9.apps.googleusercontent.com',
     iosBundleId: 'com.example.equb',
   );
 }
