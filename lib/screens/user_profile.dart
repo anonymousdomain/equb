@@ -40,7 +40,7 @@ class _UserProifleState extends State<UserProifle> {
     }
   }
 
-  Future uploadImage(File imageFile) async {
+  Future<String?> uploadImage(File imageFile) async {
     UploadTask uploadTask = storage
         .child('profiles/${DateTime.now().toString()}.jpg')
         .putFile(imageFile);
@@ -66,20 +66,20 @@ class _UserProifleState extends State<UserProifle> {
     'Zemen Bank',
   ];
 
-  void register() {
+  void register() async {
+    String? imageUrl = await uploadImage(_file!);
     if (_profileFormKey.currentState!.validate()) {
       createUserDocument(
         bankName: _bankController.text.trim(),
         bankNumber: _selectedItem,
         firstName: _nameController.text.trim(),
         lastName: _userNameController.text.trim(),
-        // imageUrl: uploadImage(_file!),
+        imageUrl: imageUrl,
       );
-
-      print(uploadImage(_file!));
     }
 
     // uploadImage(_file!);
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: ((context) => Home())));
   }

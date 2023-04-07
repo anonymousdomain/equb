@@ -4,7 +4,8 @@ Future<void> createUserDocument(
     {required firstName,
     required lastName,
     required bankName,
-    required bankNumber}) async {
+    required bankNumber,
+    required imageUrl}) async {
   final phoneNumber = user?.phoneNumber;
   final userData = {
     'phoneNumber': phoneNumber,
@@ -12,7 +13,7 @@ Future<void> createUserDocument(
     'lastName': lastName,
     'bankName': bankName,
     'bankNumber': bankNumber,
-    // 'imageUrl': imageUrl
+    'imageUrl': imageUrl
   };
   await userCollection.doc(user?.uid).set(userData);
 }
