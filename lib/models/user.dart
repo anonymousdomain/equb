@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
   final String? id;
+  final String? uid;
   final String? firstName;
   final String? lastName;
   final String? bankName;
@@ -16,12 +17,14 @@ class User {
       this.bankNumber,
       this.imageUrl,
       this.phoneNumber,
-      this.id});
+      this.id,
+      this.uid});
 
 //convert map to user instance
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
       id: doc.get('id'),
+      uid: doc.get('uid'),
       firstName: doc.get('firstName'),
       phoneNumber: doc.get('phoneNumber'),
       lastName: doc.get('lastName'),
@@ -31,10 +34,11 @@ class User {
     );
   }
 
-  //convert user instance to map 
+  //convert user instance to map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'uid': uid,
       'firstName': firstName,
       'phoneNumber': phoneNumber,
       'lastName': lastName,

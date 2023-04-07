@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import 'home.dart';
 
@@ -29,6 +30,15 @@ class _UserProifleState extends State<UserProifle> {
   File? _file;
   String? imageUrl;
   bool isDisposed = false;
+  String? id;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      id = Uuid().v4().toString().replaceAll(RegExp(r'[^0-9]'), '').substring(0,8);
+    });
+  }
+
   final ImagePicker _picker = ImagePicker();
   void takePhoto(ImageSource source) async {
     final pickedFile =
@@ -45,17 +55,6 @@ class _UserProifleState extends State<UserProifle> {
         .child('profiles/${DateTime.now().toString()}.jpg')
         .putFile(imageFile);
     String url = await (await uploadTask).ref.getDownloadURL();
-    // await uploadTask.whenComplete(() async {
-    //   if (!isDisposed) {
-    //     await storage.getDownloadURL().then(
-    //       (url) {
-    //         setState(() {
-    //           imageUrl = url;
-    //         });
-    //       },
-    //     );
-    //   }
-    // });
     return url;
   }
 
@@ -75,6 +74,7 @@ class _UserProifleState extends State<UserProifle> {
         firstName: _nameController.text.trim(),
         lastName: _userNameController.text.trim(),
         imageUrl: imageUrl,
+        id: id,
       );
     }
 
