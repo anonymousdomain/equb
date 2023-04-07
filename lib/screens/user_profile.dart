@@ -69,11 +69,14 @@ class _UserProifleState extends State<UserProifle> {
   void register() {
     if (_profileFormKey.currentState!.validate()) {
       createUserDocument(
-          bankName: _bankController.text.trim(),
-          bankNumber: _selectedItem,
-          firstName: _nameController.text.trim(),
-          lastName: _userNameController.text.trim(),
-          imageUrl: uploadImage(_file!));
+        bankName: _bankController.text.trim(),
+        bankNumber: _selectedItem,
+        firstName: _nameController.text.trim(),
+        lastName: _userNameController.text.trim(),
+        // imageUrl: uploadImage(_file!),
+      );
+
+      print(uploadImage(_file!));
     }
 
     // uploadImage(_file!);
