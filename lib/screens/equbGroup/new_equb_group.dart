@@ -1,8 +1,10 @@
+import 'package:equb/service/group.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class NewEqub extends StatefulWidget {
   const NewEqub({super.key});
@@ -23,7 +25,7 @@ class _NewEqubState extends State<NewEqub> {
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _moneyamountController = TextEditingController();
   final TextEditingController _roundSizeController = TextEditingController();
-  final TextEditingController _scheduleDateController = TextEditingController();
+
   DateTime? _selectedDate;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -36,6 +38,17 @@ class _NewEqubState extends State<NewEqub> {
         _selectedDate = picked;
       });
     }
+  }
+
+  void createGroup() async {
+    final id = Uuid().v4().replaceAll(RegExp(r'[^0-9]'), '').substring(0, 10);
+    await createGroupDocument(
+        groupName: _groupNameController.text,
+        moneyAmount: _moneyamountController.text,
+        roundSize: _roundSizeController.text,
+        schedule: _selectedDate,
+        equbType: _selectedItem,
+        id: id);
   }
 
   @override
@@ -172,7 +185,7 @@ class _NewEqubState extends State<NewEqub> {
           ),
         ),
       ),
-      bottomSheet: CustomButton(title: 'create', onTap: () {}),
+      bottomSheet: CustomButton(title: 'create', onTap: createGroup),
     );
   }
 }

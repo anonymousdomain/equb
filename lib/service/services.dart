@@ -29,3 +29,4 @@ Future<User?> getUserDocument() async {
 
   return userDoc.exists ? User.fromDocument(userDoc) : null;
 }
+
