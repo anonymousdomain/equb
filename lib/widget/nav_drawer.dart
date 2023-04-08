@@ -1,6 +1,7 @@
 import 'package:equb/models/user.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
+import 'package:equb/screens/equbGroup/new_equb_group.dart';
 import 'package:equb/service/services.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,8 @@ class _NavDrawerState extends State<NavDrawer> {
           _user?.role == 'admin'
               ? ListTile(
                   title: Text('New'),
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NewEqub())),
                   leading: Icon(FeatherIcons.plusCircle),
                 )
               : SizedBox.shrink(),

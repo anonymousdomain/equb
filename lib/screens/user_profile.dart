@@ -194,6 +194,7 @@ class _UserProifleState extends State<UserProifle> {
                   value: _selectedItem,
                   dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                   decoration: InputDecoration(
+                    hintText: 'Bank Type',
                       fillColor: Theme.of(context).primaryColor,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
