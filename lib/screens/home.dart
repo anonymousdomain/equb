@@ -86,13 +86,13 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                FeatherIcons.umbrella,
+                FeatherIcons.droplet,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                FeatherIcons.plusCircle,
+                FeatherIcons.userPlus,
                 size: 30,
               ),
             ),

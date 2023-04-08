@@ -57,31 +57,6 @@ class _NavDrawerState extends State<NavDrawer> {
                               : SizedBox.shrink(),
                         ),
                         title: Text('${_user?.firstName} ${_user?.lastName}'),
-                        // subtitle: Expanded(
-                        //   flex: 1,
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children: [
-                        //       Text(
-                        //         _user?.phoneNumber ?? '',
-                        //         style: TextStyle(
-                        //             color: Theme.of(context)
-                        //                 .textTheme
-                        //                 .headline1!
-                        //                 .color),
-                        //       ),
-                        //       SizedBox(height: 10,),
-                        //       Text(
-                        //         _user?.id ?? '',
-                        //         style: TextStyle(
-                        //             color: Theme.of(context)
-                        //                 .textTheme
-                        //                 .headline1!
-                        //                 .color),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         subtitle: Text(
                           _user?.phoneNumber ?? '',
                           style: TextStyle(
@@ -113,6 +88,11 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(FeatherIcons.home),
           ),
           ListTile(
+            title: Text('New'),
+            onTap: () => Navigator.pop(context),
+            leading: Icon(FeatherIcons.plusCircle),
+          ),
+          ListTile(
             title: Text('Equbs'),
             onTap: () => Navigator.push(
               context,
@@ -120,7 +100,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 builder: ((context) => Text('hello')),
               ),
             ),
-            leading: Icon(FeatherIcons.umbrella),
+            leading: Icon(FeatherIcons.droplet),
           ),
           ListTile(
             title: Text('Join'),
@@ -130,10 +110,10 @@ class _NavDrawerState extends State<NavDrawer> {
                 builder: ((context) => NewEqubGroup()),
               ),
             ),
-            leading: Icon(FeatherIcons.plusCircle),
+            leading: Icon(FeatherIcons.userPlus),
           ),
           ListTile(
-            leading: Icon(FeatherIcons.logOut),
+            leading: Icon(FeatherIcons.lock),
             title: Text('Logout'),
             onTap: () =>
                 Provider.of<AuthState>(context, listen: false).signOut(),
