@@ -1,6 +1,8 @@
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:intl/intl.dart';
 
 class NewEqub extends StatefulWidget {
   const NewEqub({super.key});
@@ -22,6 +24,20 @@ class _NewEqubState extends State<NewEqub> {
   final TextEditingController _moneyamountController = TextEditingController();
   final TextEditingController _roundSizeController = TextEditingController();
   final TextEditingController _scheduleDateController = TextEditingController();
+  DateTime? _selectedDate;
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +87,7 @@ class _NewEqubState extends State<NewEqub> {
                     value: _selectedItem,
                     dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                     decoration: InputDecoration(
-                      hintText: 'Equb Type',
+                        hintText: 'Equb Type',
                         fillColor: Theme.of(context).primaryColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -126,21 +142,29 @@ class _NewEqubState extends State<NewEqub> {
                     height: 10,
                   ),
                   TextFormField(
-                    controller: _scheduleDateController,
+                    onChanged: ((value) {
+                      _selectedDate = value as DateTime?;
+                    }),
+                    controller: TextEditingController(
+                        text: _selectedDate != null
+                            ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                            : ''),
+                    readOnly: true,
+                    onTap: () {
+                      _selectDate(context);
+                    },
                     style: TextStyle(
                         color: Theme.of(context).textTheme.headline1!.color),
                     decoration: InputDecoration(
+                      labelText: 'Schedule',
                       focusColor: Theme.of(context).primaryColor,
                       hintText: 'Enter Schedule',
+                      suffixIcon: Icon(FeatherIcons.calendar),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(color: Colors.indigo, width: 2),
                       ),
                     ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                  SizedBox(
-                    height: 10,
                   ),
                 ],
               ),
