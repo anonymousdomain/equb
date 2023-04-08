@@ -97,6 +97,7 @@ class _UserProifleState extends State<UserProifle> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -194,6 +195,7 @@ class _UserProifleState extends State<UserProifle> {
                   value: _selectedItem,
                   dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                   decoration: InputDecoration(
+                    hintText: 'Bank Type',
                       fillColor: Theme.of(context).primaryColor,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

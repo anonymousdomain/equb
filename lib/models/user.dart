@@ -9,6 +9,7 @@ class User {
   final String? bankNumber;
   final String? imageUrl;
   final String? phoneNumber;
+  final String? role;
 
   User(
       {this.firstName,
@@ -18,7 +19,8 @@ class User {
       this.imageUrl,
       this.phoneNumber,
       this.id,
-      this.uid});
+      this.uid,
+      this.role});
 
 //convert map to user instance
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -31,21 +33,22 @@ class User {
       bankName: doc.get('bankName'),
       bankNumber: doc.get('bankNumber'),
       imageUrl: doc.get('imageUrl'),
+      role: doc.get('role'),
     );
   }
   factory User.fromMap(Map<String, dynamic> map, {String? id}) {
     return User(
-      id: id,
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      bankName: map['bankName'],
-      bankNumber: map['bankNumber'],
-      phoneNumber: map['phoneNumber'],
-      imageUrl: map['imageUrl'],
-      uid: map['uid'],
-    );
+        id: id,
+        firstName: map['firstName'],
+        lastName: map['lastName'],
+        bankName: map['bankName'],
+        bankNumber: map['bankNumber'],
+        phoneNumber: map['phoneNumber'],
+        imageUrl: map['imageUrl'],
+        uid: map['uid'],
+        role: map['role']);
   }
- 
+
   //convert user instance to map
   Map<String, dynamic> toMap() {
     return {
