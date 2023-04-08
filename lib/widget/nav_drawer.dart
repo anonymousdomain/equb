@@ -74,11 +74,14 @@ class _NavDrawerState extends State<NavDrawer> {
                       SizedBox(
                         height: 50,
                       ),
-                      Text('Id:${_user?.id}',style: TextStyle(
-                        color: Theme.of(context).textTheme.headline1!.color,
-                        fontSize: 11,
-                      ),
-                      textAlign: TextAlign.end,)
+                      Text(
+                        'Id:${_user?.id}',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.headline1!.color,
+                          fontSize: 11,
+                        ),
+                        textAlign: TextAlign.end,
+                      )
                     ],
                   ),
           ),
@@ -87,11 +90,13 @@ class _NavDrawerState extends State<NavDrawer> {
             onTap: () => Navigator.pop(context),
             leading: Icon(FeatherIcons.home),
           ),
-          ListTile(
-            title: Text('New'),
-            onTap: () => Navigator.pop(context),
-            leading: Icon(FeatherIcons.plusCircle),
-          ),
+          _user?.role == 'admin'
+              ? ListTile(
+                  title: Text('New'),
+                  onTap: () => Navigator.pop(context),
+                  leading: Icon(FeatherIcons.plusCircle),
+                )
+              : SizedBox.shrink(),
           ListTile(
             title: Text('Equbs'),
             onTap: () => Navigator.push(

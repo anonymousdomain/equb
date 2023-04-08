@@ -18,7 +18,8 @@ Future<void> createUserDocument({
     'bankNumber': bankNumber,
     'imageUrl': imageUrl,
     'id': id,
-    'uid': user?.uid
+    'uid': user?.uid,
+    'role':'memeber'
   };
   await userCollection.doc(user?.uid).set(userData);
 }
