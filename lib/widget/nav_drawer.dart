@@ -34,36 +34,77 @@ class _NavDrawerState extends State<NavDrawer> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration:
-                BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
             child: _user == null
                 ? ListTile(
                     leading: CircleAvatar(
                     radius: 30,
                     child: CircularProgressIndicator(),
                   ))
-                : ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(_user!.imageUrl ?? ''),
-                      child: _user == null
-                          ? Icon(
-                              FeatherIcons.user,
-                            )
-                          : SizedBox.shrink(),
-                    ),
-                    title: Text('${_user?.firstName} ${_user?.lastName}'),
-                    subtitle: Text(
-                      _user?.phoneNumber ?? '',
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.headline1!.color),
-                    ),
-                    trailing: GestureDetector(
-                      child: currentTheme.currentTheme == ThemeMode.dark
-                          ? Icon(FeatherIcons.moon)
-                          : Icon(FeatherIcons.sun),
-                      onTap: () => currentTheme.toggleTheme(),
-                    ),
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(_user!.imageUrl ?? ''),
+                          child: _user == null
+                              ? Icon(
+                                  FeatherIcons.user,
+                                )
+                              : SizedBox.shrink(),
+                        ),
+                        title: Text('${_user?.firstName} ${_user?.lastName}'),
+                        // subtitle: Expanded(
+                        //   flex: 1,
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Text(
+                        //         _user?.phoneNumber ?? '',
+                        //         style: TextStyle(
+                        //             color: Theme.of(context)
+                        //                 .textTheme
+                        //                 .headline1!
+                        //                 .color),
+                        //       ),
+                        //       SizedBox(height: 10,),
+                        //       Text(
+                        //         _user?.id ?? '',
+                        //         style: TextStyle(
+                        //             color: Theme.of(context)
+                        //                 .textTheme
+                        //                 .headline1!
+                        //                 .color),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        subtitle: Text(
+                          _user?.phoneNumber ?? '',
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.headline1!.color),
+                        ),
+                        trailing: GestureDetector(
+                          child: currentTheme.currentTheme == ThemeMode.dark
+                              ? Icon(FeatherIcons.moon)
+                              : Icon(FeatherIcons.sun),
+                          onTap: () => currentTheme.toggleTheme(),
+                        ),
+                        // isThreeLine: true,
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text('Id:${_user?.id}',style: TextStyle(
+                        color: Theme.of(context).textTheme.headline1!.color,
+                        fontSize: 11,
+                      ),
+                      textAlign: TextAlign.end,)
+                    ],
                   ),
           ),
           ListTile(
@@ -73,14 +114,22 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           ListTile(
             title: Text('Equbs'),
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: ((context) => Text('hello')))),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => Text('hello')),
+              ),
+            ),
             leading: Icon(FeatherIcons.umbrella),
           ),
           ListTile(
             title: Text('Join'),
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: ((context) => NewEqubGroup()))),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => NewEqubGroup()),
+              ),
+            ),
             leading: Icon(FeatherIcons.plusCircle),
           ),
           ListTile(
