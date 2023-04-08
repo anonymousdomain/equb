@@ -1,13 +1,14 @@
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/models/user.dart';
 
-Future<void> createUserDocument(
-    {required firstName,
-    required lastName,
-    required bankName,
-    required bankNumber,
-    required imageUrl, required id,
-
-    }) async {
+Future<void> createUserDocument({
+  required firstName,
+  required lastName,
+  required bankName,
+  required bankNumber,
+  required imageUrl,
+  required id,
+}) async {
   final phoneNumber = user?.phoneNumber;
   final userData = {
     'phoneNumber': phoneNumber,
@@ -20,4 +21,10 @@ Future<void> createUserDocument(
     'uid': user?.uid
   };
   await userCollection.doc(user?.uid).set(userData);
+}
+
+Future<User?> getUserDocument() async {
+  final userDoc = await userCollection.doc(user?.uid).get();
+
+  return userDoc.exists ? User.fromDocument(userDoc) : null;
 }
