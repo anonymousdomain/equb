@@ -2,6 +2,7 @@ import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
+import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class NewEqub extends StatefulWidget {
 class _NewEqubState extends State<NewEqub> {
   String? _selectedItem;
   String? _catagoryItem;
+  String _message = '';
   final _equbKey = GlobalKey<FormState>();
   final _types = [
     'Daily',
@@ -43,22 +45,46 @@ class _NewEqubState extends State<NewEqub> {
     }
   }
 
-  void createGroup()  {
+  void createGroup() async {
     final id = Uuid().v4().replaceAll(RegExp(r'[^0-9]'), '').substring(0, 10);
-     createGroupDocument(
-        catagory: _catagoryItem,
-        groupName: _groupNameController.text,
-        moneyAmount: _moneyamountController.text,
-        roundSize: _roundSizeController.text,
-        schedule: _selectedDate,
-        equbType: _selectedItem,
-        id: id).then((value) =>Navigator.push(context, MaterialPageRoute(builder: (context)=>GroupsIn())));
-        
+    final isDocumentExist = await isDocExist(_groupNameController.text);
+
+    if (_equbKey.currentState!.validate() && !isDocumentExist) {
+      await createGroupDocument(
+              catagory: _catagoryItem,
+              groupName: _groupNameController.text,
+              moneyAmount: _moneyamountController.text,
+              roundSize: _roundSizeController.text,
+              schedule: _selectedDate,
+              equbType: _selectedItem,
+              id: id)
+          .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: CustomSnackBar(
+                  message: 'group created successfully', isSuccess: true))))
+          .then((value) => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => GroupsIn())));
+    }
+    if (isDocumentExist) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: CustomSnackBar(
+              message: 'Group aleady exsit with a Name', isSuccess: false)));
+    } else {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: CustomSnackBar(message: _message, isSuccess: false)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // actions: const [
+        //   Icon(FeatherIcons.bell)
+        // ],
+        elevation: 0.0,
+      ),
       resizeToAvoidBottomInset: false,
       body: Center(
         child: SingleChildScrollView(
@@ -95,6 +121,22 @@ class _NewEqubState extends State<NewEqub> {
                         borderSide: BorderSide(color: Colors.indigo, width: 2),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'group name is required';
+                        });
+                        return '';
+                      }
+                      if (value.length > 30) {
+                        setState(() {
+                          _message =
+                              'group name  must be less than 30 characters';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -102,7 +144,7 @@ class _NewEqubState extends State<NewEqub> {
                   DropdownButtonFormField(
                     borderRadius: BorderRadius.circular(10),
                     focusColor: Theme.of(context).primaryColor,
-                    value: _catagoryItem,
+                    value: _catagoryItem ?? _catagory[0],
                     dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                     decoration: InputDecoration(
                         hintText: 'Catagory',
@@ -121,6 +163,15 @@ class _NewEqubState extends State<NewEqub> {
                       });
                     },
                     isDense: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'catagory item is required';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -128,7 +179,7 @@ class _NewEqubState extends State<NewEqub> {
                   DropdownButtonFormField(
                     borderRadius: BorderRadius.circular(10),
                     focusColor: Theme.of(context).primaryColor,
-                    value: _selectedItem,
+                    value: _selectedItem ?? _types[0],
                     dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                     decoration: InputDecoration(
                         hintText: 'Type',
@@ -147,6 +198,15 @@ class _NewEqubState extends State<NewEqub> {
                       });
                     },
                     isDense: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'equb type is required';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -164,6 +224,15 @@ class _NewEqubState extends State<NewEqub> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'money amount is required';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -181,6 +250,15 @@ class _NewEqubState extends State<NewEqub> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'round size is required';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -209,6 +287,15 @@ class _NewEqubState extends State<NewEqub> {
                         borderSide: BorderSide(color: Colors.indigo, width: 2),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'schedule is  required';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                   ),
                 ],
               ),

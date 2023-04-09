@@ -22,6 +22,7 @@ class _GroupsInState extends State<GroupsIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Text('groups in'),
     );
   }
