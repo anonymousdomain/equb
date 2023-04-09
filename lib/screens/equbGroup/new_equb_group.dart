@@ -1,3 +1,4 @@
+import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
@@ -34,7 +35,7 @@ class _NewEqubState extends State<NewEqub> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime.now());
+        lastDate: DateTime(2030));
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -42,16 +43,17 @@ class _NewEqubState extends State<NewEqub> {
     }
   }
 
-  void createGroup() async {
+  void createGroup()  {
     final id = Uuid().v4().replaceAll(RegExp(r'[^0-9]'), '').substring(0, 10);
-    await createGroupDocument(
+     createGroupDocument(
         catagory: _catagoryItem,
         groupName: _groupNameController.text,
         moneyAmount: _moneyamountController.text,
         roundSize: _roundSizeController.text,
         schedule: _selectedDate,
         equbType: _selectedItem,
-        id: id);
+        id: id).then((value) =>Navigator.push(context, MaterialPageRoute(builder: (context)=>GroupsIn())));
+        
   }
 
   @override

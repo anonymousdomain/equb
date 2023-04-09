@@ -3,15 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../helper/firbasereference.dart';
 
 final groupId = groupCollection.doc().id;
-Future<void> createGroupDocument({
-  required groupName,
-  required moneyAmount,
-  required roundSize,
-  required schedule,
-  required equbType,
-  required id,
-  required catagory
-}) async {
+Future<bool> isDocExist(String groupName) async {
+  final QuerySnapshot querySnapshot =
+      await groupCollection.where('groupName', isEqualTo: groupName).get();
+  return querySnapshot.docs.isNotEmpty;
+}
+
+Future<void> createGroupDocument(
+    {required groupName,
+    required moneyAmount,
+    required roundSize,
+    required schedule,
+    required equbType,
+    required id,
+    required catagory}) async {
   final groupDoc = {
     'groupName': groupName,
     'moneyAmount': moneyAmount,
@@ -21,11 +26,15 @@ Future<void> createGroupDocument({
     'id': id,
     'uid': user?.uid,
     'members': [user?.uid],
-    'catagory':catagory,
+    'catagory': catagory,
     'createdAt': FieldValue.serverTimestamp()
   };
-
-  await groupCollection.doc(groupId).set(groupDoc);
+  final bool docExist = await isDocExist(groupName);
+  if (!docExist) {
+    await groupCollection.add(groupDoc);
+  } else {
+    print('document already exists');
+  }
 }
 
 //join a group
