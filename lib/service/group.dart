@@ -58,6 +58,6 @@ Future<void> groupsUsersIn() async {
       await groupCollection.where('members', arrayContains: user?.uid).get();
 
   for (final doc in usersGroup.docs) {
-    print(doc['groupName']);
+    print(doc);
   }
 }
