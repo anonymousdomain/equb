@@ -9,6 +9,9 @@ class NewEqubGroup extends StatefulWidget {
 
 class _NewEqubGroupState extends State<NewEqubGroup> {
   @override
+ 
+  
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

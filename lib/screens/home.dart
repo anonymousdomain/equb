@@ -1,4 +1,5 @@
 import 'package:equb/screens/equbGroup/equb_groups.dart';
+import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/widget/nav_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,13 +61,15 @@ class _HomeState extends State<Home> {
         onPageChanged: onPageChanged,
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children:  [
+        children: [
           Center(
-            child: Text('',style: TextStyle(
-              color: Theme.of(context).textTheme.headline1!.color
-            ),),
+            child: Text(
+              '',
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.headline1!.color),
+            ),
           ),
-          Center(child: Text('groups you in')),
+          GroupsIn(),
           NewEqubGroup(),
           Center(
             child: Text('new stuf'),

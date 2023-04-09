@@ -133,6 +133,7 @@ class LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   // width: MediaQuery.of(context).size.width * 0.8,
                   child: TextFormField(
+
                     style: TextStyle(
                         color: Theme.of(context).textTheme.headline1!.color),
                     controller: _phoneNumberController,
