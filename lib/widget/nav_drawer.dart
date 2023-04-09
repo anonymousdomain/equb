@@ -1,6 +1,7 @@
 import 'package:equb/models/user.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
+import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/equbGroup/new_equb_group.dart';
 import 'package:equb/service/services.dart';
 import 'package:equb/utils/theme.dart';
@@ -104,7 +105,7 @@ class _NavDrawerState extends State<NavDrawer> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: ((context) => Text('hello')),
+                builder: ((context) => GroupsIn()),
               ),
             ),
             leading: Icon(FeatherIcons.droplet),

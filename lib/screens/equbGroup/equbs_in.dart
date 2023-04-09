@@ -1,4 +1,5 @@
 import 'package:equb/service/group.dart';
+import 'package:equb/widget/nav_drawer.dart';
 import 'package:flutter/material.dart';
 
 class GroupsIn extends StatefulWidget {
@@ -22,7 +23,6 @@ class _GroupsInState extends State<GroupsIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Text('groups in'),
     );
   }
