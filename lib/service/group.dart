@@ -10,6 +10,7 @@ Future<void> createGroupDocument({
   required schedule,
   required equbType,
   required id,
+  required catagory
 }) async {
   final groupDoc = {
     'groupName': groupName,
@@ -20,6 +21,7 @@ Future<void> createGroupDocument({
     'id': id,
     'uid': user?.uid,
     'members': [user?.uid],
+    'catagory':catagory,
     'createdAt': FieldValue.serverTimestamp()
   };
 

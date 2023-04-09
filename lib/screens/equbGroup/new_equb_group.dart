@@ -15,13 +15,15 @@ class NewEqub extends StatefulWidget {
 
 class _NewEqubState extends State<NewEqub> {
   String? _selectedItem;
+  String? _catagoryItem;
   final _equbKey = GlobalKey<FormState>();
-  final _items = [
-    'Regular',
-    'Irregural',
-    'Non-Stop',
-    'Mewww',
+  final _types = [
+    'Daily',
+    'Weekly',
+    'monthly',
   ];
+
+  final _catagory = ['Employee', 'Drivers', 'Bussiness'];
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _moneyamountController = TextEditingController();
   final TextEditingController _roundSizeController = TextEditingController();
@@ -43,6 +45,7 @@ class _NewEqubState extends State<NewEqub> {
   void createGroup() async {
     final id = Uuid().v4().replaceAll(RegExp(r'[^0-9]'), '').substring(0, 10);
     await createGroupDocument(
+        catagory: _catagoryItem,
         groupName: _groupNameController.text,
         moneyAmount: _moneyamountController.text,
         roundSize: _roundSizeController.text,
@@ -97,17 +100,43 @@ class _NewEqubState extends State<NewEqub> {
                   DropdownButtonFormField(
                     borderRadius: BorderRadius.circular(10),
                     focusColor: Theme.of(context).primaryColor,
-                    value: _selectedItem,
+                    value: _catagoryItem,
                     dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                     decoration: InputDecoration(
-                        hintText: 'Equb Type',
+                        hintText: 'Catagory',
                         fillColor: Theme.of(context).primaryColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     style: TextStyle(
                         color: Theme.of(context).textTheme.headline1!.color),
-                    items: _items.map((item) {
+                    items: _catagory.map((item) {
+                      return DropdownMenuItem(value: item, child: Text(item));
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _catagoryItem = value!;
+                      });
+                    },
+                    isDense: true,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  DropdownButtonFormField(
+                    borderRadius: BorderRadius.circular(10),
+                    focusColor: Theme.of(context).primaryColor,
+                    value: _selectedItem,
+                    dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                    decoration: InputDecoration(
+                        hintText: 'Type',
+                        fillColor: Theme.of(context).primaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.headline1!.color),
+                    items: _types.map((item) {
                       return DropdownMenuItem(value: item, child: Text(item));
                     }).toList(),
                     onChanged: (String? value) {
