@@ -158,9 +158,9 @@ class AuthState with ChangeNotifier {
     await storage.delete(key: 'auth');
   }
 
-  Future attempt(String token) async {
+  Future attempt(String? token) async {
     try {
-      await _auth.signInWithCustomToken(token);
+      await _auth.signInWithCustomToken(token??'');
       setStatus(AuthStatus.authenticated);
     } catch (e) {
       _user = null;
