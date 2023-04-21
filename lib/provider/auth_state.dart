@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equb/helper/firbasereference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +38,13 @@ class AuthState with ChangeNotifier {
     try {
       Future<void> verificationCompleted(
           PhoneAuthCredential phoneAuthCredential) async {
-        await _auth.signInWithCredential(phoneAuthCredential);
+        UserCredential userCredential =
+            await _auth.signInWithCredential(phoneAuthCredential);
+        String token = userCredential.user!.getIdToken().toString();
+        log(token);
+        await storeToken(token);
+        _user = userCredential.user;
+        setStatus(AuthStatus.authenticated);
       }
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
@@ -90,12 +97,13 @@ class AuthState with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _user = userCredential.user;
+      String token = userCredential.user!.getIdToken().toString();
+      log(token);
+      await storeToken(token);
       _isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
       if (_user == null) {
         setStatus(AuthStatus.uninitialized);
       } else {
-        String token = userCredential.user!.getIdToken().toString();
-        await storeToken(token);
         setStatus(AuthStatus.authenticated);
       }
     } catch (e) {
@@ -145,7 +153,7 @@ class AuthState with ChangeNotifier {
     notifyListeners();
   }
 
-  Future storeToken(String token) async {
+  Future storeToken(token) async {
     await storage.write(key: 'auth', value: token);
   }
 
@@ -158,14 +166,19 @@ class AuthState with ChangeNotifier {
     await storage.delete(key: 'auth');
   }
 
-  Future attempt(String? token) async {
-    try {
-      await _auth.signInWithCustomToken(token??'');
-      setStatus(AuthStatus.authenticated);
-    } catch (e) {
-      _user = null;
+  Future attempt(token) async {
+    if (token != null) {
+      try {
+        UserCredential userCredential =
+            await _auth.signInWithCustomToken(token);
+        _user = userCredential.user;
+        setStatus(AuthStatus.authenticated);
+      } catch (e) {
+        print(e.toString());
+        setStatus(AuthStatus.uninitialized);
+      }
+    } else {
       setStatus(AuthStatus.uninitialized);
-      print(e);
     }
   }
 }

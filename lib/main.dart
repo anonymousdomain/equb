@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
 import 'package:equb/screens/user_profile.dart';
@@ -74,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final storage = FlutterSecureStorage();
   void _attempAuthentication() async {
     String? key = await storage.read(key: 'auth');
+    print('$key key');
+    log(key!);
     // ignore: use_build_context_synchronously
     Provider.of<AuthState>(context, listen: false).attempt(key);
   }
