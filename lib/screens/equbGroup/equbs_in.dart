@@ -42,49 +42,53 @@ class _GroupsInState extends State<GroupsIn> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1, childAspectRatio:1.0),
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.all(10),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            docs[index].get('groupName'),
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                            textAlign: TextAlign.center,
-                          ),
-                          CustomListTile(
-                              icon: FeatherIcons.feather,
-                              lead: 'EqubCatagory',
-                              value: docs[index].get('catagory')),
-                          CustomListTile(
-                              icon: FeatherIcons.activity,
-                              lead: 'EqubType',
-                              value: docs[index].get('equbType')),
-                          CustomListTile(
-                              icon: FeatherIcons.dollarSign,
-                              lead: 'MoneyAmount',
-                              value: docs[index].get('moneyAmount')),
-                          CustomListTile(
-                              icon: FeatherIcons.users,
-                              lead: 'total members',
-                              value: docs[index].get('members').toList().length.toString()),
-                          CustomListTile(
-                            icon: FeatherIcons.calendar,
-                            lead: 'Schedule',
-                            value: DateFormat('MMMM dd yyyy')
-                                .format(docs[index].get('createdAt').toDate())
-                                .toString(),
-                          ),
-                        ],
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Card(
+                      borderOnForeground: true,
+                      margin: EdgeInsets.all(10),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              docs[index].get('groupName'),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                            CustomListTile(
+                                icon: FeatherIcons.feather,
+                                lead: 'EqubCatagory',
+                                value: docs[index].get('catagory')),
+                            CustomListTile(
+                                icon: FeatherIcons.activity,
+                                lead: 'EqubType',
+                                value: docs[index].get('equbType')),
+                            CustomListTile(
+                                icon: FeatherIcons.dollarSign,
+                                lead: 'MoneyAmount',
+                                value: docs[index].get('moneyAmount')),
+                            CustomListTile(
+                                icon: FeatherIcons.users,
+                                lead: 'total members',
+                                value: docs[index].get('members').toList().length.toString()),
+                            CustomListTile(
+                              icon: FeatherIcons.calendar,
+                              lead: 'Schedule',
+                              value: DateFormat('MMMM dd yyyy')
+                                  .format(docs[index].get('createdAt').toDate())
+                                  .toString(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

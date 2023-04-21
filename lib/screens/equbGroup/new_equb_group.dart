@@ -59,6 +59,7 @@ class _NewEqubState extends State<NewEqub> {
               equbType: _selectedItem,
               id: id)
           .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               content: CustomSnackBar(
                   message: 'group created successfully', isSuccess: true))))
           .then((value) => Navigator.push(
@@ -67,11 +68,13 @@ class _NewEqubState extends State<NewEqub> {
     if (isDocumentExist) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(
               message: 'Group aleady exsit with a Name', isSuccess: false)));
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(message: _message, isSuccess: false)));
     }
   }
@@ -80,9 +83,6 @@ class _NewEqubState extends State<NewEqub> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // actions: const [
-        //   Icon(FeatherIcons.bell)
-        // ],
         elevation: 0.0,
       ),
       resizeToAvoidBottomInset: false,
