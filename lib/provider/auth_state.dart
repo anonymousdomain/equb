@@ -94,6 +94,8 @@ class AuthState with ChangeNotifier {
       if (_user == null) {
         setStatus(AuthStatus.uninitialized);
       } else {
+        String token = userCredential.user!.getIdToken().toString();
+        await storeToken(token);
         setStatus(AuthStatus.authenticated);
       }
     } catch (e) {
@@ -106,7 +108,7 @@ class AuthState with ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
     _user = null;
-   await deleteToken();
+    await deleteToken();
     setStatus(AuthStatus.uninitialized);
   }
 
@@ -154,5 +156,16 @@ class AuthState with ChangeNotifier {
 
   Future deleteToken() async {
     await storage.delete(key: 'auth');
+  }
+
+  Future attempt(String token) async {
+    try {
+      await _auth.signInWithCustomToken(token);
+      setStatus(AuthStatus.authenticated);
+    } catch (e) {
+      _user = null;
+      setStatus(AuthStatus.uninitialized);
+      print(e);
+    }
   }
 }
