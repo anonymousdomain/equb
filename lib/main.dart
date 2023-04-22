@@ -76,8 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final storage = FlutterSecureStorage();
   void _attempAuthentication() async {
     String? key = await storage.read(key: 'auth');
-    print('$key key');
-    log(key!);
+    
+    log('key $key');
     // ignore: use_build_context_synchronously
     Provider.of<AuthState>(context, listen: false).attempt(key);
   }
