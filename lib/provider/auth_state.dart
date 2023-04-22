@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:equb/helper/firbasereference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum AuthStatus {
   uninitialized,
@@ -15,9 +16,10 @@ enum AuthStatus {
 }
 
 class AuthState with ChangeNotifier {
-  var logger = Logger();
   AuthStatus _status = AuthStatus.uninitialized;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final storage = FlutterSecureStorage();
+
   User? _user;
   bool _isNewUser = false;
   bool get isNewUser => _isNewUser;
@@ -36,7 +38,13 @@ class AuthState with ChangeNotifier {
     try {
       Future<void> verificationCompleted(
           PhoneAuthCredential phoneAuthCredential) async {
-        await _auth.signInWithCredential(phoneAuthCredential);
+        UserCredential userCredential =
+            await _auth.signInWithCredential(phoneAuthCredential);
+        String token = userCredential.user!.getIdToken().toString();
+        log(token);
+        await storeToken(token);
+        _user = userCredential.user;
+        setStatus(AuthStatus.authenticated);
       }
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
@@ -75,9 +83,9 @@ class AuthState with ChangeNotifier {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
     } catch (e) {
-        print(e.toString());
-        setStatus(AuthStatus.verificationFailed);
-        setErrorMessage('You provide invalide sms code');
+      print(e.toString());
+      setStatus(AuthStatus.verificationFailed);
+      setErrorMessage('You provide invalide sms code');
     }
   }
 
@@ -89,6 +97,9 @@ class AuthState with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _user = userCredential.user;
+      String token = userCredential.user!.getIdToken().toString();
+      log(token);
+      await storeToken(token);
       _isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
       if (_user == null) {
         setStatus(AuthStatus.uninitialized);
@@ -105,6 +116,7 @@ class AuthState with ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
     _user = null;
+    await deleteToken();
     setStatus(AuthStatus.uninitialized);
   }
 
@@ -139,5 +151,34 @@ class AuthState with ChangeNotifier {
       }
     });
     notifyListeners();
+  }
+
+  Future storeToken(token) async {
+    await storage.write(key: 'auth', value: token);
+  }
+
+  Future getToken() async {
+    final token = await storage.read(key: 'auth');
+    return token;
+  }
+
+  Future deleteToken() async {
+    await storage.delete(key: 'auth');
+  }
+
+  Future attempt(token) async {
+    if (token != null) {
+      try {
+        UserCredential userCredential =
+            await _auth.signInWithCustomToken(token);
+        _user = userCredential.user;
+        setStatus(AuthStatus.authenticated);
+      } catch (e) {
+        print(e.toString());
+        setStatus(AuthStatus.uninitialized);
+      }
+    } else {
+      setStatus(AuthStatus.uninitialized);
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
 import 'package:equb/screens/user_profile.dart';
@@ -7,6 +9,7 @@ import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +73,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final storage = FlutterSecureStorage();
+  void _attempAuthentication() async {
+    String? key = await storage.read(key: 'auth');
+    print('$key key');
+    log(key!);
+    // ignore: use_build_context_synchronously
+    Provider.of<AuthState>(context, listen: false).attempt(key);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _attempAuthentication();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

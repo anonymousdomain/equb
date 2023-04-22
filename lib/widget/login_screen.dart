@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/utils/theme.dart';
@@ -24,8 +22,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    String message = AuthState().status.toString();
-    log('status:$message');
     super.initState();
   }
 
@@ -61,6 +57,7 @@ class LoginScreenState extends State<LoginScreen> {
       }
       if (_phoneNumberController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             content: CustomSnackBar(
           message: 'Enter Your Phone Number',
           isSuccess: false,
