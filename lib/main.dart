@@ -7,6 +7,7 @@ import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -73,56 +74,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final storage = FlutterSecureStorage();
-  void _attempAuthentication() async {
-    String? key = await storage.read(key: 'auth');
-    
-    log('key $key');
-    // ignore: use_build_context_synchronously
-    Provider.of<AuthState>(context, listen: false).attempt(key);
-  }
-
   @override
   void initState() {
     super.initState();
-    _attempAuthentication();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        actions: [
-          IconButton(
-            padding: EdgeInsets.all(10),
-            onPressed: () {
-              currentTheme.toggleTheme();
+      body: Stack(children: [
+        Center(
+          child: Builder(
+            builder: (context) {
+              return StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.metadata.creationTime ==
+                        snapshot.data!.metadata.lastSignInTime) {
+                      return UserProifle();
+                    } else {
+                      return Home();
+                    }
+                  } else {
+                    return OnBoardingScreen();
+                  }
+                },
+              );
             },
-            icon: currentTheme.currentTheme == ThemeMode.dark
-                ? Icon(FeatherIcons.moon)
-                : Icon(FeatherIcons.sun),
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Center(
-            child: Consumer<AuthState>(
-              builder: (context, auth, child) {
-                if (auth.user == null) {
-                  return OnBoardingScreen();
-                } else if (auth.isNewUser) {
-                  return UserProifle();
-                } else {
-                  return Home();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+        )
+      ]),
+      // body: Stack(
+      //   children: [
+      //     Center(
+      //       child: Consumer<AuthState>(
+      //         builder: (context, auth, child) {
+      //           if (auth.user == null) {
+      //             return OnBoardingScreen();
+      //           } else if (auth.isNewUser) {
+      //             return UserProifle();
+      //           } else {
+      //             return Home();
+      //           }
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
