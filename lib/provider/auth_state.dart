@@ -38,13 +38,7 @@ class AuthState with ChangeNotifier {
     try {
       Future<void> verificationCompleted(
           PhoneAuthCredential phoneAuthCredential) async {
-        UserCredential userCredential =
             await _auth.signInWithCredential(phoneAuthCredential);
-        String token = userCredential.user!.getIdToken().toString();
-        log(token);
-        await storeToken(token);
-        _user = userCredential.user;
-        setStatus(AuthStatus.authenticated);
       }
 
       void phoneVerificationFaild(FirebaseAuthException authException) {
@@ -97,8 +91,8 @@ class AuthState with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _user = userCredential.user;
-      String token = userCredential.user!.getIdToken().toString();
-      log(token);
+      String token = await userCredential.user!.getIdToken();
+      log('from signinwith phone $token');
       await storeToken(token);
       _isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
       if (_user == null) {
@@ -166,11 +160,11 @@ class AuthState with ChangeNotifier {
     await storage.delete(key: 'auth');
   }
 
-  Future attempt(token) async {
+  Future attempt(String? token) async {
     if (token != null) {
       try {
         UserCredential userCredential =
-            await _auth.signInWithCustomToken(token);
+        await _auth.signInWithCustomToken(token);
         _user = userCredential.user;
         setStatus(AuthStatus.authenticated);
       } catch (e) {
