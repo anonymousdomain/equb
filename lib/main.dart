@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         snapshot.data!.metadata.lastSignInTime) {
                       return UserProifle();
                     } else {
-                      return Home();
+                      return Home(); 
                     }
                   } else {
                     return OnBoardingScreen();
