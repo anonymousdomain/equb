@@ -53,11 +53,19 @@ Future<void> leaveGroup() async {
 
 //show list of groups users in
 
-Future<void> groupsUsersIn() async {
+Future<QuerySnapshot<Map<String, dynamic>>> groupsUsersIn() async {
   final usersGroup =
       await groupCollection.where('members', arrayContains: user?.uid).get();
 
-  for (final doc in usersGroup.docs) {
-    print(doc);
+  return usersGroup;
+}
+
+Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
+    String catagoryName) async {
+  final groupCatagory =
+      await groupCollection.where('catagory', isEqualTo: catagoryName).get();
+  for (final doc in groupCatagory.docs) {
+    print(doc.get('groupName'));
   }
+  return groupCatagory;
 }

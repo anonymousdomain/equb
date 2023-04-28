@@ -9,8 +9,6 @@ import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
