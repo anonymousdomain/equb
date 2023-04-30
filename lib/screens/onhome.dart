@@ -26,12 +26,43 @@ class _OnHomeState extends State<OnHome> {
             title: Text('WELCOME TO ADDIS EQUB'),
           ),
           SliverToBoxAdapter(
-           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: const [
-              EmployeeCard(),
-            ],
-           ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'EMPLOYEE EQUB',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                EmployeeCard(query: 'Employee'),
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'Drivers EQUB',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                EmployeeCard(query: 'Drivers'),
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'Bussiness EQUB',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                EmployeeCard(query: 'Bussiness')
+              ],
+            ),
           )
         ],
       ),
