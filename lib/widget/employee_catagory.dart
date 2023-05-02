@@ -35,27 +35,20 @@ class _EmployeeCardState extends State<EmployeeCard> {
             .where((doc) => !doc.get('members').contains(user!.uid))
             .toList();
         return SizedBox(
-          height: 200,
+          height: 140,
           child: ListView.builder(
             itemCount: docs.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 200,
-                child: GestureDetector(
-                  onTap: () {
-                    joinGroup(docs[index].get('groupId')).then((value) =>
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => GroupsIn()))));
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListTile(
-                      leading: Icon(FeatherIcons.userCheck),
+                width: 180,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Stack(children: [
+                    ListTile(
+                      leading: Icon(FeatherIcons.users),
                       title: Text(
                         docs[index].get('groupName'),
                         style: TextStyle(
@@ -69,7 +62,57 @@ class _EmployeeCardState extends State<EmployeeCard> {
                                 Theme.of(context).textTheme.headline1!.color),
                       ),
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            docs[index]
+                                .get('members')
+                                .toList()
+                                .length
+                                .toString(),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            'members',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .color,
+                                    ),
+                          ),
+                          SizedBox(width:20,),
+                          IconButton(
+                            onPressed: () async {
+                              await joinGroup(docs[index].get('groupId')).then(
+                                (value) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => GroupsIn()),
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              FeatherIcons.plusCircle,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ]),
                 ),
               );
             },
