@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -15,22 +16,25 @@ class _EmployeeCardState extends State<EmployeeCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: groupCollection
-          .where('catagory', isEqualTo: widget.query).get(),
-          // .where('members', whereIn: [user?.uid]).get(),
+      future: groupCollection.where('catagory', isEqualTo: widget.query).get(),
+      // .where('members', whereIn: [user?.uid]).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (!snapshot.hasData|| snapshot.data!.docs.isEmpty ||snapshot.data!.docs==[]) {
+        if (!snapshot.hasData ||
+            snapshot.data!.docs.isEmpty ||
+            snapshot.data!.docs == []) {
           return Center(
             child: Text('Group Not Found'),
           );
         }
-        final List<DocumentSnapshot> docs = snapshot.data!.docs.where((doc) => !doc.get('members').contains(user!.uid)).toList();
-                return SizedBox(
+        final List<DocumentSnapshot> docs = snapshot.data!.docs
+            .where((doc) => !doc.get('members').contains(user!.uid))
+            .toList();
+        return SizedBox(
           height: 200,
           child: ListView.builder(
             itemCount: docs.length,
@@ -40,7 +44,11 @@ class _EmployeeCardState extends State<EmployeeCard> {
                 width: 200,
                 child: GestureDetector(
                   onTap: () {
-                    joinGroup(docs[index].get('groupId'));
+                    joinGroup(docs[index].get('groupId')).then((value) =>
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => GroupsIn()))));
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(

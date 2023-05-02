@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../helper/firbasereference.dart';
-
-final groupId = groupCollection.doc().id;
+String groupId = '';
 Future<bool> isDocExist(String groupName) async {
   final QuerySnapshot querySnapshot =
       await groupCollection.where('groupName', isEqualTo: groupName).get();
   return querySnapshot.docs.isNotEmpty;
 }
-
 Future<void> createGroupDocument(
     {required groupName,
     required moneyAmount,
@@ -27,12 +24,14 @@ Future<void> createGroupDocument(
     'uid': user?.uid,
     'members': [user?.uid],
     'catagory': catagory,
-    'groupId':groupId,
+    'groupId': groupId,
     'createdAt': FieldValue.serverTimestamp()
   };
   final bool docExist = await isDocExist(groupName);
   if (!docExist) {
-    await groupCollection.add(groupDoc);
+    DocumentReference docRef = await groupCollection.add(groupDoc);
+    groupId = docRef.id;
+    await docRef.update({'groupId': groupId});
   } else {
     print('document already exists');
   }
@@ -43,6 +42,8 @@ Future<void> joinGroup(groupId) async {
   await groupCollection.doc(groupId).update({
     'members': FieldValue.arrayUnion([user?.uid])
   });
+  
+  // context, MaterialPageRoute(builder: ((context) => GroupsIn())));
 }
 
 //leave a group
@@ -65,8 +66,8 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
     String catagoryName) async {
   final groupCatagory = await groupCollection
       .where('catagory', isEqualTo: catagoryName)
-      .where('members',arrayContains:[user?.uid], isEqualTo: false)
+      .where('members', arrayContains: [user?.uid], isEqualTo: false)
       .get();
-      
+
   return groupCatagory;
 }
