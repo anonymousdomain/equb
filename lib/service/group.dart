@@ -27,6 +27,7 @@ Future<void> createGroupDocument(
     'uid': user?.uid,
     'members': [user?.uid],
     'catagory': catagory,
+    'groupId':groupId,
     'createdAt': FieldValue.serverTimestamp()
   };
   final bool docExist = await isDocExist(groupName);
@@ -38,14 +39,14 @@ Future<void> createGroupDocument(
 }
 
 //join a group
-Future<void> joinGroup() async {
+Future<void> joinGroup(groupId) async {
   await groupCollection.doc(groupId).update({
     'members': FieldValue.arrayUnion([user?.uid])
   });
 }
 
 //leave a group
-Future<void> leaveGroup() async {
+Future<void> leaveGroup(groupId) async {
   await groupCollection.doc(groupId).update({
     'members': FieldValue.arrayRemove([user?.uid])
   });
@@ -62,10 +63,10 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsUsersIn() async {
 
 Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
     String catagoryName) async {
-  final groupCatagory =
-      await groupCollection.where('catagory', isEqualTo: catagoryName).get();
-  for (final doc in groupCatagory.docs) {
-    print(doc.get('groupName'));
-  }
+  final groupCatagory = await groupCollection
+      .where('catagory', isEqualTo: catagoryName)
+      .where('members',arrayContains:[user?.uid], isEqualTo: false)
+      .get();
+      
   return groupCatagory;
 }

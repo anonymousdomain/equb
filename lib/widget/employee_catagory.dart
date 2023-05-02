@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -14,15 +15,22 @@ class _EmployeeCardState extends State<EmployeeCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: groupsCatagory(widget.query),
+      future: groupCollection
+          .where('catagory', isEqualTo: widget.query).get(),
+          // .where('members', whereIn: [user?.uid]).get(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        final List<DocumentSnapshot> docs = snapshot.data!.docs;
-        return SizedBox(
+        if (!snapshot.hasData|| snapshot.data!.docs.isEmpty ||snapshot.data!.docs==[]) {
+          return Center(
+            child: Text('Group Not Found'),
+          );
+        }
+        final List<DocumentSnapshot> docs = snapshot.data!.docs.where((doc) => !doc.get('members').contains(user!.uid)).toList();
+                return SizedBox(
           height: 200,
           child: ListView.builder(
             itemCount: docs.length,
@@ -31,7 +39,9 @@ class _EmployeeCardState extends State<EmployeeCard> {
               return SizedBox(
                 width: 200,
                 child: GestureDetector(
-                  onTap: joinGroup,
+                  onTap: () {
+                    joinGroup(docs[index].get('groupId'));
+                  },
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
