@@ -98,6 +98,7 @@ class _GroupsInState extends State<GroupsIn> {
   }
 }
 
+// ignore: must_be_immutable
 class CustomListTile extends StatelessWidget {
   String lead;
   String value;

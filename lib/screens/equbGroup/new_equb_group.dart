@@ -1,4 +1,5 @@
 import 'package:equb/screens/equbGroup/equbs_in.dart';
+import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
@@ -63,7 +64,7 @@ class _NewEqubState extends State<NewEqub> {
               content: CustomSnackBar(
                   message: 'group created successfully', isSuccess: true))))
           .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => GroupsIn())));
+              context, MaterialPageRoute(builder: (context) => Home())));
     }
     if (isDocumentExist) {
       // ignore: use_build_context_synchronously
