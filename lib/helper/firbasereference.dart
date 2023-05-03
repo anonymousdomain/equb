@@ -7,3 +7,4 @@ final userCollection = FirebaseFirestore.instance.collection('users');
 final groupCollection = FirebaseFirestore.instance.collection('groups');
 
 final storage = FirebaseStorage.instance.ref();
+

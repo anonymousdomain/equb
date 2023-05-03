@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/screens/home.dart';
+import 'package:equb/service/services.dart';
+import 'package:equb/widget/nav_drawer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -26,13 +30,14 @@ class _EditProfileState extends State<EditProfile> {
   bool isDisposed = false;
   File? _file;
   String? _selectedItem;
+  String? imageUrl;
   void takePhoto(ImageSource source) async {
     final pickedFile =
         await _picker.pickImage(source: source, maxHeight: 675, maxWidth: 960);
 
-    if (!isDisposed) {
+    if (pickedFile != null && !isDisposed) {
       setState(() {
-        _file = File(pickedFile!.path);
+        _file = File(pickedFile.path);
       });
     }
   }
@@ -59,11 +64,6 @@ class _EditProfileState extends State<EditProfile> {
     _phoneNumberController.text = widget.user?.phoneNumber ?? '';
     _selectedItem = widget.user?.bankName ?? '';
     _bankNumberController.text = widget.user?.bankNumber ?? '';
-    // if (widget.user?.imageUrl != null) {
-    //   setState(() {
-    //     _imageFile = File.fromUri(Uri.parse(widget.user!.imageUrl!));
-    //   });
-    // }
   }
 
   @override
@@ -76,6 +76,24 @@ class _EditProfileState extends State<EditProfile> {
     _bankNumberController.dispose();
   }
 
+  void update() async {
+    if (_file != null) {
+      imageUrl = await uploadImage(_file!);
+      final oldRef =
+          FirebaseStorage.instance.refFromURL(widget.user!.imageUrl!);
+      await oldRef.delete();
+    }
+    updateUserDocument(
+            firstName: _nameController.text,
+            lastName: _lasnameController.text,
+            bankName: _selectedItem,
+            bankNumber: _bankNumberController.text,
+            imageUrl: imageUrl ?? widget.user?.imageUrl)
+        .then((value) => getUserDocument())
+        .then((value) => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -83,12 +101,7 @@ class _EditProfileState extends State<EditProfile> {
         appBar: AppBar(
           title: Text('Edit Profile'),
           actions: [
-            IconButton(
-              icon: Icon(FeatherIcons.check),
-              onPressed: () {
-                // Save changes to the database
-              },
-            )
+            IconButton(icon: Icon(FeatherIcons.check), onPressed: update)
           ],
         ),
         body: CustomScrollView(
@@ -104,19 +117,20 @@ class _EditProfileState extends State<EditProfile> {
                         // Open image picker to select a new profile picture
                         takePhoto(ImageSource.gallery);
                       },
-                      child:_file!=null?CircleAvatar(
-                        radius: 56,
-                        backgroundImage:FileImage(_file!)
-                      ):CircleAvatar(
-                        radius: 56, 
-                        backgroundImage: NetworkImage(widget.user!.imageUrl??''),
-                      ),
+                      child: _file != null
+                          ? CircleAvatar(
+                              radius: 56, backgroundImage: FileImage(_file!))
+                          : CircleAvatar(
+                              radius: 56,
+                              backgroundImage:
+                                  NetworkImage(widget.user!.imageUrl ?? ''),
+                            ),
                     ),
                     SizedBox(height: 12),
                     TextButton(
                       onPressed: () {
                         // Open image picker to select a new profile picture
-                      takePhoto(ImageSource.gallery);
+                        takePhoto(ImageSource.gallery);
                       },
                       child: Text(
                         'Change Profile Picture',
@@ -156,6 +170,7 @@ class _EditProfileState extends State<EditProfile> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: TextField(
+                        readOnly: true,
                         style: TextStyle(
                             color:
                                 Theme.of(context).textTheme.headline1!.color),
