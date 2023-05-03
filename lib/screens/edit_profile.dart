@@ -184,17 +184,17 @@ class _EditProfileState extends State<EditProfile> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: DropdownButtonFormField(
+
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Theme.of(context).primaryColor,
                         value: _selectedItem,
                         dropdownColor:
                             Theme.of(context).scaffoldBackgroundColor,
+                            //  decoration: InputDecoration.collapsed(hintText: 'Bank Name'),
                         decoration: InputDecoration(
                             hintText: 'Bank Name',
                             fillColor: Theme.of(context).primaryColor,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
+                            ),
                         style: TextStyle(
                             color:
                                 Theme.of(context).textTheme.headline1!.color),
