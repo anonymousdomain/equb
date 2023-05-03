@@ -1,5 +1,7 @@
+import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/provider/auth_state.dart';
+import 'package:equb/screens/edit_profile.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/equbGroup/new_equb_group.dart';
@@ -49,14 +51,21 @@ class _NavDrawerState extends State<NavDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(_user!.imageUrl ?? ''),
-                          child: _user == null
-                              ? Icon(
-                                  FeatherIcons.user,
-                                )
-                              : SizedBox.shrink(),
+                        leading: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => EditProfile(user: _user,)))),
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundImage:
+                                NetworkImage(_user!.imageUrl ?? ''),
+                            child: _user == null
+                                ? Icon(
+                                    FeatherIcons.user,
+                                  )
+                                : SizedBox.shrink(),
+                          ),
                         ),
                         title: Text('${_user?.firstName} ${_user?.lastName}'),
                         subtitle: Text(

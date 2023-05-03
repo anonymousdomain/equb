@@ -69,8 +69,8 @@ class _UserProifleState extends State<UserProifle> {
     String? imageUrl = await uploadImage(_file!);
     if (_profileFormKey.currentState!.validate()) {
       createUserDocument(
-        bankName: _bankController.text.trim(),
-        bankNumber: _selectedItem,
+        bankName: _selectedItem,
+        bankNumber:  _bankController.text.trim(),
         firstName: _nameController.text.trim(),
         lastName: _userNameController.text.trim(),
         imageUrl: imageUrl,
