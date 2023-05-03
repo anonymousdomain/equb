@@ -183,19 +183,6 @@ class _EditProfileState extends State<EditProfile> {
                     SizedBox(height: 24),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: TextField(
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.headline1!.color),
-                        controller: _bankNumberController,
-                        decoration: InputDecoration(
-                          labelText: 'Bank Number',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
                       child: DropdownButtonFormField(
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Theme.of(context).primaryColor,
@@ -221,6 +208,19 @@ class _EditProfileState extends State<EditProfile> {
                           });
                         },
                         isDense: true,
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: TextField(
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.headline1!.color),
+                        controller: _bankNumberController,
+                        decoration: InputDecoration(
+                          labelText: 'Bank Number',
+                        ),
                       ),
                     ),
                   ],
