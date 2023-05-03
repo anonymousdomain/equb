@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/service/group.dart';
+import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -86,23 +87,35 @@ class _EmployeeCardState extends State<EmployeeCard> {
                           Text(
                             'members',
                             style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .color,
-                                    ),
+                              color:
+                                  Theme.of(context).textTheme.headline1!.color,
+                            ),
                           ),
-                          SizedBox(width:20,),
+                          SizedBox(
+                            width: 20,
+                          ),
                           IconButton(
                             onPressed: () async {
-                              await joinGroup(docs[index].get('groupId')).then(
-                                (value) => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => GroupsIn()),
-                                  ),
-                                ),
-                              );
+                              await joinGroup(docs[index].get('groupId'))
+                                  .then(
+                                    (value) => ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      SnackBar(
+                                        content: CustomSnackBar(
+                                            message:
+                                                'You Are Joind Successfully',
+                                            isSuccess: true),
+                                      ),
+                                    ),
+                                  )
+                                  .then(
+                                    (value) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: ((context) => GroupsIn()),
+                                      ),
+                                    ),
+                                  );
                             },
                             icon: Icon(
                               FeatherIcons.plusCircle,
