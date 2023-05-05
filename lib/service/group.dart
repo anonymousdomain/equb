@@ -46,20 +46,19 @@ Future<void> joinGroup(groupId) async {
   });
 }
 
-Future<void> requestJoinGroup(groupId,userId) async {
+Future<void> requestJoinGroup(groupId) async {
   await groupCollection.doc(groupId).update({
-    'groupRequest': FieldValue.arrayUnion([userId])
+    'groupRequest': FieldValue.arrayUnion([user?.uid])
   });
 }
 
-Future<void> approveRequest(groupid,userId) async {
+Future<void> approveRequest(groupid, userId) async {
   await groupCollection.doc(groupid).update({
     'groupRequest': FieldValue.arrayRemove([userId])
   });
   await groupCollection.doc(groupid).update({
     'members': FieldValue.arrayUnion([userId])
   });
-  
 }
 
 //leave a group
