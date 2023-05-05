@@ -33,12 +33,12 @@ class LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       String phoneNumber =
           _selectedCountry! + _phoneNumberController.text.trim();
-     
-          await provider.verifyPhoneNumber(phoneNumber).then((value) {
+
+      await provider.verifyPhoneNumber(phoneNumber).then((value) {
         Provider.of<AuthState>(context, listen: false)
             .setStatus(AuthStatus.authenticating);
       });
-      if (provider.status==AuthStatus.codeSent) {
+      if (provider.status == AuthStatus.codeSent) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
           message: 'Your Phone is verifyed',
@@ -57,11 +57,11 @@ class LoginScreenState extends State<LoginScreen> {
       }
       if (_phoneNumberController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             content: CustomSnackBar(
-          message: 'Enter Your Phone Number',
-          isSuccess: false,
-        )));
+              message: 'Enter Your Phone Number',
+              isSuccess: false,
+            )));
 
         if (provider.status == AuthStatus.verificationFailed) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -130,7 +130,6 @@ class LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   // width: MediaQuery.of(context).size.width * 0.8,
                   child: TextFormField(
-
                     style: TextStyle(
                         color: Theme.of(context).textTheme.headline1!.color),
                     controller: _phoneNumberController,

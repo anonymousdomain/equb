@@ -69,12 +69,14 @@ class _NewEqubState extends State<NewEqub> {
     if (isDocumentExist) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+         // ignore: use_build_context_synchronously
          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(
               message: 'Group aleady exsit with a Name', isSuccess: false)));
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+         // ignore: use_build_context_synchronously
          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(message: _message, isSuccess: false)));
     }
