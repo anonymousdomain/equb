@@ -6,6 +6,7 @@ import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+// ignore: must_be_immutable
 class EmployeeCard extends StatefulWidget {
   EmployeeCard({super.key, required this.query});
   String query;

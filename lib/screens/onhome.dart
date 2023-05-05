@@ -1,16 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equb/helper/firbasereference.dart';
-import 'package:equb/service/group.dart';
+import 'package:equb/helper/images.dart';
 import 'package:equb/widget/employee_catagory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:intl/intl.dart';
-
-import 'equbGroup/equbs_in.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class OnHome extends StatefulWidget {
   const OnHome({super.key});
-
   @override
   State<OnHome> createState() => _OnHomeState();
 }
@@ -22,8 +16,20 @@ class _OnHomeState extends State<OnHome> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 150,
-            title: Text('WELCOME TO ADDIS EQUB'),
+            expandedHeight: 160,
+            flexibleSpace: FlexibleSpaceBar(
+              background: SvgPicture.asset(Images.life),
+              titlePadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              title: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'WELCOME TO ADDIS EQUB',
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: 15),
+                ),
+              ),
+              centerTitle: true,
+            ),
           ),
           SliverToBoxAdapter(
             child: Column(
@@ -36,8 +42,7 @@ class _OnHomeState extends State<OnHome> {
                   child: Text(
                     'EMPLOYEE EQUB',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor),
+                    style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
                 EmployeeCard(query: 'Employee'),
@@ -46,8 +51,7 @@ class _OnHomeState extends State<OnHome> {
                   child: Text(
                     'Drivers EQUB',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor),
+                    style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
                 EmployeeCard(query: 'Drivers'),
@@ -56,8 +60,7 @@ class _OnHomeState extends State<OnHome> {
                   child: Text(
                     'Bussiness EQUB',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor),
+                    style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
                 EmployeeCard(query: 'Bussiness')
