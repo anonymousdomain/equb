@@ -25,6 +25,7 @@ Future<void> createGroupDocument(
     'id': id,
     'uid': user?.uid,
     'members': [user?.uid],
+    'groupRequest': [],
     'catagory': catagory,
     'groupId': groupId,
     'createdAt': FieldValue.serverTimestamp()
@@ -84,4 +85,9 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
       .where('members', arrayContains: [user?.uid], isEqualTo: false)
       .get();
   return groupCatagory;
+}
+
+Future<QuerySnapshot<Map<String, dynamic>>> getGroupRequests() async {
+  
+  return await groupCollection.where('groupRequests', arrayContains: true).get();
 }

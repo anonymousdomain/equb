@@ -97,14 +97,14 @@ class _EmployeeCardState extends State<EmployeeCard> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              await joinGroup(docs[index].get('groupId'))
+                              await requestJoinGroup(docs[index].get('groupId'))
                                   .then(
                                     (value) => ScaffoldMessenger.of(context)
                                         .showSnackBar(
                                       SnackBar(
                                         content: CustomSnackBar(
                                             message:
-                                                'You Are Joind Successfully',
+                                                'You Are Requested to Join Group',
                                             isSuccess: true),
                                       ),
                                     ),
