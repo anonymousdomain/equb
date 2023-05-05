@@ -1,11 +1,15 @@
+import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
+import 'package:equb/screens/equbGroup/requested_groups.dart';
 import 'package:equb/screens/onhome.dart';
 import 'package:equb/widget/nav_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+import '../service/services.dart';
 import '../widget/custom_snackbar.dart';
 
 class Home extends StatefulWidget {
@@ -18,10 +22,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   PageController? _pageController;
   int pageIndex = 1;
-
+  User? _user;
   @override
   void initState() {
     super.initState();
+    _loadProfile();
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
@@ -30,6 +35,11 @@ class _HomeState extends State<Home> {
                 isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
+  }
+
+  void _loadProfile() async {
+    _user = await getUserDocument();
+    setState(() {});
   }
 
   onPageChanged(int page) {
@@ -49,6 +59,12 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  Widget customContainer() {
+    return Container(
+      child: _user!.role == 'admin' ? GroupRequest() : NewEqubGroup(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +78,11 @@ class _HomeState extends State<Home> {
         onPageChanged: onPageChanged,
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: const [
-         OnHome(),
+        children: [
+          OnHome(),
           GroupsIn(),
-          NewEqubGroup(),
+          // NewEqubGroup(),
+          customContainer(),
           Center(
             child: Text('new stuf'),
           ),
