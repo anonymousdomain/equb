@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../helper/firbasereference.dart';
+
 String groupId = '';
 Future<bool> isDocExist(String groupName) async {
   final QuerySnapshot querySnapshot =
       await groupCollection.where('groupName', isEqualTo: groupName).get();
   return querySnapshot.docs.isNotEmpty;
 }
+
 Future<void> createGroupDocument(
     {required groupName,
     required moneyAmount,
@@ -42,8 +44,22 @@ Future<void> joinGroup(groupId) async {
   await groupCollection.doc(groupId).update({
     'members': FieldValue.arrayUnion([user?.uid])
   });
+}
+
+Future<void> requestJoinGroup(groupId,userId) async {
+  await groupCollection.doc(groupId).update({
+    'groupRequest': FieldValue.arrayUnion([userId])
+  });
+}
+
+Future<void> approveRequest(groupid,userId) async {
+  await groupCollection.doc(groupid).update({
+    'groupRequest': FieldValue.arrayRemove([userId])
+  });
+  await groupCollection.doc(groupid).update({
+    'members': FieldValue.arrayUnion([userId])
+  });
   
-  // context, MaterialPageRoute(builder: ((context) => GroupsIn())));
 }
 
 //leave a group
@@ -68,6 +84,5 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
       .where('catagory', isEqualTo: catagoryName)
       .where('members', arrayContains: [user?.uid], isEqualTo: false)
       .get();
-
   return groupCatagory;
 }
