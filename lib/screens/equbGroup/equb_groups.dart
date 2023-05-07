@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/service/group.dart';
+import 'package:equb/service/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -33,35 +34,6 @@ class _NewEqubGroupState extends State<NewEqubGroup> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: TextFormField(
-                onChanged: (value) {
-                  _stream = groupCollection
-                      .where('groupName', isEqualTo: value)
-                      .orderBy('groupName')
-                      .snapshots();
-                },
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.headline1!.color),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  suffixIcon: Icon(FeatherIcons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor, width: 1),
-                  ),
-                  hintText: 'Search',
-                ),
-                validator: ((value) {
-                  if (value!.isEmpty) {
-                    return 'Search Result is empty';
-                  }
-                  return null;
-                }),
-              ),
-            ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: _stream,
@@ -78,7 +50,9 @@ class _NewEqubGroupState extends State<NewEqubGroup> {
                       child: Text('Result Not Found'),
                     );
                   }
-                  final List<DocumentSnapshot> docs = snapshot.data!.docs.where((doc) =>!doc.get('members').contains(user!.uid)).toList();
+                  final List<DocumentSnapshot> docs = snapshot.data!.docs
+                      .where((doc) => !doc.get('members').contains(user!.uid))
+                      .toList();
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, childAspectRatio: 1),
