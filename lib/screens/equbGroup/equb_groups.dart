@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
+import 'package:equb/screens/equbGroup/requested_groups.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/service/search.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,9 @@ class NewEqubGroup extends StatefulWidget {
 }
 
 class _NewEqubGroupState extends State<NewEqubGroup> {
-  late Stream<QuerySnapshot> _stream;
-
   @override
   void initState() {
     super.initState();
-    _stream = groupCollection.snapshots();
   }
 
   @override
@@ -35,8 +33,10 @@ class _NewEqubGroupState extends State<NewEqubGroup> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _stream,
+              child: StreamBuilder(
+                stream: groupCollection
+                    .where('groupRequest', arrayContains: user?.uid)
+                    .snapshots(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -50,12 +50,9 @@ class _NewEqubGroupState extends State<NewEqubGroup> {
                       child: Text('Result Not Found'),
                     );
                   }
-                  final List<DocumentSnapshot> docs = snapshot.data!.docs
-                      .where((doc) => !doc.get('members').contains(user!.uid))
-                      .toList();
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, childAspectRatio: 1),
+                  final List<DocumentSnapshot> docs = snapshot.data!.docs;
+                  print(docs);
+                  return ListView.builder(
                     itemCount: docs.length,
                     itemBuilder: ((context, index) {
                       return SizedBox(
@@ -64,94 +61,33 @@ class _NewEqubGroupState extends State<NewEqubGroup> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Stack(children: [
-                            ListTile(
-                              leading: Icon(FeatherIcons.user),
-                              title: Text(
-                                docs[index].get('groupName'),
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .color),
-                              ),
-                              subtitle: Text(
-                                docs[index].get('catagory'),
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .color),
-                              ),
+                          child: ListTile(
+                            leading: Icon(FeatherIcons.gitPullRequest),
+                            title: Text(
+                              docs[index].get('groupName'),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color),
                             ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    docs[index]
-                                        .get('members')
-                                        .toList()
-                                        .length
-                                        .toString(),
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    'members',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline1!
-                                          .color,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  IconButton(
-                                    onPressed: () async {
-                                      await requestJoinGroup(
-                                              docs[index].get('groupId'))
-                                          .then(
-                                            (value) =>
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                              SnackBar(
-                                                content: CustomSnackBar(
-                                                    message:
-                                                        'You Are Requested to Join Group',
-                                                    isSuccess: true),
-                                              ),
-                                            ),
-                                          )
-                                          .then(
-                                            (value) => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    GroupsIn()),
-                                              ),
-                                            ),
-                                          );
-                                    },
-                                    icon: Icon(
-                                      FeatherIcons.plusCircle,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            subtitle: Text(
+                              docs[index].get('catagory'),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color),
                             ),
-                          ]),
+                            trailing: Text(
+                              'requested',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color),
+                            ),
+                          ),
                         ),
                       );
                     }),
