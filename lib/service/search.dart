@@ -66,7 +66,7 @@ class GroupSearch extends SearchDelegate {
           itemCount: docs.length,
           itemBuilder: ((context, index) {
             final members = List<String>.from(docs[index].get('members'));
-
+            final request = List<String>.from(docs[index].get('groupRequest'));
             return Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -100,34 +100,47 @@ class GroupSearch extends SearchDelegate {
                       ),
                     )
                   : ListTile(
-                      leading: IconButton(
-                        onPressed: () async {
-                          await requestJoinGroup(docs[index].get('groupId'))
-                              .then(
-                                (value) =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: CustomSnackBar(
-                                        message:
-                                            'You Are Requested to Join Group',
-                                        isSuccess: true),
-                                  ),
-                                ),
-                              )
-                              .then(
-                                (value) => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => Home()),
-                                  ),
-                                ),
-                              );
-                        },
-                        icon: Icon(
-                          FeatherIcons.plusCircle,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      leading: request.contains(user?.uid)
+                          ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                                'requested',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .color),
+                              ),
+                          )
+                          : IconButton(
+                              onPressed: () async {
+                                await requestJoinGroup(
+                                        docs[index].get('groupId'))
+                                    .then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: CustomSnackBar(
+                                              message:
+                                                  'You Are Requested to Join Group',
+                                              isSuccess: true),
+                                        ),
+                                      ),
+                                    )
+                                    .then(
+                                      (value) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) => Home()),
+                                        ),
+                                      ),
+                                    );
+                              },
+                              icon: Icon(
+                                FeatherIcons.plusCircle,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                       title: Text(
                         docs[index].get('groupName'),
                         style: TextStyle(
@@ -158,7 +171,7 @@ class GroupSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-     if (query.isEmpty) {
+    if (query.isEmpty) {
       return Container();
     }
     return StreamBuilder(
@@ -178,7 +191,7 @@ class GroupSearch extends SearchDelegate {
           itemCount: docs.length,
           itemBuilder: ((context, index) {
             final members = List<String>.from(docs[index].get('members'));
-
+            final request = List<String>.from(docs[index].get('groupRequest'));
             return Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -212,34 +225,47 @@ class GroupSearch extends SearchDelegate {
                       ),
                     )
                   : ListTile(
-                      leading: IconButton(
-                        onPressed: () async {
-                          await requestJoinGroup(docs[index].get('groupId'))
-                              .then(
-                                (value) =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: CustomSnackBar(
-                                        message:
-                                            'You Are Requested to Join Group',
-                                        isSuccess: true),
-                                  ),
-                                ),
-                              )
-                              .then(
-                                (value) => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => Home()),
-                                  ),
-                                ),
-                              );
-                        },
-                        icon: Icon(
-                          FeatherIcons.plusCircle,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      leading: request.contains(user?.uid)
+                          ? Padding(
+                            padding: EdgeInsets.symmetric(vertical:8),
+                            child: Text(
+                                'requested',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .color),
+                              ),
+                          )
+                          : IconButton(
+                              onPressed: () async {
+                                await requestJoinGroup(
+                                        docs[index].get('groupId'))
+                                    .then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: CustomSnackBar(
+                                              message:
+                                                  'You Are Requested to Join Group',
+                                              isSuccess: true),
+                                        ),
+                                      ),
+                                    )
+                                    .then(
+                                      (value) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) => Home()),
+                                        ),
+                                      ),
+                                    );
+                              },
+                              icon: Icon(
+                                FeatherIcons.plusCircle,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                       title: Text(
                         docs[index].get('groupName'),
                         style: TextStyle(
