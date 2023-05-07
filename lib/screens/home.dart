@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+import '../service/search.dart';
 import '../service/services.dart';
 import '../widget/custom_snackbar.dart';
 
@@ -21,7 +22,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   PageController? _pageController;
-  int pageIndex = 1;
+  int pageIndex = 0;
   User? _user;
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _HomeState extends State<Home> {
 
   Widget customContainer() {
     return Container(
-      child: _user!.role == 'admin' ? GroupRequest() : NewEqubGroup(),
+      child: _user?.role == 'admin' ? GroupRequest() : NewEqubGroup(),
     );
   }
 
@@ -69,9 +70,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text(''),
+        actions: [
+          IconButton(
+            // color: Colors.blue,
+              onPressed: () {
+
+                showSearch(context: context, delegate: GroupSearch());
+              },
+              icon: Icon(FeatherIcons.search)),
+          IconButton(onPressed: () {}, icon: Icon(FeatherIcons.bell))
+        ],
       ),
       drawer: NavDrawer(),
       body: PageView(

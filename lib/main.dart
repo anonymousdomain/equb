@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(children: [
         Center(
-          child: Builder(
+          child: Builder( 
             builder: (context) {
               return StreamBuilder(
                 stream: FirebaseAuth.instance.authStateChanges(),
