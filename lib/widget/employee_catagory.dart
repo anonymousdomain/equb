@@ -42,8 +42,10 @@ class _EmployeeCardState extends State<EmployeeCard> {
             itemCount: docs.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
+              final request =
+                  List<String>.from(docs[index].get('groupRequest'));
               return SizedBox(
-                width: 180,
+                width: 200,
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -95,33 +97,48 @@ class _EmployeeCardState extends State<EmployeeCard> {
                           SizedBox(
                             width: 20,
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              await requestJoinGroup(docs[index].get('groupId'))
-                                  .then(
-                                    (value) => ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      SnackBar(
-                                        content: CustomSnackBar(
-                                            message:
-                                                'You Are Requested to Join Group',
-                                            isSuccess: true),
-                                      ),
+                          SizedBox(
+                            child: request.contains(user!.uid)
+                                ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                     'requested',
+                                     style: TextStyle(
+                                      color: Theme.of(context).textTheme.headline1!.color
+                                     ),
                                     ),
-                                  )
-                                  .then(
-                                    (value) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) => GroupsIn()),
-                                      ),
+                                )
+                                : IconButton(
+                                    onPressed: () async {
+                                      await requestJoinGroup(
+                                              docs[index].get('groupId'))
+                                          .then(
+                                            (value) =>
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                              SnackBar(
+                                                content: CustomSnackBar(
+                                                    message:
+                                                        'You Are Requested to Join Group',
+                                                    isSuccess: true),
+                                              ),
+                                            ),
+                                          )
+                                          .then(
+                                            (value) => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    GroupsIn()),
+                                              ),
+                                            ),
+                                          );
+                                    },
+                                    icon: Icon(
+                                      FeatherIcons.plusCircle,
+                                      color: Theme.of(context).primaryColor,
                                     ),
-                                  );
-                            },
-                            icon: Icon(
-                              FeatherIcons.plusCircle,
-                              color: Theme.of(context).primaryColor,
-                            ),
+                                  ),
                           ),
                         ],
                       ),
