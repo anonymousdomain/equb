@@ -89,5 +89,5 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
 
 Future<QuerySnapshot<Map<String, dynamic>>> getGroupRequests() async {
   
-  return await groupCollection.where('groupRequests', arrayContains: true).get();
+  return await groupCollection.where('groupRequest', isNull:false).get();
 }

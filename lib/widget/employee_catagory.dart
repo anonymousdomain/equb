@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
+import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class _EmployeeCardState extends State<EmployeeCard> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: groupCollection.where('catagory', isEqualTo: widget.query).get(),
-      // .where('members', whereIn: [user?.uid]).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -129,7 +129,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    GroupsIn()),
+                                                    Home()),
                                               ),
                                             ),
                                           );
