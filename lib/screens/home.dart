@@ -72,9 +72,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         actions: [
           IconButton(
-            // color: Colors.blue,
+              // color: Colors.blue,
               onPressed: () {
-
                 showSearch(context: context, delegate: GroupSearch());
               },
               icon: Icon(FeatherIcons.search)),
