@@ -44,8 +44,7 @@ class _GroupRequestState extends State<GroupRequest> {
                 List<String>.from(doc.data()['groupRequest']);
             usersId.forEach((id) {
               userDocFuture.add(userCollection.doc(id).get().then((userDoc) {
-                userDoc.data()!['groupId'] = groupId;
-                log(userDoc.data().toString());
+                userDoc.reference.update({'groupId': groupId});
                 return userDoc;
               }));
             });
@@ -70,7 +69,7 @@ class _GroupRequestState extends State<GroupRequest> {
                 child: ListView.builder(
                   itemCount: userDocs.length,
                   itemBuilder: ((context, index) {
-                    String groupId = userDocs[index].get('uid');
+                    String groupId = userDocs[index].get('groupId');
                     return SizedBox(
                       width: 600,
                       child: Card(
@@ -83,27 +82,25 @@ class _GroupRequestState extends State<GroupRequest> {
                                 padding: EdgeInsets.symmetric(vertical: 8),
                                 child: Text('requested')),
                             title: Text(userDocs[index].get('firstName') ?? ''),
+                            trailing: FutureBuilder(
+                              future: groupCollection.doc(groupId).get(),
+                              builder: ((context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: Text('no data'),
+                                  );
+                                }
+                                // List<DocumentSnapshot> groupDoc = snapshot.data;
+                                return Text(snapshot.data?.get('groupName'));
+                              }),
+                            ),
                           ),
-                          // Align(
-                          //   alignment: Alignment.bottomRight,
-                          //   child: FutureBuilder(
-                          //       future: groupCollection.doc(groupId).get(),
-                          //       builder: ((context, snapshot) {
-                          //         if (snapshot.connectionState ==
-                          //             ConnectionState.waiting) {
-                          //           return Center(
-                          //             child: CircularProgressIndicator(),
-                          //           );
-                          //         }
-                          //         if (!snapshot.hasData) {
-                          //           return Center(
-                          //             child: Text('no data'),
-                          //           );
-                          //         }
-                          //         // List<DocumentSnapshot> groupDoc = snapshot.data;
-                          //         return Text(snapshot.data?.get('id'));
-                          //       })),
-                          // )
                         ]),
                       ),
                     );
