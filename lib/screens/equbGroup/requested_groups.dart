@@ -5,6 +5,8 @@ import 'package:equb/helper/firbasereference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+import '../../widget/customtext_iconbutton.dart';
+
 class GroupRequest extends StatefulWidget {
   const GroupRequest({super.key});
 
@@ -174,45 +176,14 @@ class _GroupRequestState extends State<GroupRequest> {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextButton.icon(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        )),
-                                        alignment: Alignment.bottomLeft,
-                                        foregroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.redAccent),
-                                        textStyle: MaterialStateProperty.all(
-                                            TextStyle(fontSize: 14))),
-                                    label: Text('cancel'),
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      FeatherIcons.xOctagon,
-                                      size: 14,
-                                    )),
-                                TextButton.icon(
-                                    style: ButtonStyle(
-                                        textStyle: MaterialStateProperty.all(
-                                            TextStyle(fontSize: 14)),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        )),
-                                        alignment: Alignment.bottomLeft,
-                                        foregroundColor:
-                                            MaterialStateProperty.all(
-                                                Theme.of(context)
-                                                    .primaryColor)),
-                                    label: Text('approve'),
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      FeatherIcons.checkCircle,
-                                      size: 14,
-                                    )),
+                                CustomTextButtonIcon(
+                                    color: Colors.red,
+                                    icon: FeatherIcons.xOctagon,
+                                    text: 'cancel'),
+                                CustomTextButtonIcon(
+                                    color: Theme.of(context).primaryColor,
+                                    icon: FeatherIcons.checkCircle,
+                                    text: 'approve'),
                               ],
                             ),
                           )
