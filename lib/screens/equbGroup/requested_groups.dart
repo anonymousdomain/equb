@@ -20,6 +20,11 @@ class _GroupRequestState extends State<GroupRequest> {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      color: Theme.of(context).textTheme.bodyText1!.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
     return Scaffold(
       body: FutureBuilder(
         future: groupCollection.where('groupRequest', isGreaterThan: []).get(),
@@ -33,13 +38,15 @@ class _GroupRequestState extends State<GroupRequest> {
               snapshot.data!.docs.isEmpty ||
               snapshot.data!.docs == []) {
             return Center(
-              child: Text('Result Not Found'),
+              child: Text(
+                'Result Not Found',
+                style: textStyle,
+              ),
             );
           }
           List<Future<DocumentSnapshot>> userDocFuture = [];
           snapshot.data!.docs.forEach((doc) {
             String groupId = doc.id;
-            log('groupId $groupId');
             List<String> usersId =
                 List<String>.from(doc.data()['groupRequest']);
             usersId.forEach((id) {
@@ -60,52 +67,160 @@ class _GroupRequestState extends State<GroupRequest> {
               }
               if (!snapshot.hasData) {
                 return Center(
-                  child: Text('Result Not Found'),
+                  child: Text(
+                    'Result Not Found',
+                    style: textStyle,
+                  ),
                 );
               }
               List<DocumentSnapshot> userDocs = snapshot.data!;
-              return SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemCount: userDocs.length,
-                  itemBuilder: ((context, index) {
-                    String groupId = userDocs[index].get('groupId');
-                    return SizedBox(
-                      width: 600,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(children: [
-                          ListTile(
-                            leading: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                                child: Text('requested')),
-                            title: Text(userDocs[index].get('firstName') ?? ''),
-                            trailing: FutureBuilder(
-                              future: groupCollection.doc(groupId).get(),
-                              builder: ((context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: Text('no data'),
-                                  );
-                                }
-                                // List<DocumentSnapshot> groupDoc = snapshot.data;
-                                return Text(snapshot.data?.get('groupName'));
-                              }),
+              return ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+                shrinkWrap: true,
+                itemCount: userDocs.length,
+                itemBuilder: ((context, index) {
+                  String groupId = userDocs[index].get('groupId');
+                  return Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage:
+                                  NetworkImage(userDocs[index].get('imageUrl')),
                             ),
                           ),
-                        ]),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'user',
+                                style: textStyle,
+                              ),
+                              Text(
+                                "${userDocs[index].get('firstName')} ${userDocs[index].get('lastName')}",
+                                style: textStyle,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'groupName',
+                                style: textStyle,
+                              ),
+                              SizedBox(
+                                  child: FutureBuilder(
+                                future: groupCollection.doc(groupId).get(),
+                                builder: ((context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Text(
+                                        'no data',
+                                        style: textStyle,
+                                      ),
+                                    );
+                                  }
+                                  // List<DocumentSnapshot> groupDoc = snapshot.data;
+                                  return Text(snapshot.data?.get('groupName'),
+                                      style: textStyle);
+                                }),
+                              )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text('status ', style: textStyle),
+                              Text('requested', style: textStyle)
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextButton.icon(
+                                    style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        )),
+                                        alignment: Alignment.bottomLeft,
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.redAccent),
+                                        textStyle: MaterialStateProperty.all(
+                                            TextStyle(fontSize: 14))),
+                                    label: Text('cancel'),
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      FeatherIcons.xOctagon,
+                                      size: 14,
+                                    )),
+                                TextButton.icon(
+                                    style: ButtonStyle(
+                                        textStyle: MaterialStateProperty.all(
+                                            TextStyle(fontSize: 14)),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        )),
+                                        alignment: Alignment.bottomLeft,
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                                Theme.of(context)
+                                                    .primaryColor)),
+                                    label: Text('approve'),
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      FeatherIcons.checkCircle,
+                                      size: 14,
+                                    )),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
               );
             }),
           );

@@ -44,6 +44,11 @@ class _EmployeeCardState extends State<EmployeeCard> {
             itemBuilder: (context, index) {
               final request =
                   List<String>.from(docs[index].get('groupRequest'));
+              var textStyle = TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            );
               return SizedBox(
                 width: 200,
                 child: Card(
@@ -78,11 +83,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
                                 .toList()
                                 .length
                                 .toString(),
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: textStyle,
                           ),
                           SizedBox(
                             width: 12,

@@ -27,10 +27,10 @@ class CustomTheme with ChangeNotifier {
         selectedItemColor: kPrimaryColor,
         unselectedItemColor: Colors.grey,
       ),
-      textTheme:const TextTheme(
+      textTheme: TextTheme(
         headline1: TextStyle(
             color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(color:Colors.black, fontSize: 16),
+        bodyText1: TextStyle(color:Colors.black.withOpacity(0.7), fontSize: 16),
       ),
     );
   }
