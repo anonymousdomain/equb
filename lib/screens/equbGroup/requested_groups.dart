@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -23,13 +24,14 @@ class _GroupRequestState extends State<GroupRequest> {
   @override
   Widget build(BuildContext context) {
     var textStyle = TextStyle(
-      color: Theme.of(context).textTheme.bodyText1!.color,
+      color: Theme.of(context).textTheme.headline1!.color,
       fontSize: 14,
       fontWeight: FontWeight.w600,
     );
     return Scaffold(
-      body: FutureBuilder(
-        future: groupCollection.where('groupRequest', isGreaterThan: []).get(),
+      body: StreamBuilder(
+        stream: groupCollection
+            .where('groupRequest', isGreaterThan: []).snapshots(),
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -58,7 +60,6 @@ class _GroupRequestState extends State<GroupRequest> {
               }));
             });
           });
-
           return FutureBuilder(
             future: getUserDocs(userDocFuture),
             builder: ((context, snapshot) {
@@ -133,8 +134,9 @@ class _GroupRequestState extends State<GroupRequest> {
                                 style: textStyle,
                               ),
                               SizedBox(
-                                  child: FutureBuilder(
-                                future: groupCollection.doc(groupId).get(),
+                                  child: StreamBuilder(
+                                stream:
+                                    groupCollection.doc(groupId).snapshots(),
                                 builder: ((context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -150,9 +152,9 @@ class _GroupRequestState extends State<GroupRequest> {
                                       ),
                                     );
                                   }
-                                  // List<DocumentSnapshot> groupDoc = snapshot.data;
-                                  return Text(snapshot.data?.get('groupName'),
-                                      style: textStyle);
+                                  String groupName =
+                                      snapshot.data?.get('groupName');
+                                  return Text(groupName, style: textStyle);
                                 }),
                               )),
                             ],
@@ -177,13 +179,25 @@ class _GroupRequestState extends State<GroupRequest> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomTextButtonIcon(
-                                    color: Colors.red,
-                                    icon: FeatherIcons.xOctagon,
-                                    text: 'cancel'),
+                                  color: Colors.red,
+                                  icon: FeatherIcons.xOctagon,
+                                  text: 'cancel',
+                                  ontap: () {
+                                    cancelRequest(
+                                      groupId,
+                                      userDocs[index].get('uid'),
+                                    );
+                                  },
+                                ),
                                 CustomTextButtonIcon(
-                                    color: Theme.of(context).primaryColor,
-                                    icon: FeatherIcons.checkCircle,
-                                    text: 'approve'),
+                                  color: Theme.of(context).primaryColor,
+                                  icon: FeatherIcons.checkCircle,
+                                  text: 'approve',
+                                  ontap: () {
+                                    approveRequest(
+                                        groupId, userDocs[index].get('uid'));
+                                  },
+                                ),
                               ],
                             ),
                           )
