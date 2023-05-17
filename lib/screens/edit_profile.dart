@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/service/services.dart';
-import 'package:equb/widget/nav_drawer.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';

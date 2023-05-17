@@ -1,5 +1,4 @@
 import 'package:equb/provider/auth_state.dart';
-import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/screens/user_profile.dart';
 import 'package:equb/widget/login_screen.dart';

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
