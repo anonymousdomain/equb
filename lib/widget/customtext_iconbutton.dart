@@ -5,12 +5,14 @@ class CustomTextButtonIcon extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.text,
+    required this.ontap,
     Key? key,
   }) : super(key: key);
 
   IconData icon;
   Color color;
   String text;
+  Function() ontap;
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
@@ -25,8 +27,8 @@ class CustomTextButtonIcon extends StatelessWidget {
             TextStyle(fontSize: 14),
           ),
         ),
-        label: Text('cancel'),
-        onPressed: () {},
+        label: Text(text),
+        onPressed:ontap ,
         icon: Icon(
           icon,
           size: 14,

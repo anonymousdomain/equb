@@ -61,7 +61,11 @@ Future<void> approveRequest(groupid, userId) async {
     'members': FieldValue.arrayUnion([userId])
   });
 }
-
+Future<void>cancelRequest(groupId,userId)async{
+  await groupCollection.doc(groupId).update({
+    'groupRequest': FieldValue.arrayRemove([userId])
+  });
+}
 //leave a group
 Future<void> leaveGroup(groupId) async {
   await groupCollection.doc(groupId).update({
