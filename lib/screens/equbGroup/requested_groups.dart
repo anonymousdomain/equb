@@ -69,14 +69,24 @@ class _GroupRequestState extends State<GroupRequest> {
                         Padding(
                           padding: EdgeInsets.all(8),
                           child: Center(
-                            child: Text(docs[index].get('groupName')),
+                            child: Text(docs[index].get('groupName'),
+                            style: TextStyle(
+                              fontSize:24,
+                              fontWeight: FontWeight.w600,
+                              color:Theme.of(context).textTheme.headline1!.color
+                            ),),
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8),
                           child: Center(
                             child: Text(
-                              '${docs[index].get('members').toList().length.toString()} members',
+                              docs[index].get('members').toList().length.toString(),
+                              style: TextStyle(
+                                fontSize:30,
+                                fontWeight:FontWeight.w300,
+                                color:Theme.of(context).textTheme.headline1!.color
+                              ),
                             ),
                           ),
                         ),
@@ -91,6 +101,9 @@ class _GroupRequestState extends State<GroupRequest> {
                                 children: [
                                   Chip(
                                       label: Text(
+                                        style: TextStyle(
+                                          color:Theme.of(context).primaryColor
+                                        ),
                                           '${docs[index].get("groupRequest").toList().length.toString()} request')),
                                   IconButton(
                                       onPressed: () {
@@ -99,7 +112,7 @@ class _GroupRequestState extends State<GroupRequest> {
                                             MaterialPageRoute(
                                                 builder: (context) =>ListOfUsersRequested(userIds:request, groupId:docs[index].get('groupId'),)));
                                       },
-                                      icon: Icon(FeatherIcons.plusCircle))
+                                      icon: Icon(FeatherIcons.plusCircle,color:Theme.of(context).primaryColor,))
                                 ],
                               ),
                             ),

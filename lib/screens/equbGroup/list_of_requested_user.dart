@@ -45,6 +45,11 @@ class _ListOfUsersRequestedState extends State<ListOfUsersRequested> {
 
   @override
   Widget build(BuildContext context) {
+     var textStyle = TextStyle(
+      color: Theme.of(context).textTheme.headline1!.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
     for (var id in widget.userIds) {
       userDocFuture.add(userCollection.doc(id).get());
     }
@@ -61,6 +66,7 @@ class _ListOfUsersRequestedState extends State<ListOfUsersRequested> {
               return Center(
                 child: Text(
                   'Result Not Found',
+                  style: textStyle,
                 ),
               );
             }
@@ -89,13 +95,14 @@ class _ListOfUsersRequestedState extends State<ListOfUsersRequested> {
                               ),
                             ),
                             ListTile(
-                              title: Text('fullName'),
+                              title: Text('fullName',style: textStyle,),
                               trailing: Text(
+                                style:textStyle,
                                   '${usersDoc[index].get("firstName")} ${usersDoc[index].get("lastName")}'),
                             ),
                             ListTile(
-                              title: Text('workstatus'),
-                              trailing: Text('employee'),
+                              title: Text('workstatus',style: textStyle,),
+                              trailing: Text('employee',style: textStyle,),
                             ),
                             Row(
                               mainAxisSize: MainAxisSize.max,
