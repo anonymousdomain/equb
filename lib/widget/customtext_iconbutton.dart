@@ -17,6 +17,7 @@ class CustomTextButtonIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton.icon(
         style: ButtonStyle(
+          // backgroundColor: MaterialStateProperty.all(Theme.of(context).scaffoldBackgroundColor),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

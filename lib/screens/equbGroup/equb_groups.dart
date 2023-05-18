@@ -1,13 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
-import 'package:equb/screens/equbGroup/equbs_in.dart';
-import 'package:equb/screens/equbGroup/requested_groups.dart';
-import 'package:equb/service/group.dart';
-import 'package:equb/service/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
-import '../../widget/custom_snackbar.dart';
 
 class NewEqubGroup extends StatefulWidget {
   const NewEqubGroup({super.key});

@@ -204,6 +204,7 @@ class _OtpFieldState extends State<OtpField> {
         ),
         bottomSheet: provider.status == AuthStatus.codeAutoRetievalTimeout
             ? CustomButton(title: 'resend', onTap: resend)
-            : CustomButton(title: 'signin', onTap: signIn));
+            // : CustomButton(title: 'signin', onTap: signIn));
+            :SizedBox.shrink());
   }
 }
