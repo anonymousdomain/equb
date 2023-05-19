@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
 
+import 'group_detail.dart';
+
 class GroupsIn extends StatefulWidget {
   const GroupsIn({super.key});
 
@@ -22,6 +24,14 @@ class _GroupsInState extends State<GroupsIn> {
 
   void _loadGroups() async {
     await groupsUsersIn();
+  }
+
+  Future<void> _navigateToGroupDetail(groupId) async{
+ await   Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GroupsDetail(groupId:groupId,),
+        ));
   }
 
   @override
@@ -42,7 +52,9 @@ class _GroupsInState extends State<GroupsIn> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     //TODO:implement what will happen when it gets tapped
-                    onTap: () {},
+                    onTap: () {
+                      _navigateToGroupDetail(docs[index].get('groupId'));
+                    },
                     child: Card(
                       borderOnForeground: true,
                       elevation: 4,
@@ -56,20 +68,17 @@ class _GroupsInState extends State<GroupsIn> {
                         title: Text(
                           docs[index].get('groupName'),
                           style: TextStyle(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headline1!
-                                  .color),
+                              color:
+                                  Theme.of(context).textTheme.headline1!.color),
                         ),
                         subtitle: Text(docs[index].get('catagory')),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                             Text(
+                            Text(
                               DateFormat(
                                       'MMMM dd, yyyy') // Replace with your desired format
-                                  .format(
-                                      docs[index].get('createdAt').toDate())
+                                  .format(docs[index].get('createdAt').toDate())
                                   .toString(),
                             ),
                             Chip(
@@ -87,7 +96,6 @@ class _GroupsInState extends State<GroupsIn> {
                                 ),
                               ),
                             ),
-                           
                           ],
                         ),
                       ),
