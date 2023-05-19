@@ -36,6 +36,11 @@ class _GroupsInState extends State<GroupsIn> {
 
   @override
   Widget build(BuildContext context) {
+       var textStyle = TextStyle(
+      color: Theme.of(context).textTheme.headline1!.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
     return Scaffold(
       body: FutureBuilder(
           future:
@@ -67,11 +72,9 @@ class _GroupsInState extends State<GroupsIn> {
                         ),
                         title: Text(
                           docs[index].get('groupName'),
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.headline1!.color),
+                          style: textStyle,
                         ),
-                        subtitle: Text(docs[index].get('catagory')),
+                        subtitle: Text(docs[index].get('catagory'),style: textStyle,),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -80,6 +83,7 @@ class _GroupsInState extends State<GroupsIn> {
                                       'MMMM dd, yyyy') // Replace with your desired format
                                   .format(docs[index].get('createdAt').toDate())
                                   .toString(),
+                                  style: textStyle,
                             ),
                             Chip(
                               backgroundColor: Colors
@@ -90,10 +94,7 @@ class _GroupsInState extends State<GroupsIn> {
                                     .toList()
                                     .length
                                     .toString(),
-                                style: TextStyle(
-                                  color: Colors
-                                      .white, // Replace with your desired text color
-                                ),
+                               style: textStyle,
                               ),
                             ),
                           ],
