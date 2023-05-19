@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
 
+import 'group_detail.dart';
+
 class GroupsIn extends StatefulWidget {
   const GroupsIn({super.key});
 
@@ -24,8 +26,21 @@ class _GroupsInState extends State<GroupsIn> {
     await groupsUsersIn();
   }
 
+  Future<void> _navigateToGroupDetail(groupId) async{
+ await   Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GroupsDetail(groupId:groupId,),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
+       var textStyle = TextStyle(
+      color: Theme.of(context).textTheme.headline1!.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
     return Scaffold(
       body: FutureBuilder(
           future:
@@ -37,55 +52,50 @@ class _GroupsInState extends State<GroupsIn> {
               );
             }
             final List<DocumentSnapshot> docs = snapshot.data!.docs;
-            return GridView.builder(
+            return ListView.builder(
                 itemCount: docs.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1, childAspectRatio:1.0),
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () {},
+                    //TODO:implement what will happen when it gets tapped
+                    onTap: () {
+                      _navigateToGroupDetail(docs[index].get('groupId'));
+                    },
                     child: Card(
                       borderOnForeground: true,
-                      margin: EdgeInsets.all(10),
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundImage: NetworkImage(''),
+                        ),
+                        title: Text(
+                          docs[index].get('groupName'),
+                          style: textStyle,
+                        ),
+                        subtitle: Text(docs[index].get('catagory'),style: textStyle,),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              docs[index].get('groupName'),
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              textAlign: TextAlign.center,
-                            ),
-                            CustomListTile(
-                                icon: FeatherIcons.feather,
-                                lead: 'EqubCatagory',
-                                value: docs[index].get('catagory')),
-                            CustomListTile(
-                                icon: FeatherIcons.activity,
-                                lead: 'EqubType',
-                                value: docs[index].get('equbType')),
-                            CustomListTile(
-                                icon: FeatherIcons.dollarSign,
-                                lead: 'MoneyAmount',
-                                value: docs[index].get('moneyAmount')),
-                            CustomListTile(
-                                icon: FeatherIcons.users,
-                                lead: 'total members',
-                                value: docs[index].get('members').toList().length.toString()),
-                            CustomListTile(
-                              icon: FeatherIcons.calendar,
-                              lead: 'Schedule',
-                              value: DateFormat('MMMM dd yyyy')
+                              DateFormat(
+                                      'MMMM dd, yyyy') // Replace with your desired format
                                   .format(docs[index].get('createdAt').toDate())
                                   .toString(),
+                                  style: textStyle,
+                            ),
+                            Chip(
+                              backgroundColor: Colors
+                                  .blue, // Replace with your desired color
+                              label: Text(
+                                docs[index]
+                                    .get('members')
+                                    .toList()
+                                    .length
+                                    .toString(),
+                               style: textStyle,
+                              ),
                             ),
                           ],
                         ),
@@ -99,33 +109,3 @@ class _GroupsInState extends State<GroupsIn> {
 }
 
 // ignore: must_be_immutable
-class CustomListTile extends StatelessWidget {
-  String lead;
-  String value;
-  IconData icon;
-  CustomListTile({
-    Key? key,
-    required this.lead,
-    required this.value,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      autofocus: true,
-      // horizontalTitleGap: 0.1,
-      leading: Icon(icon),
-      title: Text(
-        lead,
-        style: TextStyle(
-            color: Theme.of(context).textTheme.headline1!.color),
-      ),
-      trailing: Text(
-        value,
-        style: TextStyle(
-            color: Theme.of(context).textTheme.headline1!.color),
-      ),
-    );
-  }
-}
