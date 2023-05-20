@@ -59,7 +59,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                   SliverAppBar(
                     expandedHeight: 160,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: SvgPicture.asset(Images.save,fit:BoxFit.cover,),
+                      background: SvgPicture.asset(Images.life,fit:BoxFit.cover,),
                       titlePadding:
                           EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       title: Align(
