@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 
-class FourtuinApp extends StatelessWidget {
-  const FourtuinApp({super.key});
+// class FourtuinApp extends StatelessWidget {
+//   const FourtuinApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'fortune',
-      home:FourtuinWheel(),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'fortune',
+//       home:FourtuinWheel(),
+//     );
+//   }
+// }
 
 class FourtuinWheel extends StatefulWidget {
   const FourtuinWheel({super.key});
@@ -44,9 +44,17 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
         child: Column(
           children: [
             Expanded(
-                child: FortuneWheel(selected: selected.stream, items: [
-              for (var it in items) FortuneItem(child: Text(it))
-            ]))
+                child: FortuneWheel(
+                    physics: CircularPanPhysics(
+                        duration: Duration(seconds: 1),
+                        curve: Curves.decelerate),
+                    onFling: () {
+                      selected.add(1);
+                    },
+                    selected: selected.stream,
+                    items: [
+                  for (var it in items) FortuneItem(child: Text(it))
+                ]))
           ],
         ),
       ),

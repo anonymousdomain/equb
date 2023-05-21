@@ -118,12 +118,12 @@ class _GroupsDetailState extends State<GroupsDetail> {
                           ),
                           CustomGRoupCard(
                             text: 'Eta',
-                            ontap: () {
+                            ontap: () =>
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => FourtuinWheel()));
-                            },
+                                      builder: (context) => FourtuinWheel()))
+                            
                           ),
                           CustomGRoupCard(
                             text: 'Completed Equb',
