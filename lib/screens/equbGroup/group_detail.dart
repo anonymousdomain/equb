@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
+import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -59,7 +60,10 @@ class _GroupsDetailState extends State<GroupsDetail> {
                   SliverAppBar(
                     expandedHeight: 160,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: SvgPicture.asset(Images.life,fit:BoxFit.cover,),
+                      background: SvgPicture.asset(
+                        Images.life,
+                        fit: BoxFit.cover,
+                      ),
                       titlePadding:
                           EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       title: Align(
@@ -67,7 +71,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                         child: Text(
                           '${docs.get('groupName')} group',
                           style: TextStyle(
-                              color:Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColor,
                               fontSize: 32),
                         ),
                       ),
@@ -106,15 +110,24 @@ class _GroupsDetailState extends State<GroupsDetail> {
                         children: [
                           CustomGRoupCard(
                             text: 'Payment',
+                            ontap: () {},
                           ),
                           CustomGRoupCard(
                             text: 'Members',
+                            ontap: () {},
                           ),
                           CustomGRoupCard(
                             text: 'Eta',
+                            ontap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FourtuinWheel()));
+                            },
                           ),
                           CustomGRoupCard(
                             text: 'Completed Equb',
+                            ontap: () {},
                           ),
                         ]),
                   )
@@ -128,18 +141,28 @@ class _GroupsDetailState extends State<GroupsDetail> {
 
 class CustomGRoupCard extends StatelessWidget {
   CustomGRoupCard({
+    required this.ontap,
     required this.text,
     super.key,
   });
   final String text;
+  void Function() ontap;
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Center(child: Text(text,style:TextStyle(
-        color: Theme.of(context).textTheme.headline1!.color,
-        fontSize: 15,
-      ),)),
+      child: GestureDetector(
+        onTap: ontap,
+        child: Center(
+            child: Text(
+          text,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.headline1!.color,
+            fontSize: 15,
+          ),
+        )),
+      ),
     );
   }
 }
