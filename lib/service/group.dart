@@ -15,7 +15,8 @@ Future<void> createGroupDocument(
     required schedule,
     required equbType,
     required id,
-    required catagory}) async {
+    required catagory,
+    required imageUrl}) async {
   final groupDoc = {
     'groupName': groupName,
     'moneyAmount': moneyAmount,
@@ -28,7 +29,8 @@ Future<void> createGroupDocument(
     'groupRequest': [],
     'catagory': catagory,
     'groupId': groupId,
-    'createdAt': FieldValue.serverTimestamp()
+    'createdAt': FieldValue.serverTimestamp(),
+    'imageUrl':imageUrl
   };
   final bool docExist = await isDocExist(groupName);
   if (!docExist) {
