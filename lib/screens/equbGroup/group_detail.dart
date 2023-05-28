@@ -117,14 +117,13 @@ class _GroupsDetailState extends State<GroupsDetail> {
                             ontap: () {},
                           ),
                           CustomGRoupCard(
-                            text: 'Eta',
-                            ontap: () =>
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FourtuinWheel()))
-                            
-                          ),
+                              text: 'Eta',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FourtuinWheel()));
+                              }),
                           CustomGRoupCard(
                             text: 'Completed Equb',
                             ontap: () {},
@@ -146,22 +145,23 @@ class CustomGRoupCard extends StatelessWidget {
     super.key,
   });
   final String text;
-   Function() ontap;
+  Function() ontap;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: GestureDetector(
-        onTap: ontap,
+    return GestureDetector(
+      onTap: ontap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Center(
-            child: Text(
-          text,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.headline1!.color,
-            fontSize: 15,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.headline1!.color,
+              fontSize: 15,
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

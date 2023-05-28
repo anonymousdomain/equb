@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:rxdart/streams.dart';
+import 'package:rxdart/subjects.dart';
 
 class FourtuinWheel extends StatefulWidget {
   const FourtuinWheel({Key? key}) : super(key: key);
@@ -11,18 +13,25 @@ class FourtuinWheel extends StatefulWidget {
 }
 
 class _FourtuinWheelState extends State<FourtuinWheel> {
-  StreamController<int> selected = StreamController<int>();
+  // StreamController<int> controller = StreamController.broadcast();
+  final controller = BehaviorSubject<int>();
 
   @override
   void dispose() {
-    selected.close();
+    controller.close();
     super.dispose();
   }
 
+  String reward = '';
   @override
   Widget build(BuildContext context) {
     final items = <String>['Nahom', 'Dawit', 'eyuel', 'fikr', 'yoda'];
+
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title:Text('Spin the Wheel'),
+      ),
       body: Center(
         child: SizedBox(
           height: MediaQuery.of(context).size.width * 0.8,
@@ -30,12 +39,24 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
             children: [
               Expanded(
                 child: FortuneWheel(
+                  onFling: () {
+                    controller.add(1);
+                  },
+                  onAnimationStart: () {
+                    print('helloTHre');
+                  },
+                  onAnimationEnd: () {
+                    setState(() {
+                      reward = items[controller.stream.value];
+                      print('reward:$reward');
+                    });
+                  },
                   animateFirst: false,
                   physics: CircularPanPhysics(
-                    duration: Duration(seconds: 1),
+                    duration: Duration(seconds: 2),
                     curve: Curves.decelerate,
                   ),
-                  selected: selected.stream,
+                  selected: controller.stream,
                   items: [
                     for (var it in items) FortuneItem(child: Text(it)),
                   ],
@@ -47,12 +68,12 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    selected.add(Fortune.randomInt(0, items.length));
+                    controller.add(Fortune.randomInt(0, items.length));
                   });
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 60),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
