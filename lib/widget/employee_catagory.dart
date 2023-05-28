@@ -57,7 +57,16 @@ class _EmployeeCardState extends State<EmployeeCard> {
                   ),
                   child: Stack(children: [
                     ListTile(
-                      leading: Icon(FeatherIcons.users),
+                      // leading: Icon(FeatherIcons.users),
+                      leading:docs[index].get('imageUrl')==''? 
+                     CircleAvatar(
+                      radius: 30,
+                      child:Icon(FeatherIcons.users),
+                     ) :CircleAvatar(
+                        backgroundColor:Theme.of(context).primaryColor,
+                        radius:30,
+                        backgroundImage:docs[index].get('imageUrl'),
+                      ),
                       title: Text(
                         docs[index].get('groupName'),
                         style: TextStyle(
