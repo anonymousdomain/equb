@@ -1,6 +1,6 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
-import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/widget/custom_snackbar.dart';
@@ -45,19 +45,29 @@ class _EmployeeCardState extends State<EmployeeCard> {
               final request =
                   List<String>.from(docs[index].get('groupRequest'));
               var textStyle = TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            );
+                color: Theme.of(context).primaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              );
               return SizedBox(
-                width: 200,
+                width: 210,
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Stack(children: [
                     ListTile(
-                      leading: Icon(FeatherIcons.users),
+                      // leading: Icon(FeatherIcons.users),
+                      leading: docs[index].get('imageUrl')==null
+                          ? CircleAvatar(
+                              radius: 30,
+                              child: Icon(FeatherIcons.users),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              radius: 30,
+                              backgroundImage: NetworkImage(docs[index].get('imageUrl'))
+                            ),
                       title: Text(
                         docs[index].get('groupName'),
                         style: TextStyle(
@@ -101,14 +111,16 @@ class _EmployeeCardState extends State<EmployeeCard> {
                           SizedBox(
                             child: request.contains(user!.uid)
                                 ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                     'requested',
-                                     style: TextStyle(
-                                      color: Theme.of(context).textTheme.headline1!.color
-                                     ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'requested',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headline1!
+                                              .color),
                                     ),
-                                )
+                                  )
                                 : IconButton(
                                     onPressed: () async {
                                       await requestJoinGroup(
@@ -129,8 +141,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
                                             (value) => Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    Home()),
+                                                builder: ((context) => Home()),
                                               ),
                                             ),
                                           );

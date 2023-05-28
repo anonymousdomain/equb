@@ -1,4 +1,3 @@
-import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/screens/edit_profile.dart';

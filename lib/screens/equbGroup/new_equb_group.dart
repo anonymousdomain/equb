@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:equb/widget/custom_snackbar.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../helper/firbasereference.dart';
 
 class NewEqub extends StatefulWidget {
   const NewEqub({super.key});
@@ -20,6 +26,9 @@ class _NewEqubState extends State<NewEqub> {
   String? _selectedItem;
   String? _catagoryItem;
   String _message = '';
+  File? _file;
+  String? imageUrl;
+    bool isDisposed = false;
   final _equbKey = GlobalKey<FormState>();
   final _types = [
     'Daily',
@@ -33,6 +42,7 @@ class _NewEqubState extends State<NewEqub> {
   final TextEditingController _roundSizeController = TextEditingController();
 
   DateTime? _selectedDate;
+  
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -46,10 +56,29 @@ class _NewEqubState extends State<NewEqub> {
     }
   }
 
+  final ImagePicker _picker = ImagePicker();
+  void takePhoto(ImageSource source) async {
+    final pickedFile =
+        await _picker.pickImage(source: source, maxHeight: 675, maxWidth: 960);
+    if (!isDisposed) {
+      setState(() {
+        _file = File(pickedFile!.path);
+      });
+    }
+  }
+
+  Future<String?> uploadImage(File imageFile) async {
+    UploadTask uploadTask = storage
+        .child('profiles/${DateTime.now().toString()}.jpg')
+        .putFile(imageFile);
+    String url = await (await uploadTask).ref.getDownloadURL();
+    return url;
+  }
+
   void createGroup() async {
     final id = Uuid().v4().replaceAll(RegExp(r'[^0-9]'), '').substring(0, 10);
     final isDocumentExist = await isDocExist(_groupNameController.text);
-
+      String? imageUrl = await uploadImage(_file!);
     if (_equbKey.currentState!.validate() && !isDocumentExist) {
       await createGroupDocument(
               catagory: _catagoryItem,
@@ -58,9 +87,10 @@ class _NewEqubState extends State<NewEqub> {
               roundSize: _roundSizeController.text,
               schedule: _selectedDate,
               equbType: _selectedItem,
-              id: id)
+              id: id,
+              imageUrl:imageUrl)
           .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               content: CustomSnackBar(
                   message: 'group created successfully', isSuccess: true))))
           .then((value) => Navigator.push(
@@ -69,15 +99,15 @@ class _NewEqubState extends State<NewEqub> {
     if (isDocumentExist) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-         // ignore: use_build_context_synchronously
-         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          // ignore: use_build_context_synchronously
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(
               message: 'Group aleady exsit with a Name', isSuccess: false)));
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-         // ignore: use_build_context_synchronously
-         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          // ignore: use_build_context_synchronously
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: CustomSnackBar(message: _message, isSuccess: false)));
     }
   }
@@ -99,6 +129,22 @@ class _NewEqubState extends State<NewEqub> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                   GestureDetector(
+                  onTap: () {
+                    takePhoto(ImageSource.gallery);
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: _file != null ? FileImage(_file!) : null,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    radius: 70.0,
+                    child: _file == null
+                        ? Icon(
+                            FeatherIcons.plusCircle,
+                            size: 30,
+                          )
+                        : null,
+                  ),
+                ),
                   Text(
                     'Create New Group',
                     style: TextStyle(

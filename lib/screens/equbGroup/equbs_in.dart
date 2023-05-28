@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/service/group.dart';
-import 'package:equb/models/equb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
@@ -66,9 +65,11 @@ class _GroupsInState extends State<GroupsIn> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        leading: CircleAvatar(
+                        leading:docs[index].get('imageUrl')==''?CircleAvatar(
+                          child: Icon(FeatherIcons.userCheck),
+                        ):CircleAvatar(
                           backgroundColor: Theme.of(context).primaryColor,
-                          backgroundImage: NetworkImage(''),
+                          backgroundImage: NetworkImage(docs[index].get('imageUrl')),
                         ),
                         title: Text(
                           docs[index].get('groupName'),
