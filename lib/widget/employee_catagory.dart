@@ -50,7 +50,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
                               fontWeight: FontWeight.w600,
                             );
               return SizedBox(
-                width: 200,
+                width: 210,
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
