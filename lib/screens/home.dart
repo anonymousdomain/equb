@@ -101,26 +101,30 @@ class _HomeState extends State<Home> {
           activeColor: Colors.blue,
           items: const [
             BottomNavigationBarItem(
+              label:'Home',
               icon: Icon(
                 FeatherIcons.home,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
+              label:'Groups',
               icon: Icon(
-                FeatherIcons.droplet,
+                FeatherIcons.package,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
+              label:'GroupRequests',
               icon: Icon(
-                FeatherIcons.userPlus,
+                FeatherIcons.gitPullRequest,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
+              label: 'Notification',
                 icon: Icon(
-              FeatherIcons.anchor,
+              FeatherIcons.bell,
               size: 30,
             ))
           ]),
