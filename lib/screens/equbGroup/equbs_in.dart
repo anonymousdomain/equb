@@ -65,7 +65,7 @@ class _GroupsInState extends State<GroupsIn> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        leading:docs[index].get('imageUrl')==''?CircleAvatar(
+                        leading:docs[index].get('imageUrl')==null?CircleAvatar(
                           child: Icon(FeatherIcons.userCheck),
                         ):CircleAvatar(
                           backgroundColor: Theme.of(context).primaryColor,
