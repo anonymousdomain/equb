@@ -146,7 +146,7 @@ class CustomGRoupCard extends StatelessWidget {
     super.key,
   });
   final String text;
-  void Function() ontap;
+   Function() ontap;
   @override
   Widget build(BuildContext context) {
     return Card(
