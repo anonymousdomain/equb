@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/service/group.dart';
 import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
@@ -47,8 +48,12 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
       items = userNames;
     });
   }
-
   String reward = '';
+  void saveWinner(winn) async {
+    groupCollection.doc(widget.groupId).update({
+      'winner':FieldValue.arrayUnion([winn])
+    });
+  }
   @override
   Widget build(BuildContext context) {
     getUsers();
@@ -69,7 +74,7 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
                         onFling: () {
                           controller.add(1);
                         },
-                        animateFirst:false,
+                        animateFirst: false,
                         onAnimationStart: () {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor:
@@ -89,6 +94,7 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
                                   duration: Duration(seconds: 6),
                                 )));
                           });
+                          saveWinner(reward);
                         },
                         // animateFirst: false,
                         physics: CircularPanPhysics(

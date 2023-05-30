@@ -30,7 +30,7 @@ Future<void> createGroupDocument(
     'catagory': catagory,
     'groupId': groupId,
     'createdAt': FieldValue.serverTimestamp(),
-    'imageUrl':imageUrl
+    'imageUrl': imageUrl
   };
   final bool docExist = await isDocExist(groupName);
   if (!docExist) {
@@ -63,11 +63,13 @@ Future<void> approveRequest(groupid, userId) async {
     'members': FieldValue.arrayUnion([userId])
   });
 }
-Future<void>cancelRequest(groupId,userId)async{
+
+Future<void> cancelRequest(groupId, userId) async {
   await groupCollection.doc(groupId).update({
     'groupRequest': FieldValue.arrayRemove([userId])
   });
 }
+
 //leave a group
 Future<void> leaveGroup(groupId) async {
   await groupCollection.doc(groupId).update({
@@ -94,6 +96,19 @@ Future<QuerySnapshot<Map<String, dynamic>>> groupsCatagory(
 }
 
 Future<QuerySnapshot<Map<String, dynamic>>> getGroupRequests() async {
-  
-  return await groupCollection.where('groupRequest', isNull:false).get();
+  return await groupCollection.where('groupRequest', isNull: false).get();
+}
+
+Future<List<String>> getUsers(groupId) async {
+  DocumentSnapshot snapshot = await groupCollection.doc(groupId).get();
+  List<String> usersId = List<String>.from(snapshot.get('members'));
+  QuerySnapshot userSnapshot =
+      await userCollection.where('uid', whereIn: usersId).get();
+
+  List<String> userNames = [];
+  userSnapshot.docs.forEach((element) {
+    String userName = '${element.get('firstName')} ${element.get('lastName')}';
+    userNames.add(userName);
+  });
+  return userNames;
 }

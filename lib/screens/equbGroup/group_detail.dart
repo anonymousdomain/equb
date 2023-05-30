@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
+import 'package:equb/screens/eta/eta_detail.dart';
+import 'package:equb/screens/eta/members.dart';
+import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -114,15 +117,27 @@ class _GroupsDetailState extends State<GroupsDetail> {
                           ),
                           CustomGRoupCard(
                             text: 'Members',
-                            ontap: () {},
+                            ontap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>Members(groupId:docs.id))
+                              );
+                            },
                           ),
                           CustomGRoupCard(
                               text: 'Eta',
                               ontap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FourtuinWheel(groupId: docs.id,)));
+                                _user!.role == 'admin'
+                                    ? (Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => FourtuinWheel(
+                                                  groupId: docs.id,
+                                                ))))
+                                    : Navigator.of(context).push(
+
+                                        MaterialPageRoute(
+                                            builder: (context) => EtaDetail()));
                               }),
                           CustomGRoupCard(
                             text: 'Completed Equb',
