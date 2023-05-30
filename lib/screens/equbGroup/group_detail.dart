@@ -122,7 +122,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FourtuinWheel()));
+                                        builder: (context) => FourtuinWheel(groupId: docs.id,)));
                               }),
                           CustomGRoupCard(
                             text: 'Completed Equb',
