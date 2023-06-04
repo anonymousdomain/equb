@@ -99,7 +99,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getGroupRequests() async {
   return await groupCollection.where('groupRequest', isNull: false).get();
 }
 
-Future<List<String>> getUsers(groupId) async {
+Future<List<String>> getUsersName(groupId) async {
   DocumentSnapshot snapshot = await groupCollection.doc(groupId).get();
   List<String> usersId = List<String>.from(snapshot.get('members'));
   QuerySnapshot userSnapshot =
@@ -111,4 +111,12 @@ Future<List<String>> getUsers(groupId) async {
     userNames.add(userName);
   });
   return userNames;
+}
+Future<QuerySnapshot<Object?>> getUsers(groupId) async {
+  DocumentSnapshot snapshot = await groupCollection.doc(groupId).get();
+  List<String> usersId = List<String>.from(snapshot.get('members'));
+  QuerySnapshot userSnapshot =
+      await userCollection.where('uid', whereIn: usersId).get();
+
+  return userSnapshot;
 }

@@ -33,7 +33,6 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
   }
 
   String reward = '';
-  String name = '';
   void saveWinner(winn) async {
     groupCollection.doc(widget.groupId).update({
       'winner': FieldValue.arrayUnion([winn])
