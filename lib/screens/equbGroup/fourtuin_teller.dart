@@ -9,8 +9,10 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/subjects.dart';
 
 class FourtuinWheel extends StatefulWidget {
-  FourtuinWheel({Key? key, required this.groupId}) : super(key: key);
+  FourtuinWheel({Key? key, required this.groupId, required this.items})
+      : super(key: key);
   String groupId;
+  List<String> items;
   @override
   State<FourtuinWheel> createState() => _FourtuinWheelState();
 }
@@ -18,7 +20,7 @@ class FourtuinWheel extends StatefulWidget {
 class _FourtuinWheelState extends State<FourtuinWheel> {
   // StreamController<int> controller = StreamController.broadcast();
   final controller = BehaviorSubject<int>();
-  List<String> items = [];
+
   @override
   void dispose() {
     controller.close();
@@ -28,35 +30,19 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
   @override
   void initState() {
     super.initState();
-    // getUsers();
-    controller.add(0);
   }
 
-  getUsers() async {
-    DocumentSnapshot snapshot = await groupCollection.doc(widget.groupId).get();
-    List<String> usersId = List<String>.from(snapshot.get('members'));
-    QuerySnapshot userSnapshot =
-        await userCollection.where('uid', whereIn: usersId).get();
-
-    List<String> userNames = [];
-    userSnapshot.docs.forEach((element) {
-      String userName =
-          '${element.get('firstName')} ${element.get('lastName')}';
-      userNames.add(userName);
-    });
-    setState(() {
-      items = userNames;
-    });
-  }
   String reward = '';
   void saveWinner(winn) async {
     groupCollection.doc(widget.groupId).update({
-      'winner':FieldValue.arrayUnion([winn])
+      'winner': FieldValue.arrayUnion([winn])
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    getUsers();
+    print(widget.items);
+    final items = widget.items;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

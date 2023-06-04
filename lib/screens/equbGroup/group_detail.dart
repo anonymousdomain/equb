@@ -21,6 +21,7 @@ class GroupsDetail extends StatefulWidget {
 
 class _GroupsDetailState extends State<GroupsDetail> {
   User? _user;
+  List<String> items = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -58,6 +59,29 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 );
               }
               DocumentSnapshot<Map<String, dynamic>> docs = snapshot.data!;
+
+              getUsers() async {
+                DocumentSnapshot snapshot =
+                    await groupCollection.doc(docs.id).get();
+                List<String> usersId =
+                    List<String>.from(snapshot.get('members'));
+                QuerySnapshot userSnapshot =
+                    await userCollection.where('uid', whereIn: usersId).get();
+
+                List<String> userNames = [];
+                userSnapshot.docs.forEach((element) {
+                  String userName =
+                      '${element.get('firstName')} ${element.get('lastName')}';
+                  userNames.add(userName);
+                });
+                setState(() {
+                  items = userNames;
+                });
+
+                print('usernames $userNames');
+                print('ite $items');
+              }
+
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -119,23 +143,27 @@ class _GroupsDetailState extends State<GroupsDetail> {
                             text: 'Members',
                             ontap: () {
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context)=>Members(groupId:docs.id))
-                              );
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Members(groupId: docs.id)));
                             },
                           ),
                           CustomGRoupCard(
                               text: 'Eta',
-                              ontap: () {
+                              ontap: () async {
+                                await getUsers();
                                 _user!.role == 'admin'
+                                    // ignore: use_build_context_synchronously
                                     ? (Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => FourtuinWheel(
                                                   groupId: docs.id,
+                                                  items: items,
                                                 ))))
+                                    // ignore: use_build_context_synchronously
                                     : Navigator.of(context).push(
-
                                         MaterialPageRoute(
                                             builder: (context) => EtaDetail()));
                               }),
