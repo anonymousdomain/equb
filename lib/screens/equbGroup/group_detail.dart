@@ -71,24 +71,10 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 List<String> res = usersId
                     .where((element) => !winnerId.contains(element))
                     .toList();
-                // print('res $res');
-                // QuerySnapshot userSnapshot =
-                //     await userCollection.where('uid', whereIn: usersId).get();
-
-                // List<String> userNames = [];
-                // userSnapshot.docs.forEach((element) {
-                //   String userName =
-                //       '${element.get('firstName')} ${element.get('lastName')}';
-                //   userNames.add(userName);
-                // });
-                // setState(() {
-                //   items = userNames;
-                // });
                 setState(() {
-                  items = usersId;
+                  items = res;
                 });
               }
-
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(

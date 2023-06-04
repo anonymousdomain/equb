@@ -68,161 +68,114 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
         centerTitle: true,
         title: Text('Spin the Wheel'),
       ),
-      body: StreamBuilder(
-          stream: userCollection.where('uid', whereIn: items).snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final docs = snapshot.data!.docs;
-            return Center(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: FortuneWheel(
-                      onFling: () {
-                        controller.add(1);
-                      },
-                      animateFirst: false,
-                      onAnimationStart: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            content: CustomSnackBar(
-                                message: 'Eta Is started', isSuccess: true)));
-                      },
-                      onAnimationEnd: () {
-                        setState(() {
-                          reward = docs[controller.value].id;
-                        });
-                        print('reqa $reward');
-                        getUserName(reward).then((value) => {
+      body: items.length <= 1
+          ? Center(
+              child: Card( 
+
+                   shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('There is no enough people left to spin up equb',style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),),
+                )),
+            )
+          : StreamBuilder(
+              stream: userCollection.where('uid', whereIn: items).snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final docs = snapshot.data!.docs;
+                return Center(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.8,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: FortuneWheel(
+                            onFling: () {
+                              controller.add(1);
+                            },
+                            animateFirst: false,
+                            onAnimationStart: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       backgroundColor: Theme.of(context)
                                           .scaffoldBackgroundColor,
                                       content: CustomSnackBar(
-                                        message: 'The Winner is $value',
-                                        isSuccess: true,
-                                        duration: Duration(seconds: 6),
-                                      )))
-                            });
+                                          message: 'Eta Is started',
+                                          isSuccess: true)));
+                            },
+                            onAnimationEnd: () {
+                              setState(() {
+                                reward = docs[controller.value].id;
+                              });
+                              print('reqa $reward');
+                              getUserName(reward)
+                                  .then((value) => {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                backgroundColor: Theme.of(
+                                                        context)
+                                                    .scaffoldBackgroundColor,
+                                                content: CustomSnackBar(
+                                                  message:
+                                                      'The Winner is $value',
+                                                  isSuccess: true,
+                                                  duration:
+                                                      Duration(seconds: 6),
+                                                )))
+                                      })
+                                  .then((value) => Navigator.pop(context));
 
-                        saveWinner(reward);
-                      },
-                      // animateFirst: false,
-                      physics: CircularPanPhysics(
-                        duration: Duration(seconds: 10),
-                        curve: Curves.decelerate,
-                      ),
-                      selected: controller.stream,
-                      items: [
-                        // for(var i in items)FortuneItem(child: Text('${docs[i].get('firstName')} ${docs[i].get('lastName')}'))
-                        for (var it = 0; it < items.length; it++)
-                          FortuneItem(
-                              child: Text(
-                                  '${docs[it].get('firstName')} ${docs[it].get('lastName')}')),
+                              saveWinner(reward);
+                            },
+                            // animateFirst: false,
+                            physics: CircularPanPhysics(
+                              duration: Duration(seconds: 10),
+                              curve: Curves.decelerate,
+                            ),
+                            selected: controller.stream,
+                            items: [
+                              for (var it = 0; it < items.length; it++)
+                                FortuneItem(
+                                    child: Text(
+                                        '${docs[it].get('firstName')} ${docs[it].get('lastName')}')),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              controller
+                                  .add(Fortune.randomInt(0, items.length));
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor:
+                                Theme.of(context).textTheme.headline1!.color,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text('Spin'),
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        controller.add(Fortune.randomInt(0, items.length));
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor:
-                          Theme.of(context).textTheme.headline1!.color,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text('Spin'),
-                  ),
-                ],
-              ),
-            );
-          }),
+                );
+              }),
     );
   }
 }
-      // body: items.length <= 1
-      //     ? Center(child: CircularProgressIndicator())
-      //     : Center(
-      //         child: SizedBox(
-      //           height: MediaQuery.of(context).size.width * 0.8,
-      //           child: Column(
-      //             children: [
-      //               Expanded(
-      //                 child: FortuneWheel(
-      // onFling: () {
-      //   controller.add(1);
-      // },
-      // animateFirst: false,
-      // onAnimationStart: () {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //       backgroundColor:
-      //           Theme.of(context).scaffoldBackgroundColor,
-      //       content: CustomSnackBar(
-      //           message: 'Eta Is started', isSuccess: true)));
-      // },
-      // onAnimationEnd: () {
-      //   setState(() {
-      //     reward = items[controller.value];
-      //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //         backgroundColor:
-      //             Theme.of(context).scaffoldBackgroundColor,
-      //         content: CustomSnackBar(
-      //           message: 'The Winner is $reward',
-      //           isSuccess: true,
-      //           duration: Duration(seconds: 6),
-      //         )));
-      //   });
-      //   saveWinner(reward);
-      // },
-      // // animateFirst: false,
-      //                   physics: CircularPanPhysics(
-      //                     duration: Duration(seconds: 10),
-      //                     curve: Curves.decelerate,
-      //                   ),
-      //                   selected: controller.stream,
-      //                   items: [
-      //                     for (var it in items) FortuneItem(child: Text(it)),
-      //                   ],
-      //                 ),
-      //               ),
-      // SizedBox(
-      //   height: 10,
-      // ),
-      // ElevatedButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       controller.add(Fortune.randomInt(0, items.length));
-      //     });
-      //   },
-      //   style: ElevatedButton.styleFrom(
-      //     backgroundColor: Theme.of(context).primaryColor,
-      //     foregroundColor:
-      //         Theme.of(context).textTheme.headline1!.color,
-      //     padding:
-      //         EdgeInsets.symmetric(vertical: 15, horizontal: 60),
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(12),
-      //     ),
-      //   ),
-      //   child: Text('Spin'),
-      // ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-  
+     
