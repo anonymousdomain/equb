@@ -40,18 +40,6 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
     });
   }
 
-  Future<List<String>> getUsersName(List<String> usersId) async {
-    final List<String> usersName = [];
-    QuerySnapshot querySnapshot =
-        await groupCollection.where('uid', whereIn: usersId).get();
-    querySnapshot.docs.forEach((element) {
-      String userName =
-          '${element.get('firstName')} ${element.get('lastName')}';
-      usersName.add(userName);
-    });
-    return usersName;
-  }
-
   Future<String> getUserName(String userId) async {
     final querySnapshot = await userCollection.doc(userId).get();
 
@@ -70,16 +58,19 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
       ),
       body: items.length <= 1
           ? Center(
-              child: Card( 
-
-                   shape: RoundedRectangleBorder(
+              child: Card(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('There is no enough people left to spin up equb',style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),),
-                )),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'There is no enough people left to spin up equb',
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.headline1!.color),
+                    ),
+                  )),
             )
           : StreamBuilder(
               stream: userCollection.where('uid', whereIn: items).snapshots(),
@@ -178,4 +169,3 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
     );
   }
 }
-     
