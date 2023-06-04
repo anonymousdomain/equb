@@ -65,21 +65,28 @@ class _GroupsDetailState extends State<GroupsDetail> {
                     await groupCollection.doc(docs.id).get();
                 List<String> usersId =
                     List<String>.from(snapshot.get('members'));
-                QuerySnapshot userSnapshot =
-                    await userCollection.where('uid', whereIn: usersId).get();
+                List<String> winnerId =
+                    List<String>.from(snapshot.get('winner'));
 
-                List<String> userNames = [];
-                userSnapshot.docs.forEach((element) {
-                  String userName =
-                      '${element.get('firstName')} ${element.get('lastName')}';
-                  userNames.add(userName);
-                });
+                List<String> res = usersId
+                    .where((element) => !winnerId.contains(element))
+                    .toList();
+                // print('res $res');
+                // QuerySnapshot userSnapshot =
+                //     await userCollection.where('uid', whereIn: usersId).get();
+
+                // List<String> userNames = [];
+                // userSnapshot.docs.forEach((element) {
+                //   String userName =
+                //       '${element.get('firstName')} ${element.get('lastName')}';
+                //   userNames.add(userName);
+                // });
+                // setState(() {
+                //   items = userNames;
+                // });
                 setState(() {
-                  items = userNames;
+                  items = usersId;
                 });
-
-                print('usernames $userNames');
-                print('ite $items');
               }
 
               return CustomScrollView(
