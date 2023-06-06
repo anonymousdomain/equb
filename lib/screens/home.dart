@@ -4,6 +4,7 @@ import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/equbGroup/requested_groups.dart';
 import 'package:equb/screens/notification/equb_notification.dart';
 import 'package:equb/screens/onhome.dart';
+import 'package:equb/service/group.dart';
 import 'package:equb/widget/nav_drawer.dart';
 import 'package:equb/widget/notification_bell.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> {
   PageController? _pageController;
   int pageIndex = 0;
   User? _user;
+  int? notificationCount;
   @override
   void initState() {
     super.initState();
@@ -37,11 +39,17 @@ class _HomeState extends State<Home> {
                 isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
+    _countNotification();
   }
 
   void _loadProfile() async {
     _user = await getUserDocument();
     setState(() {});
+  }
+
+  void _countNotification() async {
+    notificationCount = await notify();
+    print(notificationCount);
   }
 
   onPageChanged(int page) {
@@ -78,7 +86,11 @@ class _HomeState extends State<Home> {
                 showSearch(context: context, delegate: GroupSearch());
               },
               icon: Icon(FeatherIcons.search)),
-          IconButton(onPressed: () {}, icon:NotificationBell(notificationCount: 3,))
+          IconButton(
+              onPressed: () {},
+              icon: NotificationBell(
+                notificationCount: notificationCount ?? 0,
+              ))
         ],
       ),
       drawer: NavDrawer(),

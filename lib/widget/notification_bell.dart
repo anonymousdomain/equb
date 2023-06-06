@@ -12,6 +12,7 @@ class NotificationBell extends StatelessWidget {
         Icon(
           FeatherIcons.bell,
         ),
+        if(notificationCount>0)
         Positioned(
           right: 0,
           bottom: 0,

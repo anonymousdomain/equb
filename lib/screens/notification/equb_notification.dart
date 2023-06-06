@@ -63,7 +63,7 @@ class EqubNotification extends StatelessWidget {
                           ' group eta schedule will start in ${ DateFormat(
                                     'MMMM dd, yyyy') // Replace with your desired format
                                 .format(docs[index].get('schedule').toDate())
-                                .toString()}'),
+                                .toString()}',style: textStyle,),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -75,7 +75,7 @@ class EqubNotification extends StatelessWidget {
                               style: textStyle,
                             ),
                           ),
-                          Text('days left')
+                          Text('days left',style: textStyle,)
                         ],
                       ),
                         ),
