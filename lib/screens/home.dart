@@ -5,6 +5,7 @@ import 'package:equb/screens/equbGroup/requested_groups.dart';
 import 'package:equb/screens/notification/equb_notification.dart';
 import 'package:equb/screens/onhome.dart';
 import 'package:equb/widget/nav_drawer.dart';
+import 'package:equb/widget/notification_bell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -77,7 +78,7 @@ class _HomeState extends State<Home> {
                 showSearch(context: context, delegate: GroupSearch());
               },
               icon: Icon(FeatherIcons.search)),
-          IconButton(onPressed: () {}, icon: Icon(FeatherIcons.bell))
+          IconButton(onPressed: () {}, icon:NotificationBell(notificationCount: 3,))
         ],
       ),
       drawer: NavDrawer(),
