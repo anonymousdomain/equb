@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equb/screens/equbGroup/group_detail.dart';
 import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -42,42 +43,54 @@ class EqubNotification extends StatelessWidget {
                   int diffIndays = diff.inDays;
                   if (diffIndays <= 10) {
                     return GestureDetector(
-                      onTap: (){},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    GroupsDetail(groupId:docs[index].get('groupId'))));
+                      },
                       child: Card(
                         borderOnForeground: true,
                         elevation: 4,
                         shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10)),
                         child: ListTile(
-                      leading:docs[index].get('imageUrl')==null?CircleAvatar(
-                          child: Icon(FeatherIcons.bell),
-                        ):CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          backgroundImage: NetworkImage(docs[index].get('imageUrl')),
-                        ),
-                        
-                      title: Text(
-                        docs[index].get('groupName'),
-                      ),
-                      subtitle: Text(
-                          ' group eta schedule will start in ${ DateFormat(
-                                    'MMMM dd, yyyy') // Replace with your desired format
-                                .format(docs[index].get('schedule').toDate())
-                                .toString()}',style: textStyle,),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Chip(
-                            backgroundColor: Colors
-                                .blue, // Replace with your desired color
-                            label: Text(
-                              '$diffIndays',
-                              style: textStyle,
-                            ),
+                          leading: docs[index].get('imageUrl') == null
+                              ? CircleAvatar(
+                                  child: Icon(FeatherIcons.bell),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  backgroundImage:
+                                      NetworkImage(docs[index].get('imageUrl')),
+                                ),
+                          title: Text(
+                            docs[index].get('groupName'),
                           ),
-                          Text('days left',style: textStyle,)
-                        ],
-                      ),
+                          subtitle: Text(
+                            ' group eta schedule will start in ${DateFormat('MMMM dd, yyyy') // Replace with your desired format
+                                .format(docs[index].get('schedule').toDate()).toString()}',
+                            style: textStyle,
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Chip(
+                                backgroundColor: Colors
+                                    .blue, // Replace with your desired color
+                                label: Text(
+                                  '$diffIndays',
+                                  style: textStyle,
+                                ),
+                              ),
+                              Text(
+                                'days left',
+                                style: textStyle,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

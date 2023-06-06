@@ -87,7 +87,12 @@ class _HomeState extends State<Home> {
               },
               icon: Icon(FeatherIcons.search)),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EqubNotification()));
+              },
               icon: NotificationBell(
                 notificationCount: notificationCount ?? 0,
               ))
