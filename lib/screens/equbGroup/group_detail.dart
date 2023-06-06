@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
+import 'package:equb/screens/eta/eta_detail.dart';
+import 'package:equb/screens/eta/members.dart';
+import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,6 +21,7 @@ class GroupsDetail extends StatefulWidget {
 
 class _GroupsDetailState extends State<GroupsDetail> {
   User? _user;
+  List<String> items = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -55,6 +59,22 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 );
               }
               DocumentSnapshot<Map<String, dynamic>> docs = snapshot.data!;
+
+              getUsers() async {
+                DocumentSnapshot snapshot =
+                    await groupCollection.doc(docs.id).get();
+                List<String> usersId =
+                    List<String>.from(snapshot.get('members'));
+                List<String> winnerId =
+                    List<String>.from(snapshot.get('winner'));
+
+                List<String> res = usersId
+                    .where((element) => !winnerId.contains(element))
+                    .toList();
+                setState(() {
+                  items = res;
+                });
+              }
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -114,15 +134,31 @@ class _GroupsDetailState extends State<GroupsDetail> {
                           ),
                           CustomGRoupCard(
                             text: 'Members',
-                            ontap: () {},
+                            ontap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Members(groupId: docs.id)));
+                            },
                           ),
                           CustomGRoupCard(
                               text: 'Eta',
-                              ontap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FourtuinWheel()));
+                              ontap: () async {
+                                await getUsers();
+                                _user!.role == 'admin'
+                                    // ignore: use_build_context_synchronously
+                                    ? (Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => FourtuinWheel(
+                                                  groupId: docs.id,
+                                                  items: items,
+                                                ))))
+                                    // ignore: use_build_context_synchronously
+                                    : Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => EtaDetail()));
                               }),
                           CustomGRoupCard(
                             text: 'Completed Equb',
