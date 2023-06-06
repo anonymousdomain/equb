@@ -11,9 +11,7 @@ class _EtaDetailState extends State<EtaDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('eta detail'),
-      ),
+      body: Center(child: Text('You are Not Allowed to spin the wheel ',style:TextStyle(color:Colors.red[400]),)),
     );
   }
 }
