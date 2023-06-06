@@ -1,8 +1,8 @@
-import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/equbGroup/requested_groups.dart';
+import 'package:equb/screens/notification/equb_notification.dart';
 import 'package:equb/screens/onhome.dart';
 import 'package:equb/widget/nav_drawer.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
                 duration: Duration(seconds: 3),
-                message: 'You are logged in successfuly',
+                message: 'welcome back',
                 isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
@@ -90,9 +90,7 @@ class _HomeState extends State<Home> {
           GroupsIn(),
           // NewEqubGroup(),
           customContainer(),
-          Center(
-            child: Text('new stuf'),
-          ),
+          EqubNotification()
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -101,32 +99,32 @@ class _HomeState extends State<Home> {
           activeColor: Colors.blue,
           items: const [
             BottomNavigationBarItem(
-              label:'Home',
+              label: 'Home',
               icon: Icon(
                 FeatherIcons.home,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label:'Groups',
+              label: 'Groups',
               icon: Icon(
                 FeatherIcons.package,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label:'GroupRequests',
+              label: 'GroupRequests',
               icon: Icon(
                 FeatherIcons.gitPullRequest,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Notification',
+                label: 'Notification',
                 icon: Icon(
-              FeatherIcons.bell,
-              size: 30,
-            ))
+                  FeatherIcons.bell,
+                  size: 30,
+                ))
           ]),
     );
   }

@@ -41,6 +41,9 @@ class _GroupsInState extends State<GroupsIn> {
       fontWeight: FontWeight.w600,
     );
     return Scaffold(
+      appBar: AppBar(
+        title:Text('List of Groups you joind',style:TextStyle(color:Theme.of(context).primaryColor,fontSize:16)),
+      ),
       body: FutureBuilder(
           future:
               groupCollection.where('members', arrayContains: user?.uid).get(),
