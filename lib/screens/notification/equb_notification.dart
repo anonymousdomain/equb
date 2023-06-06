@@ -70,7 +70,7 @@ class EqubNotification extends StatelessWidget {
                             docs[index].get('groupName'),
                           ),
                           subtitle: Text(
-                            ' group eta schedule will start in ${DateFormat('MMMM dd, yyyy') // Replace with your desired format
+                            ' group eta schedule will start in ${DateFormat('MMMM dd, yyyy') 
                                 .format(docs[index].get('schedule').toDate()).toString()}',
                             style: textStyle,
                           ),
