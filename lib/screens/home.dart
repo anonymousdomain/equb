@@ -1,10 +1,12 @@
-import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/equb_groups.dart';
 import 'package:equb/screens/equbGroup/equbs_in.dart';
 import 'package:equb/screens/equbGroup/requested_groups.dart';
+import 'package:equb/screens/notification/equb_notification.dart';
 import 'package:equb/screens/onhome.dart';
+import 'package:equb/service/group.dart';
 import 'package:equb/widget/nav_drawer.dart';
+import 'package:equb/widget/notification_bell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -24,6 +26,7 @@ class _HomeState extends State<Home> {
   PageController? _pageController;
   int pageIndex = 0;
   User? _user;
+  int? notificationCount;
   @override
   void initState() {
     super.initState();
@@ -32,15 +35,21 @@ class _HomeState extends State<Home> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: CustomSnackBar(
                 duration: Duration(seconds: 3),
-                message: 'You are logged in successfuly',
+                message: 'welcome back',
                 isSuccess: true))));
 
     _pageController = PageController(initialPage: pageIndex);
+    _countNotification();
   }
 
   void _loadProfile() async {
     _user = await getUserDocument();
     setState(() {});
+  }
+
+  void _countNotification() async {
+    notificationCount = await notify();
+    print(notificationCount);
   }
 
   onPageChanged(int page) {
@@ -77,7 +86,16 @@ class _HomeState extends State<Home> {
                 showSearch(context: context, delegate: GroupSearch());
               },
               icon: Icon(FeatherIcons.search)),
-          IconButton(onPressed: () {}, icon: Icon(FeatherIcons.bell))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EqubNotification()));
+              },
+              icon: NotificationBell(
+                notificationCount: notificationCount ?? 0,
+              ))
         ],
       ),
       drawer: NavDrawer(),
@@ -90,9 +108,7 @@ class _HomeState extends State<Home> {
           GroupsIn(),
           // NewEqubGroup(),
           customContainer(),
-          Center(
-            child: Text('new stuf'),
-          ),
+          EqubNotification()
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -101,32 +117,32 @@ class _HomeState extends State<Home> {
           activeColor: Colors.blue,
           items: const [
             BottomNavigationBarItem(
-              label:'Home',
+              label: 'Home',
               icon: Icon(
                 FeatherIcons.home,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label:'Groups',
+              label: 'Groups',
               icon: Icon(
                 FeatherIcons.package,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label:'GroupRequests',
+              label: 'GroupRequests',
               icon: Icon(
                 FeatherIcons.gitPullRequest,
                 size: 30,
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Notification',
+                label: 'Notification',
                 icon: Icon(
-              FeatherIcons.bell,
-              size: 30,
-            ))
+                  FeatherIcons.bell,
+                  size: 30,
+                ))
           ]),
     );
   }
