@@ -1,4 +1,5 @@
 import 'package:equb/helper/firbasereference.dart';
+import 'package:equb/screens/eta/member_widget.dart';
 import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 
@@ -20,27 +21,39 @@ class _MembersState extends State<Members> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: FutureBuilder(
-            future: getUsers(widget.groupId),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final docs = snapshot.data!.docs;
-              return Center(
-                child: ListView.builder(
-                  itemCount: docs.length,
-                  itemBuilder: (context, index) {
-                  return ListTile(leading:CircleAvatar(
-                    backgroundImage:NetworkImage(docs[index].get('imageUrl')),
-                  ),
-                  title:Text('${docs[index].get('firstName')} ${docs[index].get('lastName')}',style:TextStyle(color:Theme.of(context).textTheme.headline1!.color),) ,
-                  );
-                }),
-              );
-            }));
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Members(Equbtegna)',
+          style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'All MEMBERS',
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          EqubMember(groupId: widget.groupId, query: 'members'),
+          Divider(thickness:2,),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'Members wins in the previous round',
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          EqubMember(groupId: widget.groupId, query:'winner')
+        ],
+      ),
+    );
   }
 }
