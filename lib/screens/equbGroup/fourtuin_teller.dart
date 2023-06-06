@@ -33,10 +33,26 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
   }
 
   String reward = '';
-  void saveWinner(winn) async {
+  void saveWinner(winn, schedule) async {
     groupCollection.doc(widget.groupId).update({
-      'winner': FieldValue.arrayUnion([winn])
+      'winner': FieldValue.arrayUnion([winn]),
+      'schedule': schedule
     });
+  }
+
+  Future<DateTime> schedule() async {
+    final snapshot = await groupCollection.doc(widget.groupId).get();
+    final equbType = snapshot.get('equbType');
+    Timestamp date = snapshot.get('schedule');
+    final storeddate = date.toDate();
+    DateTime scheduleDate = DateTime.now();
+    if (equbType == 'monthly') {
+      scheduleDate = storeddate.add(Duration(days: 30));
+    }
+    if (equbType == 'dayliy') {
+      scheduleDate = storeddate.add(Duration(days: 1));
+    }
+    return scheduleDate;
   }
 
   Future<String> getUserName(String userId) async {
@@ -104,7 +120,6 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
                               setState(() {
                                 reward = docs[controller.value].id;
                               });
-                              print('reqa $reward');
                               getUserName(reward)
                                   .then((value) => {
                                         ScaffoldMessenger.of(context)
@@ -122,7 +137,10 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
                                       })
                                   .then((value) => Navigator.pop(context));
 
-                              saveWinner(reward);
+                              schedule().then(
+                                (value) => saveWinner(reward, value),
+                              );
+                              // saveWinner(reward);
                             },
                             // animateFirst: false,
                             physics: CircularPanPhysics(

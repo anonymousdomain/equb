@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
+import 'package:equb/screens/eta/completed_equb.dart';
 import 'package:equb/screens/eta/eta_detail.dart';
 import 'package:equb/screens/eta/members.dart';
 import 'package:equb/service/group.dart';
@@ -75,6 +76,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                   items = res;
                 });
               }
+
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -162,7 +164,12 @@ class _GroupsDetailState extends State<GroupsDetail> {
                               }),
                           CustomGRoupCard(
                             text: 'Completed Equb',
-                            ontap: () {},
+                            ontap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompletedEqub(groupId: docs.id,)));
+                            },
                           ),
                         ]),
                   )
