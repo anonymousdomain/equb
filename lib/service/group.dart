@@ -141,9 +141,9 @@ Future<QuerySnapshot<Object?>> getWinners(groupId) async {
     Duration diffrence = currentDate.difference(storedDate);
     int daydiffs = diffrence.inDays;
 
-    if (daydiffs <= 10) {
+    if (daydiffs <= 10 && daydiffs>=0) {
       days++;
     }
-  });
+});
   return days;
 }

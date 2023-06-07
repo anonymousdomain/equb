@@ -5,7 +5,7 @@ import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
 import 'package:equb/screens/eta/completed_equb.dart';
 import 'package:equb/screens/eta/eta_detail.dart';
 import 'package:equb/screens/eta/members.dart';
-import 'package:equb/service/group.dart';
+import 'package:equb/screens/eta/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,7 +25,6 @@ class _GroupsDetailState extends State<GroupsDetail> {
   List<String> items = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadProfile();
   }
@@ -132,7 +131,12 @@ class _GroupsDetailState extends State<GroupsDetail> {
                         children: [
                           CustomGRoupCard(
                             text: 'Payment',
-                            ontap: () {},
+                            ontap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Payment()));
+                            },
                           ),
                           CustomGRoupCard(
                             text: 'Members',
@@ -168,7 +172,9 @@ class _GroupsDetailState extends State<GroupsDetail> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CompletedEqub(groupId: docs.id,)));
+                                      builder: (context) => CompletedEqub(
+                                            groupId: docs.id,
+                                          )));
                             },
                           ),
                         ]),

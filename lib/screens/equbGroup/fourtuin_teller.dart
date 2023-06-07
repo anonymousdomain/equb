@@ -1,13 +1,14 @@
-import 'dart:math';
+
+// ignore_for_file: deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
-import 'package:equb/service/group.dart';
 import 'package:equb/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/subjects.dart';
 
+// ignore: must_be_immutable
 class FourtuinWheel extends StatefulWidget {
   FourtuinWheel({Key? key, required this.groupId, required this.items})
       : super(key: key);
