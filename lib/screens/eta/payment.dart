@@ -24,6 +24,7 @@ class Payment extends StatefulWidget {
 class _PaymentState extends State<Payment> {
   User? _user;
   String _privateKey = '';
+
   final TextEditingController _email = TextEditingController();
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _currency = TextEditingController();
@@ -33,6 +34,7 @@ class _PaymentState extends State<Payment> {
   void initState() {
     super.initState();
     _loadProfile();
+    // checkUsersPayment();
     _amount.text = widget.amount;
     _currency.text = 'ETB';
     _privateKey = dotenv.env['PRIVATE_KEY']!;
@@ -42,6 +44,30 @@ class _PaymentState extends State<Payment> {
     _user = await getUserDocument();
     setState(() {});
   }
+
+  bool isScheduleMatched(Map<String, dynamic> item, DateTime dateTime) {
+    Timestamp schedule = item['schedule'] as Timestamp;
+    DateTime scheduleDate = schedule.toDate();
+
+    return scheduleDate.year == dateTime.year &&
+        scheduleDate.month == dateTime.month;
+  }
+
+  // Future checkUsersPayment() async {
+  //   final docs = await groupCollection.doc(widget.groupId).get();
+  //   List<Map<String, dynamic>> paymentList =
+  //       List<Map<String, dynamic>>.from(docs.get('payment'));
+  //   Iterable<Map<String, dynamic>> filterdList = paymentList.where((items) {
+  //     return isScheduleMatched(items, widget.schedule.toDate());
+  //   });
+  //   filterdList.forEach((element) {
+  //     if (element['user_id'] == user!.uid) {
+  //       setState(() {
+  //         isPayed = true;
+  //       });
+  //     }
+  //   });
+  // }
 
   void pay() {
     Chapa.paymentParameters(
@@ -59,7 +85,13 @@ class _PaymentState extends State<Payment> {
       title: 'payment',
     );
     groupCollection.doc(widget.groupId).update({
-      'payment':FieldValue.arrayUnion([{'user_id':user!.uid,'schedule':widget.schedule.toDate(),'amount':widget.amount}]),
+      'payment': FieldValue.arrayUnion([
+        {
+          'user_id': user!.uid,
+          'schedule': widget.schedule.toDate(),
+          'amount': widget.amount
+        }
+      ]),
     });
   }
 
@@ -79,85 +111,86 @@ class _PaymentState extends State<Payment> {
           style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(30),
-            child: Form(
-                key: paymentKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Start payment process',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: 'Roboto',
-                            fontSize: 22,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      style: textStyle,
-                      controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        focusColor: Theme.of(context).primaryColor,
-                        hintText: 'Enter Your Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: Colors.indigo, width: 2),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      enabled: false,
-                      style: textStyle,
-                      controller: _currency,
-                      decoration: InputDecoration(
-                        focusColor: Theme.of(context).primaryColor,
-                        hintText: 'currency',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: Colors.indigo, width: 2),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      enabled: false,
-                      style: textStyle,
-                      controller: _amount,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        focusColor: Theme.of(context).primaryColor,
-                        hintText: 'amount',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: Colors.indigo, width: 2),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          ),
-        ),
-      ),
-      bottomSheet: CustomButton(title: 'pay', onTap: pay),
+      body: 
+           Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(30),
+                  child: Form(
+                      key: paymentKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Start payment process',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 22,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            style: textStyle,
+                            controller: _email,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              focusColor: Theme.of(context).primaryColor,
+                              hintText: 'Enter Your Email',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: Colors.indigo, width: 2),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            enabled: false,
+                            style: textStyle,
+                            controller: _currency,
+                            decoration: InputDecoration(
+                              focusColor: Theme.of(context).primaryColor,
+                              hintText: 'currency',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: Colors.indigo, width: 2),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            enabled: false,
+                            style: textStyle,
+                            controller: _amount,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              focusColor: Theme.of(context).primaryColor,
+                              hintText: 'amount',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: Colors.indigo, width: 2),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+            ),
+      bottomSheet:CustomButton(title: 'pay', onTap: pay),
     );
   }
 }

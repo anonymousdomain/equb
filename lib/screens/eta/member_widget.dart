@@ -10,11 +10,11 @@ class EqubMember extends StatelessWidget {
     return FutureBuilder(
       future: getUsers(groupId, query),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        // if (!snapshot.hasData) {
+        //   return Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        // }
           if (!snapshot.hasData ||
             snapshot.data!.docs.isEmpty ||
             snapshot.data!.docs == []) {

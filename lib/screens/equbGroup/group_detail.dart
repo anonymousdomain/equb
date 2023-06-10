@@ -24,6 +24,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
   User? _user;
   List<String> items = [];
   List<String> payedUsers = [];
+  bool isPayed = false;
   @override
   void initState() {
     super.initState();
@@ -88,10 +89,16 @@ class _GroupsDetailState extends State<GroupsDetail> {
                   return isScheduleMatched(items, schedule.toDate());
                 });
                 filtrd.forEach((item) {
-                  //collect users id to a list
                   payedUsers.add(item['user_id']);
+                  if (item['user_id'] == user!.uid) {
+                    setState(() {
+                      isPayed = true;
+                    });
+                  }
                 });
-               List<String>  response=res.where((element)=>payedUsers.contains(element)).toList();
+                List<String> response = res
+                    .where((element) => payedUsers.contains(element))
+                    .toList();
                 setState(() {
                   items = response;
                 });
@@ -152,15 +159,48 @@ class _GroupsDetailState extends State<GroupsDetail> {
                         children: [
                           CustomGRoupCard(
                             text: 'Payment',
-                            ontap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Payment(
-                                            amount: docs.get('moneyAmount'),
-                                            groupId: docs.id,
-                                            schedule: docs.get('schedule'),
-                                          )));
+                            ontap: () async {
+                              await getUsers();
+                              if (isPayed) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Container(
+                                      padding: EdgeInsets.all(16),
+
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          color:Colors.green),
+                                      child: Column(
+                                        crossAxisAlignment:CrossAxisAlignment.start,
+                                        children:  [
+                                          Text('Hey ${_user?.firstName??''}',style:TextStyle(
+                                            fontSize:18
+                                          ),),
+                                          Text(
+                                              'You have paid this round ,Do not miss out the next schedule',
+                                              overflow:TextOverflow.ellipsis,
+                                              maxLines: 2,),
+                                        ],
+                                      ),
+                                    ),
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                  ),
+                                );
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Payment(
+                                              amount: docs.get('moneyAmount'),
+                                              groupId: docs.id,
+                                              schedule: docs.get('schedule'),
+                                            )));
+                              }
                             },
                           ),
                           CustomGRoupCard(
