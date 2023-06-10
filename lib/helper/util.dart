@@ -8,5 +8,4 @@ const kWarninngColor = Color(0xFFF3BB1C);
 const kErrorColor = Color(0xFFF03738);
 
 const kDefaultPadding = 20.0;
-const PUBLIC_KEY = 'CHAPUBK_TEST-amECIFWsHoaLawFoL2bulApnZbOZY7JY';
-const PRIVATE_KEY = 'CHASECK_TEST-ugxb0IUmRuXU0CXeTw0ZnYpgYl8GEvgA';
+

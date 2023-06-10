@@ -1,12 +1,11 @@
 
 import 'package:equb/helper/txtref.dart';
-import 'package:equb/helper/util.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/service/services.dart';
 import 'package:equb/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:chapasdk/chapasdk.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class Payment extends StatefulWidget {
   const Payment({super.key, required this.amount});
   final String amount;
@@ -16,6 +15,7 @@ class Payment extends StatefulWidget {
 
 class _PaymentState extends State<Payment> {
   User? _user;
+  String _privateKey='';
   final TextEditingController _email = TextEditingController();
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _currency = TextEditingController();
@@ -27,6 +27,7 @@ class _PaymentState extends State<Payment> {
     _loadProfile();
     _amount.text = widget.amount;
     _currency.text = 'ETB';
+    _privateKey=dotenv.env['PRIVATE_KEY']!;
   }
 
   void _loadProfile() async {
@@ -146,17 +147,9 @@ class _PaymentState extends State<Payment> {
       bottomSheet: CustomButton(
           title: 'pay',
           onTap: () {
-            print(_email.text);
-            print(_user?.phoneNumber);
-            print(_user?.phoneNumber!.substring(4));
-            print(TextRefGenerator.generateTransactionRef());
-            print(PRIVATE_KEY);
-            print(_currency.text);
-            print(_amount.text);
-
             Chapa.paymentParameters(
               context: context,
-              publicKey: PRIVATE_KEY,
+              publicKey:_privateKey,
               currency: _currency.text,
               amount: widget.amount,
               email: _email.text,
