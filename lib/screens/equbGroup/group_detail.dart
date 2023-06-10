@@ -23,6 +23,7 @@ class GroupsDetail extends StatefulWidget {
 class _GroupsDetailState extends State<GroupsDetail> {
   User? _user;
   List<String> items = [];
+  List<String> payedUsers = [];
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,14 @@ class _GroupsDetailState extends State<GroupsDetail> {
   void _loadProfile() async {
     _user = await getUserDocument();
     setState(() {});
+  }
+
+  bool isScheduleMatched(Map<String, dynamic> item, DateTime dateTime) {
+    Timestamp schedule = item['schedule'] as Timestamp;
+    DateTime scheduleDate = schedule.toDate();
+
+    return scheduleDate.year == dateTime.year &&
+        scheduleDate.month == dateTime.month;
   }
 
   @override
@@ -59,7 +68,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 );
               }
               DocumentSnapshot<Map<String, dynamic>> docs = snapshot.data!;
-
+              Timestamp schedule = docs.get('schedule');
               getUsers() async {
                 DocumentSnapshot snapshot =
                     await groupCollection.doc(docs.id).get();
@@ -71,8 +80,20 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 List<String> res = usersId
                     .where((element) => !winnerId.contains(element))
                     .toList();
+                List<Map<String, dynamic>> paymentList =
+                    List<Map<String, dynamic>>.from(docs.get('payment'));
+
+                Iterable<Map<String, dynamic>> filtrd =
+                    paymentList.where((items) {
+                  return isScheduleMatched(items, schedule.toDate());
+                });
+                filtrd.forEach((item) {
+                  //collect users id to a list
+                  payedUsers.add(item['user_id']);
+                });
+               List<String>  response=res.where((element)=>payedUsers.contains(element)).toList();
                 setState(() {
-                  items = res;
+                  items = response;
                 });
               }
 

@@ -59,7 +59,7 @@ class _PaymentState extends State<Payment> {
       title: 'payment',
     );
     groupCollection.doc(widget.groupId).update({
-      'payment':FieldValue.arrayUnion([{'user_id':user!.uid,'schedule':widget.schedule.toDate()}]),
+      'payment':FieldValue.arrayUnion([{'user_id':user!.uid,'schedule':widget.schedule.toDate(),'amount':widget.amount}]),
     });
   }
 
