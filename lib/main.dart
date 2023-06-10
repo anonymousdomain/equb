@@ -1,6 +1,7 @@
 
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
+import 'package:equb/screens/checkout_page.dart';
 import 'package:equb/screens/user_profile.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
@@ -54,6 +55,9 @@ class EqubState extends State<Equb> {
       theme: CustomTheme.lightTheme(context),
       darkTheme: CustomTheme.darkTheme(context),
       themeMode: currentTheme.currentTheme,
+      routes: {
+        '/checkout':(context)=>CheckoutPage()
+      },
       home: const MyHomePage(
         title: 'equb addis',
       ),

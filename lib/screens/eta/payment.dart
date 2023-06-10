@@ -1,9 +1,4 @@
-import 'package:chapasdk/chapawebview.dart';
-import 'package:chapasdk/constants/requests.dart';
-import 'package:chapasdk/constants/strings.dart';
-import 'package:chapasdk/constants/url.dart';
-import 'package:equb/helper/dio.dart';
-import 'package:equb/helper/firbasereference.dart';
+
 import 'package:equb/helper/txtref.dart';
 import 'package:equb/helper/util.dart';
 import 'package:equb/models/user.dart';
@@ -24,9 +19,7 @@ class _PaymentState extends State<Payment> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _currency = TextEditingController();
-  // final TextEditingController _txtRef = TextEditingController();
-  // final TextEditingController _title = TextEditingController();
-  // final TextEditingController _desc = TextEditingController();
+
   final paymentKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -41,23 +34,23 @@ class _PaymentState extends State<Payment> {
     setState(() {});
   }
 
-  void pay() async {
-    Chapa.paymentParameters(
-      context: context,
-      publicKey: PUBLIC_KEY,
-      currency: _currency.text,
-      amount: _amount.text,
-      email: _email.text,
-      phone: _user?.phoneNumber ?? '',
-      firstName: _user?.firstName ?? '',
-      lastName: _user?.lastName ?? '',
-      txRef: TextRefGenerator.generate(),
-      desc: 'desc',
-      namedRouteFallBack: '',
-      title: 'payment',
-    );
-    // intilizeMyPayment(context, authorization, email, phone, amount, currency, firstName, lastName, transactionReference, customTitle, customDescription, fallBackNamedRoute)
-  }
+  // void pay() {
+  //   Chapa.paymentParameters(
+  //     context: context,
+  //     publicKey: PRIVATE_KEY,
+  //     currency: _currency.text,
+  //     amount: _amount.text,
+  //     email: _email.text,
+  //     phone: _user?.phoneNumber ?? '',
+  //     firstName: _user?.firstName ?? '',
+  //     lastName: _user?.lastName ?? '',
+  //     txRef: TextRefGenerator.generate(),
+  //     desc: 'desc',
+  //     namedRouteFallBack: '/checkout',
+  //     title: 'payment',
+  //   );
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +143,33 @@ class _PaymentState extends State<Payment> {
           ),
         ),
       ),
-      bottomSheet: CustomButton(title: 'pay', onTap: pay),
+      bottomSheet: CustomButton(
+          title: 'pay',
+          onTap: () {
+            print(_email.text);
+            print(_user?.phoneNumber);
+            print(_user?.phoneNumber!.substring(4));
+            print(TextRefGenerator.generateTransactionRef());
+            print(PRIVATE_KEY);
+            print(_currency.text);
+            print(_amount.text);
+
+            Chapa.paymentParameters(
+              context: context,
+              publicKey: PRIVATE_KEY,
+              currency: _currency.text,
+              amount: widget.amount,
+              email: _email.text,
+              // phone: _user!.phoneNumber!.substring(4),
+              phone:'0900881111',
+              firstName: _user?.firstName ?? 'Dawit',
+              lastName: _user?.lastName ?? 'Mekonnen',
+              txRef: TextRefGenerator.generateTransactionRef(),
+              desc: 'desc',
+              namedRouteFallBack: '/checkout',
+              title: 'payment',
+            );
+          }),
     );
   }
 }
