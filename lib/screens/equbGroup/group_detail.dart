@@ -135,7 +135,11 @@ class _GroupsDetailState extends State<GroupsDetail> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Payment(amount: docs.get('moneyAmount'),)));
+                                      builder: (context) => Payment(
+                                            amount: docs.get('moneyAmount'),
+                                            groupId: docs.id,
+                                            schedule: docs.get('schedule'),
+                                          )));
                             },
                           ),
                           CustomGRoupCard(

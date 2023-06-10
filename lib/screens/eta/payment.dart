@@ -1,4 +1,5 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/helper/txtref.dart';
 import 'package:equb/models/user.dart';
 import 'package:equb/service/services.dart';
@@ -6,16 +7,23 @@ import 'package:equb/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:chapasdk/chapasdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class Payment extends StatefulWidget {
-  const Payment({super.key, required this.amount});
+  const Payment(
+      {super.key,
+      required this.amount,
+      required this.groupId,
+      required this.schedule});
   final String amount;
+  final String groupId;
+  final Timestamp schedule;
   @override
   State<Payment> createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> {
   User? _user;
-  String _privateKey='';
+  String _privateKey = '';
   final TextEditingController _email = TextEditingController();
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _currency = TextEditingController();
@@ -27,7 +35,7 @@ class _PaymentState extends State<Payment> {
     _loadProfile();
     _amount.text = widget.amount;
     _currency.text = 'ETB';
-    _privateKey=dotenv.env['PRIVATE_KEY']!;
+    _privateKey = dotenv.env['PRIVATE_KEY']!;
   }
 
   void _loadProfile() async {
@@ -35,26 +43,31 @@ class _PaymentState extends State<Payment> {
     setState(() {});
   }
 
-  // void pay() {
-  //   Chapa.paymentParameters(
-  //     context: context,
-  //     publicKey: PRIVATE_KEY,
-  //     currency: _currency.text,
-  //     amount: _amount.text,
-  //     email: _email.text,
-  //     phone: _user?.phoneNumber ?? '',
-  //     firstName: _user?.firstName ?? '',
-  //     lastName: _user?.lastName ?? '',
-  //     txRef: TextRefGenerator.generate(),
-  //     desc: 'desc',
-  //     namedRouteFallBack: '/checkout',
-  //     title: 'payment',
-  //   );
-
-  // }
+  void pay() {
+    Chapa.paymentParameters(
+      context: context,
+      publicKey: _privateKey,
+      currency: _currency.text,
+      amount: widget.amount,
+      email: _email.text,
+      phone: '0${_user!.phoneNumber!.substring(4)}',
+      firstName: _user?.firstName ?? 'Dawit',
+      lastName: _user?.lastName ?? 'Mekonnen',
+      txRef: TextRefGenerator.generateTransactionRef(),
+      desc: 'desc',
+      namedRouteFallBack: '/checkout',
+      title: 'payment',
+    );
+    groupCollection.doc(widget.groupId).update({
+      'payment':FieldValue.arrayUnion([{'user_id':user!.uid,'schedule':widget.schedule.toDate()}]),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.amount);
+    print(widget.groupId);
+    print(widget.schedule);
     var textStyle = TextStyle(
       color: Theme.of(context).textTheme.headline1!.color,
       fontSize: 14,
@@ -144,25 +157,7 @@ class _PaymentState extends State<Payment> {
           ),
         ),
       ),
-      bottomSheet: CustomButton(
-          title: 'pay',
-          onTap: () {
-            Chapa.paymentParameters(
-              context: context,
-              publicKey:_privateKey,
-              currency: _currency.text,
-              amount: widget.amount,
-              email: _email.text,
-              // phone: _user!.phoneNumber!.substring(4),
-              phone:'0900881111',
-              firstName: _user?.firstName ?? 'Dawit',
-              lastName: _user?.lastName ?? 'Mekonnen',
-              txRef: TextRefGenerator.generateTransactionRef(),
-              desc: 'desc',
-              namedRouteFallBack: '/checkout',
-              title: 'payment',
-            );
-          }),
+      bottomSheet: CustomButton(title: 'pay', onTap: pay),
     );
   }
 }

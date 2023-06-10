@@ -8,3 +8,4 @@ final groupCollection = FirebaseFirestore.instance.collection('groups');
 
 final storage = FirebaseStorage.instance.ref();
 
+final paymentCollection = FirebaseFirestore.instance.collection('payment');
