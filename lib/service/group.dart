@@ -122,6 +122,13 @@ Future<QuerySnapshot<Object?>> getUsers(String groupId, String query) async {
   return userSnapshot;
 }
 
+Future getUsersUsingListOfId(usersId) async {
+  QuerySnapshot userSnapshot =
+      await userCollection.where('uid', whereIn: usersId).get();
+
+  return userSnapshot;
+}
+
 Future<QuerySnapshot<Object?>> getWinners(groupId) async {
   DocumentSnapshot snapshot = await groupCollection.doc(groupId).get();
   List<String> usersId = List<String>.from(snapshot.get('winners'));
@@ -131,7 +138,7 @@ Future<QuerySnapshot<Object?>> getWinners(groupId) async {
   return userSnapshot;
 }
 
- notify() async {
+notify() async {
   final docs = await groupsUsersIn();
   int days = 0;
   docs.docs.toList().forEach((element) {
@@ -141,9 +148,9 @@ Future<QuerySnapshot<Object?>> getWinners(groupId) async {
     Duration diffrence = currentDate.difference(storedDate);
     int daydiffs = diffrence.inDays;
 
-    if (daydiffs <= 10 && daydiffs>=0) {
+    if (daydiffs <= 10 && daydiffs >= 0) {
       days++;
     }
-});
+  });
   return days;
 }

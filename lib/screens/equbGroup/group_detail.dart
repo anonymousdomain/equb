@@ -25,6 +25,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
   List<String> items = [];
   List<String> payedUsers = [];
   bool isPayed = false;
+  List<String> notPayed = [];
   @override
   void initState() {
     super.initState();
@@ -102,6 +103,13 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 setState(() {
                   items = response;
                 });
+                List<String> notpayedUsers = usersId
+                    .where((element) => !payedUsers.contains(element))
+                    .toList();
+
+                setState(() {
+                  notPayed = notpayedUsers;
+                });
               }
 
               return CustomScrollView(
@@ -167,21 +175,23 @@ class _GroupsDetailState extends State<GroupsDetail> {
                                   SnackBar(
                                     content: Container(
                                       padding: EdgeInsets.all(16),
-
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(20)),
-                                          color:Colors.green),
+                                          color: Colors.green),
                                       child: Column(
-                                        crossAxisAlignment:CrossAxisAlignment.start,
-                                        children:  [
-                                          Text('Hey ${_user?.firstName??''}',style:TextStyle(
-                                            fontSize:18
-                                          ),),
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
                                           Text(
-                                              'You have paid this round ,Do not miss out the next schedule',
-                                              overflow:TextOverflow.ellipsis,
-                                              maxLines: 2,),
+                                            'Hey ${_user?.firstName ?? ''}',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                          Text(
+                                            'You have paid this round ,Do not miss out the next schedule',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -206,11 +216,14 @@ class _GroupsDetailState extends State<GroupsDetail> {
                           CustomGRoupCard(
                             text: 'Members',
                             ontap: () {
+                              getUsers().then((value) => 
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          Members(groupId: docs.id)));
+                                      builder: (context) => Members(
+                                            groupId: docs.id,
+                                            notpayd: notPayed,
+                                          ))));
                             },
                           ),
                           CustomGRoupCard(

@@ -90,11 +90,8 @@ String? emailValidator(String? value) {
   return null;
 }
 
-  @overrideemial
+  @override
   Widget build(BuildContext context) {
-    print(widget.amount);
-    print(widget.groupId);
-    print(widget.schedule);
     var textStyle = TextStyle(
       color: Theme.of(context).textTheme.headline1!.color,
       fontSize: 14,
