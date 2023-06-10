@@ -28,7 +28,7 @@ class EqubNotification extends StatelessWidget {
                 snapshot.data!.docs.isEmpty ||
                 snapshot.data!.docs == []) {
               return Center(
-                child: Text('There is not EqubNotification to show'),
+                child: Text('There is not EqubNotification to show',style:textStyle,),
               );
             }
             final docs = snapshot.data!.docs;
