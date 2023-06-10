@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
 
   void _countNotification() async {
     notificationCount = await notify();
-    print(notificationCount);
+    
   }
 
   onPageChanged(int page) {

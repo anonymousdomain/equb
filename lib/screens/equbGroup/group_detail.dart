@@ -5,7 +5,7 @@ import 'package:equb/screens/equbGroup/fourtuin_teller.dart';
 import 'package:equb/screens/eta/completed_equb.dart';
 import 'package:equb/screens/eta/eta_detail.dart';
 import 'package:equb/screens/eta/members.dart';
-import 'package:equb/service/group.dart';
+import 'package:equb/screens/eta/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -23,9 +23,11 @@ class GroupsDetail extends StatefulWidget {
 class _GroupsDetailState extends State<GroupsDetail> {
   User? _user;
   List<String> items = [];
+  List<String> payedUsers = [];
+  bool isPayed = false;
+  List<String> notPayed = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadProfile();
   }
@@ -33,6 +35,14 @@ class _GroupsDetailState extends State<GroupsDetail> {
   void _loadProfile() async {
     _user = await getUserDocument();
     setState(() {});
+  }
+
+  bool isScheduleMatched(Map<String, dynamic> item, DateTime dateTime) {
+    Timestamp schedule = item['schedule'] as Timestamp;
+    DateTime scheduleDate = schedule.toDate();
+
+    return scheduleDate.year == dateTime.year &&
+        scheduleDate.month == dateTime.month;
   }
 
   @override
@@ -60,7 +70,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 );
               }
               DocumentSnapshot<Map<String, dynamic>> docs = snapshot.data!;
-
+              Timestamp schedule = docs.get('schedule');
               getUsers() async {
                 DocumentSnapshot snapshot =
                     await groupCollection.doc(docs.id).get();
@@ -72,8 +82,33 @@ class _GroupsDetailState extends State<GroupsDetail> {
                 List<String> res = usersId
                     .where((element) => !winnerId.contains(element))
                     .toList();
+                List<Map<String, dynamic>> paymentList =
+                    List<Map<String, dynamic>>.from(docs.get('payment'));
+
+                Iterable<Map<String, dynamic>> filtrd =
+                    paymentList.where((items) {
+                  return isScheduleMatched(items, schedule.toDate());
+                });
+                filtrd.forEach((item) {
+                  payedUsers.add(item['user_id']);
+                  if (item['user_id'] == user!.uid) {
+                    setState(() {
+                      isPayed = true;
+                    });
+                  }
+                });
+                List<String> response = res
+                    .where((element) => payedUsers.contains(element))
+                    .toList();
                 setState(() {
-                  items = res;
+                  items = response;
+                });
+                List<String> notpayedUsers = usersId
+                    .where((element) => !payedUsers.contains(element))
+                    .toList();
+
+                setState(() {
+                  notPayed = notpayedUsers;
                 });
               }
 
@@ -132,16 +167,63 @@ class _GroupsDetailState extends State<GroupsDetail> {
                         children: [
                           CustomGRoupCard(
                             text: 'Payment',
-                            ontap: () {},
+                            ontap: () async {
+                              await getUsers();
+                              if (isPayed) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Container(
+                                      padding: EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          color: Colors.green),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Hey ${_user?.firstName ?? ''}',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                          Text(
+                                            'You have paid this round ,Do not miss out the next schedule',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                  ),
+                                );
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Payment(
+                                              amount: docs.get('moneyAmount'),
+                                              groupId: docs.id,
+                                              schedule: docs.get('schedule'),
+                                            )));
+                              }
+                            },
                           ),
                           CustomGRoupCard(
                             text: 'Members',
                             ontap: () {
+                              getUsers().then((value) => 
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          Members(groupId: docs.id)));
+                                      builder: (context) => Members(
+                                            groupId: docs.id,
+                                            notpayd: notPayed,
+                                          ))));
                             },
                           ),
                           CustomGRoupCard(
@@ -168,7 +250,9 @@ class _GroupsDetailState extends State<GroupsDetail> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CompletedEqub(groupId: docs.id,)));
+                                      builder: (context) => CompletedEqub(
+                                            groupId: docs.id,
+                                          )));
                             },
                           ),
                         ]),

@@ -1,6 +1,6 @@
-
 import 'package:equb/provider/auth_state.dart';
 import 'package:equb/provider/conectivity.dart';
+import 'package:equb/screens/checkout_page.dart';
 import 'package:equb/screens/user_profile.dart';
 import 'package:equb/utils/theme.dart';
 import 'package:equb/screens/home.dart';
@@ -8,6 +8,7 @@ import 'package:equb/screens/onboarding_screen/onboarding.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     androidProvider: AndroidProvider.debug,
   );
+  await dotenv.load(fileName: '.env');
   runApp(
     MultiProvider(
       providers: [
@@ -54,6 +56,7 @@ class EqubState extends State<Equb> {
       theme: CustomTheme.lightTheme(context),
       darkTheme: CustomTheme.darkTheme(context),
       themeMode: currentTheme.currentTheme,
+      routes: {'/checkout': (context) => CheckoutPage()},
       home: const MyHomePage(
         title: 'equb addis',
       ),
@@ -75,12 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
         Center(
-          child: Builder( 
+          child: Builder(
             builder: (context) {
               return StreamBuilder(
                 stream: FirebaseAuth.instance.authStateChanges(),
@@ -90,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         snapshot.data!.metadata.lastSignInTime) {
                       return UserProifle();
                     } else {
-                      return Home(); 
+                      return Home();
                     }
                   } else {
                     return OnBoardingScreen();
