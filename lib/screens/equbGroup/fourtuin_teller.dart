@@ -1,4 +1,3 @@
-
 // ignore_for_file: deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,6 +66,63 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
   @override
   Widget build(BuildContext context) {
     final items = widget.items;
+    if (widget.items.length == 0) {
+      return Scaffold(
+        body: Center(
+          child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'enough members did not complete there payment to start the wheel',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1!.color),
+                ),
+              )),
+        ),
+      );
+    }
+    if (widget.items.length == 1) {
+      return Scaffold(
+        body: Center(
+          child: GestureDetector(
+            onTap: () {
+              getUserName(items.first).then(
+                (value) => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    content: CustomSnackBar(
+                      message: 'The Winner is $value',
+                      isSuccess: true,
+                      duration: Duration(seconds: 6),
+                    ),
+                  ),
+                ),
+              );
+              schedule()
+                  .then((value) => {saveWinner(items[0], value)})
+                  .then((value) => Navigator.pop(context));
+            },
+            child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'only One Member left',
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.headline1!.color),
+                  ),
+                )),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
