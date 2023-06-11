@@ -4,6 +4,7 @@ import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import '../screens/equbGroup/group_detail.dart';
 import '../widget/custom_snackbar.dart';
 
 class GroupSearch extends SearchDelegate {
@@ -88,7 +89,12 @@ class GroupSearch extends SearchDelegate {
                                 Theme.of(context).textTheme.headline1!.color),
                       ),
                       onTap: () {
-                        query = docs[index].get('groupName');
+                        // query = docs[index].get('groupName');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GroupsDetail(
+                                    groupId: docs[index].get('groupId'))));
                       },
                       trailing: Text(
                         '${docs[index].get('members').toList().length.toString()} members ',
@@ -102,8 +108,8 @@ class GroupSearch extends SearchDelegate {
                   : ListTile(
                       leading: request.contains(user?.uid)
                           ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Text(
                                 'requested',
                                 style: TextStyle(
                                     color: Theme.of(context)
@@ -111,7 +117,7 @@ class GroupSearch extends SearchDelegate {
                                         .headline1!
                                         .color),
                               ),
-                          )
+                            )
                           : IconButton(
                               onPressed: () async {
                                 await requestJoinGroup(
@@ -214,6 +220,11 @@ class GroupSearch extends SearchDelegate {
                       ),
                       onTap: () {
                         query = docs[index].get('groupName');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GroupsDetail(
+                                    groupId: docs[index].get('groupId'))));
                       },
                       trailing: Text(
                         '${docs[index].get('members').toList().length.toString()} members ',
@@ -227,8 +238,8 @@ class GroupSearch extends SearchDelegate {
                   : ListTile(
                       leading: request.contains(user?.uid)
                           ? Padding(
-                            padding: EdgeInsets.symmetric(vertical:8),
-                            child: Text(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: Text(
                                 'requested',
                                 style: TextStyle(
                                     color: Theme.of(context)
@@ -236,7 +247,7 @@ class GroupSearch extends SearchDelegate {
                                         .headline1!
                                         .color),
                               ),
-                          )
+                            )
                           : IconButton(
                               onPressed: () async {
                                 await requestJoinGroup(
