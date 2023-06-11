@@ -37,9 +37,8 @@ class _NavDrawerState extends State<NavDrawer> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-
             curve: Curves.easeInCirc,
-            duration: Duration(seconds:1),
+            duration: Duration(seconds: 1),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
             ),
@@ -57,7 +56,9 @@ class _NavDrawerState extends State<NavDrawer> {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => EditProfile(user: _user,)))),
+                                  builder: ((context) => EditProfile(
+                                        user: _user,
+                                      )))),
                           child: CircleAvatar(
                             radius: 25,
                             backgroundImage:
@@ -73,7 +74,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         subtitle: Text(
                           _user?.phoneNumber ?? '',
                           style: TextStyle(
-                            fontSize: 12,
+                              fontSize: 12,
                               color:
                                   Theme.of(context).textTheme.headline1!.color),
                         ),
@@ -133,11 +134,12 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(FeatherIcons.userPlus),
           ),
           ListTile(
-            leading: Icon(FeatherIcons.lock),
-            title: Text('Logout'),
-            onTap: () =>
-                Provider.of<AuthState>(context, listen: false).signOut(),
-          )
+              leading: Icon(FeatherIcons.lock),
+              title: Text('Logout'),
+              onTap: () async{
+                await Provider.of<AuthState>(context, listen: false).signOut();
+
+              })
         ],
       ),
     );

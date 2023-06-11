@@ -16,6 +16,12 @@ class EqubNotification extends StatelessWidget {
       fontWeight: FontWeight.w600,
     );
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Notifications',
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+      ),
       body: FutureBuilder(
           future: groupsUsersIn(),
           builder: (context, snapshot) {
@@ -28,7 +34,10 @@ class EqubNotification extends StatelessWidget {
                 snapshot.data!.docs.isEmpty ||
                 snapshot.data!.docs == []) {
               return Center(
-                child: Text('There is not EqubNotification to show',style:textStyle,),
+                child: Text(
+                  'There is not EqubNotification to show',
+                  style: textStyle,
+                ),
               );
             }
             final docs = snapshot.data!.docs;
@@ -39,16 +48,17 @@ class EqubNotification extends StatelessWidget {
                   Timestamp firebaseSchedule = docs[index].get('schedule');
                   DateTime schedule = firebaseSchedule.toDate();
                   DateTime currentDate = DateTime.now();
-                  Duration diff = currentDate.difference(schedule);
+                  // Duration diff = currentDate.difference(schedule);
+                  Duration diff = schedule.difference(currentDate);
                   int diffIndays = diff.inDays;
-                  if (diffIndays <= 10 && diffIndays>=0) {
+                  if (diffIndays <= 10 && diffIndays >= 0) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    GroupsDetail(groupId:docs[index].get('groupId'))));
+                                builder: (context) => GroupsDetail(
+                                    groupId: docs[index].get('groupId'))));
                       },
                       child: Card(
                         borderOnForeground: true,
@@ -70,8 +80,7 @@ class EqubNotification extends StatelessWidget {
                             docs[index].get('groupName'),
                           ),
                           subtitle: Text(
-                            ' group eta schedule will start in ${DateFormat('MMMM dd, yyyy') 
-                                .format(docs[index].get('schedule').toDate()).toString()}',
+                            ' group eta schedule will start in ${DateFormat('MMMM dd, yyyy').format(docs[index].get('schedule').toDate()).toString()}',
                             style: textStyle,
                           ),
                           trailing: Row(
@@ -95,9 +104,7 @@ class EqubNotification extends StatelessWidget {
                       ),
                     );
                   } else {
-                    return Center(
-                      child: Text('there is no recent notification'),
-                    );
+                    return SizedBox.shrink();
                   }
                 });
           }),
