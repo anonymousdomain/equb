@@ -37,13 +37,16 @@ class _NavDrawerState extends State<NavDrawer> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
+
+            curve: Curves.easeInCirc,
+            duration: Duration(seconds:1),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: _user == null
                 ? ListTile(
                     leading: CircleAvatar(
-                    radius: 30,
+                    radius: 25,
                     child: CircularProgressIndicator(),
                   ))
                 : Column(
@@ -56,7 +59,7 @@ class _NavDrawerState extends State<NavDrawer> {
                               MaterialPageRoute(
                                   builder: ((context) => EditProfile(user: _user,)))),
                           child: CircleAvatar(
-                            radius: 30,
+                            radius: 25,
                             backgroundImage:
                                 NetworkImage(_user!.imageUrl ?? ''),
                             child: _user == null
@@ -70,6 +73,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         subtitle: Text(
                           _user?.phoneNumber ?? '',
                           style: TextStyle(
+                            fontSize: 12,
                               color:
                                   Theme.of(context).textTheme.headline1!.color),
                         ),
@@ -82,7 +86,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         // isThreeLine: true,
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 35,
                       ),
                       Text(
                         'Id:${_user?.id}',
