@@ -65,6 +65,7 @@ class DefaultFirebaseOptions {
     projectId: 'equb-addis',
     databaseURL: 'https://equb-addis-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'equb-addis.appspot.com',
+    androidClientId: '370755416533-irqa3jiuv9t529qmm0js5temhsn655t9.apps.googleusercontent.com',
     iosClientId: '370755416533-gemdoa2qsdnpcsjqh6avv499j2rdhid9.apps.googleusercontent.com',
     iosBundleId: 'com.example.equb',
   );
