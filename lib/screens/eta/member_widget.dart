@@ -25,7 +25,7 @@ class EqubMember extends StatelessWidget {
         final docs = snapshot.data!.docs;
         return Center(
           child: SizedBox(
-            height:270,
+            height:220,
             child: ListView.builder(
               shrinkWrap: true,
                 itemCount: docs.length,

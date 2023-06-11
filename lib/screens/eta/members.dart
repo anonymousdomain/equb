@@ -37,91 +37,93 @@ class _MembersState extends State<Members> {
           style: TextStyle(color: Theme.of(context).textTheme.headline1!.color),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'All MEMBERS',
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Theme.of(context).primaryColor),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'All MEMBERS',
+                textAlign: TextAlign.left,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
             ),
-          ),
-          EqubMember(groupId: widget.groupId, query: 'members'),
-          Divider(
-            thickness: 2,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'Members  who wins in the previous round',
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Theme.of(context).primaryColor),
+            EqubMember(groupId: widget.groupId, query: 'members'),
+            Divider(
+              thickness: 2,
             ),
-          ),
-          EqubMember(groupId: widget.groupId, query: 'winner'),
-          _user?.role == 'admin'
-              ? Column(
-                  children: [
-                    Divider(
-                      thickness: 2,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Members Who does not pay this  round yet',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(color: Theme.of(context).primaryColor),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Members  who wins in the previous round',
+                textAlign: TextAlign.left,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            EqubMember(groupId: widget.groupId, query: 'winner'),
+            _user?.role == 'admin'
+                ? Column(
+                    children: [
+                      Divider(
+                        thickness: 2,
                       ),
-                    ),
-                    FutureBuilder(
-                        future: getUsersUsingListOfId(widget.notpayd),
-                        builder: (context, snapshot) {
-                          // if (!snapshot.hasData) {
-                          //   return Center(
-                          //     child: CircularProgressIndicator(),
-                          //   );
-                          // }
-                          if (!snapshot.hasData ||
-                              snapshot.data!.docs.isEmpty ||
-                              snapshot.data!.docs == []) {
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Members Who does not pay this  round yet',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      FutureBuilder(
+                          future: getUsersUsingListOfId(widget.notpayd),
+                          builder: (context, snapshot) {
+                            // if (!snapshot.hasData) {
+                            //   return Center(
+                            //     child: CircularProgressIndicator(),
+                            //   );
+                            // }
+                            if (!snapshot.hasData ||
+                                snapshot.data!.docs.isEmpty ||
+                                snapshot.data!.docs == []) {
+                              return Center(
+                                child: Text('Data not Found'),
+                              );
+                            }
+                            final docs = snapshot.data!.docs;
                             return Center(
-                              child: Text('Data not Found'),
+                              child: SizedBox(
+                                height: 220,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: docs.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              docs[index].get('imageUrl')),
+                                        ),
+                                        title: Text(
+                                          '${docs[index].get('firstName')} ${docs[index].get('lastName')}',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1!
+                                                  .color),
+                                        ),
+                                      );
+                                    }),
+                              ),
                             );
-                          }
-                          final docs = snapshot.data!.docs;
-                          return Center(
-                            child: SizedBox(
-                              height: 270,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: docs.length,
-                                  itemBuilder: (context, index) {
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            docs[index].get('imageUrl')),
-                                      ),
-                                      title: Text(
-                                        '${docs[index].get('firstName')} ${docs[index].get('lastName')}',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .headline1!
-                                                .color),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                          );
-                        })
-                  ],
-                )
-              : SizedBox.shrink()
-        ],
+                          })
+                    ],
+                  )
+                : SizedBox.shrink()
+          ],
+        ),
       ),
     );
   }

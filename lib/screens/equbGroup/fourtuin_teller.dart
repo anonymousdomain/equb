@@ -90,24 +90,21 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
         body: Center(
           child: GestureDetector(
             onTap: () {
-              getUserName(items.first)
-                  .then(
-                    (value) => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        content: CustomSnackBar(
-                          message: 'The Winner is $value',
-                          isSuccess: true,
-                          duration: Duration(seconds: 6),
-                        ),
-                      ),
+              getUserName(items.first).then(
+                (value) => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    content: CustomSnackBar(
+                      message: 'The Winner is $value',
+                      isSuccess: true,
+                      duration: Duration(seconds: 6),
                     ),
-                  )
-                  .then((value) => schedule().then(
-                        (value) => saveWinner(reward, value),
-                      )
-                      );
+                  ),
+                ),
+              );
+              schedule()
+                  .then((value) => {saveWinner(items[0], value)})
+                  .then((value) => Navigator.pop(context));
             },
             child: Card(
                 shape: RoundedRectangleBorder(
