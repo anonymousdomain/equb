@@ -30,7 +30,9 @@ Future<void> createGroupDocument(
     'catagory': catagory,
     'groupId': groupId,
     'createdAt': FieldValue.serverTimestamp(),
-    'imageUrl': imageUrl
+    'imageUrl': imageUrl,
+    'winner':[],
+    'payment':[]
   };
   final bool docExist = await isDocExist(groupName);
   if (!docExist) {
@@ -145,7 +147,8 @@ notify() async {
     Timestamp sche = element.get('schedule');
     DateTime storedDate = sche.toDate();
     DateTime currentDate = DateTime.now();
-    Duration diffrence = currentDate.difference(storedDate);
+    // Duration diffrence = currentDate.difference(storedDate);
+    Duration diffrence = storedDate.difference(currentDate);
     int daydiffs = diffrence.inDays;
 
     if (daydiffs <= 10 && daydiffs >= 0) {
