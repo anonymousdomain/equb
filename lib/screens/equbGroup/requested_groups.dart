@@ -81,7 +81,8 @@ class _GroupRequestState extends State<GroupRequest> {
                           padding: EdgeInsets.all(8),
                           child: Center(
                             child: Text(
-                              docs[index].get('members').toList().length.toString(),
+                              // docs[index].get('members').toList().length.toString()
+                              docs[index].get("groupRequest").toList().length.toString(),
                               style: TextStyle(
                                 fontSize:30,
                                 fontWeight:FontWeight.w300,
