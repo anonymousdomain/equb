@@ -62,7 +62,8 @@ class _EmployeeCardState extends State<EmployeeCard> {
                     child: Stack(children: [
                       ListTile(
                         // leading: Icon(FeatherIcons.users),
-                        leading: docs[index].get('imageUrl') == null
+                        leading: 
+                        docs[index].get('imageUrl') == null
                             ? CircleAvatar(
                                 radius: 30,
                                 child: Icon(FeatherIcons.users),
