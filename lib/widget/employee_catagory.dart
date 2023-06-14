@@ -1,9 +1,9 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equb/helper/firbasereference.dart';
 import 'package:equb/screens/home.dart';
 import 'package:equb/service/group.dart';
 import 'package:equb/widget/custom_snackbar.dart';
+import 'package:equb/widget/group_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -51,111 +51,119 @@ class _EmployeeCardState extends State<EmployeeCard> {
               );
               return SizedBox(
                 width: 210,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Stack(children: [
-                    ListTile(
-                      // leading: Icon(FeatherIcons.users),
-                      leading: docs[index].get('imageUrl')==null
-                          ? CircleAvatar(
-                              radius: 30,
-                              child: Icon(FeatherIcons.users),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              radius: 30,
-                              backgroundImage: NetworkImage(docs[index].get('imageUrl'))
-                            ),
-                      title: Text(
-                        docs[index].get('groupName'),
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.headline1!.color),
-                      ),
-                      subtitle: Text(
-                        docs[index].get('catagory'),
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.headline1!.color),
-                      ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>GroupInfo(groupId:docs[index].id,)));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            docs[index]
-                                .get('members')
-                                .toList()
-                                .length
-                                .toString(),
-                            style: textStyle,
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Text(
-                            'members',
-                            style: TextStyle(
+                    child: Stack(children: [
+                      ListTile(
+                        // leading: Icon(FeatherIcons.users),
+                        leading: docs[index].get('imageUrl') == null
+                            ? CircleAvatar(
+                                radius: 30,
+                                child: Icon(FeatherIcons.users),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage(docs[index].get('imageUrl'))),
+                        title: Text(
+                          docs[index].get('groupName'),
+                          style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.headline1!.color,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          SizedBox(
-                            child: request.contains(user!.uid)
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'requested',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .color),
-                                    ),
-                                  )
-                                : IconButton(
-                                    onPressed: () async {
-                                      await requestJoinGroup(
-                                              docs[index].get('groupId'))
-                                          .then(
-                                            (value) =>
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                              SnackBar(
-                                                content: CustomSnackBar(
-                                                    message:
-                                                        'You Are Requested to Join Group',
-                                                    isSuccess: true),
-                                              ),
-                                            ),
-                                          )
-                                          .then(
-                                            (value) => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: ((context) => Home()),
-                                              ),
-                                            ),
-                                          );
-                                    },
-                                    icon: Icon(
-                                      FeatherIcons.plusCircle,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                          ),
-                        ],
+                                  Theme.of(context).textTheme.headline1!.color),
+                        ),
+                        subtitle: Text(
+                          docs[index].get('catagory'),
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.headline1!.color),
+                        ),
                       ),
-                    )
-                  ]),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              docs[index]
+                                  .get('members')
+                                  .toList()
+                                  .length
+                                  .toString(),
+                              style: textStyle,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              'members',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .color,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
+                              child: request.contains(user!.uid)
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'requested',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline1!
+                                                .color),
+                                      ),
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        await requestJoinGroup(
+                                                docs[index].get('groupId'))
+                                            .then(
+                                              (value) =>
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                SnackBar(
+                                                  content: CustomSnackBar(
+                                                      message:
+                                                          'You Are Requested to Join Group',
+                                                      isSuccess: true),
+                                                ),
+                                              ),
+                                            )
+                                            .then(
+                                              (value) => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: ((context) =>
+                                                      Home()),
+                                                ),
+                                              ),
+                                            );
+                                      },
+                                      icon: Icon(
+                                        FeatherIcons.plusCircle,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
                 ),
               );
             },
