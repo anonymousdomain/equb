@@ -92,8 +92,20 @@ class _GroupInfoState extends State<GroupInfo> {
                           ),
                         ),
                         ListTile(
+                          
                           title: Text(
-                            'Expected Size: ${docs?.get('roundSize')}',
+                            'EqubType: ${docs?.get('equbType')}',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .color),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Expected  Grroup Size: ${docs?.get('roundSize')}',
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context)
