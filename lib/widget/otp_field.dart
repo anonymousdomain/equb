@@ -28,7 +28,7 @@ class _OtpFieldState extends State<OtpField> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(
         isSuccess: false,
-        message: widget.message ?? '',
+        message: widget.message ?? 'Invalid Otp Is Provided',
       )));
       Provider.of<AuthState>(context, listen: false)
           .setStatus(AuthStatus.codeSent);
