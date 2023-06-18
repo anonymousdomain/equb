@@ -124,14 +124,14 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(FeatherIcons.droplet),
           ),
           ListTile(
-            title: Text('Join'),
+            title: Text('requested '),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: ((context) => NewEqubGroup()),
               ),
             ),
-            leading: Icon(FeatherIcons.userPlus),
+            leading: Icon(FeatherIcons.gitPullRequest),
           ),
           ListTile(
               leading: Icon(FeatherIcons.lock),

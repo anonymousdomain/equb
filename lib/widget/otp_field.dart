@@ -28,7 +28,7 @@ class _OtpFieldState extends State<OtpField> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: CustomSnackBar(
         isSuccess: false,
-        message: widget.message ?? '',
+        message: widget.message ?? 'Invalid Otp Is Provided',
       )));
       Provider.of<AuthState>(context, listen: false)
           .setStatus(AuthStatus.codeSent);
@@ -137,12 +137,16 @@ class _OtpFieldState extends State<OtpField> {
                       }
                       return null;
                     },
-                    onCompleted: (value) {
-                      if (value.length == 6 &&
-                          _formKey.currentState!.validate()) {
-                        signIn();
-                      }
-                    },
+                    // onCompleted: (value) {
+                    //   if (value.length == 6 &&
+                    //       _formKey.currentState!.validate()) {
+                    //     signIn();
+                    //   } else {
+                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    //         content: CustomSnackBar(
+                    //             message: 'Invalid Otp Is Provided', isSuccess:false)));
+                    //   }
+                    // },
                   ),
                   provider.countdown == 0
                       ? Row(
@@ -204,7 +208,7 @@ class _OtpFieldState extends State<OtpField> {
         ),
         bottomSheet: provider.status == AuthStatus.codeAutoRetievalTimeout
             ? CustomButton(title: 'resend', onTap: resend)
-            // : CustomButton(title: 'signin', onTap: signIn));
-            :SizedBox.shrink());
+            : CustomButton(title: 'signin', onTap: signIn));
+            // : SizedBox.shrink());
   }
 }

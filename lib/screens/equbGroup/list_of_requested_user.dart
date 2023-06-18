@@ -101,8 +101,16 @@ class _ListOfUsersRequestedState extends State<ListOfUsersRequested> {
                                   '${usersDoc[index].get("firstName")} ${usersDoc[index].get("lastName")}'),
                             ),
                             ListTile(
-                              title: Text('workstatus',style: textStyle,),
-                              trailing: Text('employee',style: textStyle,),
+                              title: Text('phoneNumber',style: textStyle,),
+                              trailing: Text(usersDoc[index].get('phoneNumber'),style: textStyle,),
+                            ),
+                            ListTile(
+                              title: Text('BankName',style: textStyle,),
+                              trailing: Text(usersDoc[index].get('bankName'),style: textStyle,),
+                            ),
+                            ListTile(
+                              title: Text('bankNumber',style: textStyle,),
+                              trailing: Text(usersDoc[index].get('bankNumber'),style: textStyle,),
                             ),
                             Row(
                               mainAxisSize: MainAxisSize.max,
