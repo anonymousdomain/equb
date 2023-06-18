@@ -51,7 +51,6 @@ class _GroupRequestState extends State<GroupRequest> {
           }
           List<DocumentSnapshot> docs = snapshot.data!.docs;
 
-          log(docs.toList().toString());
           return ListView.builder(
               itemCount: docs.length,
               itemBuilder: (context, index) {
