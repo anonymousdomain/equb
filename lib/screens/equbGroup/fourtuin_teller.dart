@@ -9,10 +9,15 @@ import 'package:rxdart/subjects.dart';
 
 // ignore: must_be_immutable
 class FourtuinWheel extends StatefulWidget {
-  FourtuinWheel({Key? key, required this.groupId, required this.items})
+  FourtuinWheel(
+      {Key? key,
+      required this.groupId,
+      required this.items,
+      required this.paid})
       : super(key: key);
   String groupId;
   List<String> items;
+  bool paid;
   @override
   State<FourtuinWheel> createState() => _FourtuinWheelState();
 }
@@ -66,7 +71,24 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
   @override
   Widget build(BuildContext context) {
     final items = widget.items;
-    if (widget.items.length == 0) {
+
+    if (!widget.paid) {
+      return Scaffold(
+           appBar: AppBar(
+        centerTitle: true,
+        title: Text('Eta'),
+      ),
+        body: Center(
+          child: Center(
+            child: Text('All memebrs Need  to complete thier payment first',
+            style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1!.color),
+            ),
+          ),
+        ),
+      );
+    }
+    if (widget.items.isEmpty && widget.paid) {
       return Scaffold(
         body: Center(
           child: Card(
@@ -77,7 +99,7 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'enough members did not complete there payment to start the wheel',
+                  'All Members are Take Thier Equb',
                   style: TextStyle(
                       color: Theme.of(context).textTheme.headline1!.color),
                 ),
@@ -85,8 +107,12 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
         ),
       );
     }
-    if (widget.items.length == 1) {
+    if (widget.paid && widget.items.length == 1) {
       return Scaffold(
+           appBar: AppBar(
+        centerTitle: true,
+        title: Text('eta'),
+      ),
         body: Center(
           child: GestureDetector(
             onTap: () {
@@ -128,7 +154,7 @@ class _FourtuinWheelState extends State<FourtuinWheel> {
         centerTitle: true,
         title: Text('Spin the Wheel'),
       ),
-      body: items.length <= 1
+      body: items.length <= 1 || !widget.paid
           ? Center(
               child: Card(
                   shape: RoundedRectangleBorder(

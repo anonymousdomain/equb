@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/equbGroup/requested_groups.dart';
+
 class NavDrawer extends StatefulWidget {
   const NavDrawer({super.key});
 
@@ -123,6 +125,17 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             leading: Icon(FeatherIcons.droplet),
           ),
+           _user?.role == 'admin' ? 
+          ListTile(
+            title: Text('requested '),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) =>GroupRequest()),
+              ),
+            ),
+            leading: Icon(FeatherIcons.gitPullRequest),
+          ):
           ListTile(
             title: Text('requested '),
             onTap: () => Navigator.push(
