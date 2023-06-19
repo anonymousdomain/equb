@@ -9,6 +9,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
+import '../widget/custom_snackbar.dart';
 import 'home.dart';
 
 class UserProifle extends StatefulWidget {
@@ -31,6 +32,7 @@ class _UserProifleState extends State<UserProifle> {
   String? imageUrl;
   bool isDisposed = false;
   String? id;
+    String _message = '';
   @override
   void initState() {
     super.initState();
@@ -76,12 +78,18 @@ class _UserProifleState extends State<UserProifle> {
         imageUrl: imageUrl,
         id: id,
       );
-    }
-
-    // uploadImage(_file!);
-    // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
         context, MaterialPageRoute(builder: ((context) => Home())));
+    }else{
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // ignore: use_build_context_synchronously
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: CustomSnackBar(
+              message: _message, isSuccess: false)));
+    }
+  
+      
   }
 
   @override
@@ -169,6 +177,22 @@ class _UserProifleState extends State<UserProifle> {
                       borderSide: BorderSide(color: Colors.indigo, width: 2),
                     ),
                   ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'First name is required';
+                        });
+                        return '';
+                      }
+                      if (value.length > 30) {
+                        setState(() {
+                          _message =
+                              'First name  must be less than 30 characters';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                 ),
                 SizedBox(
                   height: 10,
@@ -185,6 +209,22 @@ class _UserProifleState extends State<UserProifle> {
                       borderSide: BorderSide(color: Colors.indigo, width: 2),
                     ),
                   ),
+                   validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'Last name is required';
+                        });
+                        return '';
+                      }
+                      if (value.length > 30) {
+                        setState(() {
+                          _message =
+                              'Last name  must be less than 30 characters';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                 ),
                 SizedBox(
                   height: 10,
@@ -228,6 +268,22 @@ class _UserProifleState extends State<UserProifle> {
                       borderSide: BorderSide(color: Colors.indigo, width: 2),
                     ),
                   ),
+                   validator: (value) {
+                      if (value!.isEmpty) {
+                        setState(() {
+                          _message = 'Bank Number is required';
+                        });
+                        return '';
+                      }
+                      if (value.length > 30) {
+                        setState(() {
+                          _message =
+                              'Bank Number  must be less than 30 characters';
+                        });
+                        return '';
+                      }
+                      return null;
+                    },
                 ),
               ],
             ),
