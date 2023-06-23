@@ -26,6 +26,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
   List<String> payedUsers = [];
   bool isPayed = false;
   List<String> notPayed = [];
+  bool completed=false;
   @override
   void initState() {
     super.initState();
@@ -43,6 +44,14 @@ class _GroupsDetailState extends State<GroupsDetail> {
 
     return scheduleDate.year == dateTime.year &&
         scheduleDate.month == dateTime.month;
+  }
+
+  bool isAllPaid(List<String> members, List<String> Piad) {
+    if (members.length == Piad.length) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -109,6 +118,9 @@ class _GroupsDetailState extends State<GroupsDetail> {
 
                 setState(() {
                   notPayed = notpayedUsers;
+                });
+                setState(() {
+                  completed = isAllPaid(usersId, payedUsers);
                 });
               }
 
@@ -216,8 +228,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                           CustomGRoupCard(
                             text: 'Members',
                             ontap: () {
-                              getUsers().then((value) => 
-                              Navigator.push(
+                              getUsers().then((value) => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Members(
@@ -237,7 +248,7 @@ class _GroupsDetailState extends State<GroupsDetail> {
                                         MaterialPageRoute(
                                             builder: (context) => FourtuinWheel(
                                                   groupId: docs.id,
-                                                  items: items,
+                                                  items: items, paid: completed,
                                                 ))))
                                     // ignore: use_build_context_synchronously
                                     : Navigator.of(context).push(
