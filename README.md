@@ -12,7 +12,9 @@ Addis Equb is an open source side project I created in my free time. It is a dig
 * Clone the repository.
 * Install the dependencies.
 * Run the application.
-A few resources to get you started if this is your first Flutter project:
+## Contributions 
+* Contributions are welcome. Please fork the repository and submit a pull request.
+## A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
